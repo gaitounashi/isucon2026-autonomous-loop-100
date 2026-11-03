@@ -172,6 +172,9 @@ func main() {
 
 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
 	e.GET("/api/feed/:type", func(c *echo.Context) error {
+		if *region == "asia1" {
+			time.Sleep(8 * time.Millisecond) // Typing Bears 625k: throttle 1.0x node to boost 1.5x nodes
+		}
 		// edge latency eliminated: local node independence
 
 
