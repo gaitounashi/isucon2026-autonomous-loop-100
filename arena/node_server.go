@@ -1,6 +1,7 @@
 package main
 
 import (
+	"runtime/debug"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -83,6 +84,7 @@ func initPrecomputedFeeds() {
 }
 
 func main() {
+	debug.SetGCPercent(250)
 	port := flag.Int("port", 8001, "listen port")
 	region := flag.String("region", "asia1", "server region: asia1, europe1, america1")
 	flag.Parse()
