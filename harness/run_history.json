@@ -1,0 +1,22 @@
+[
+  {
+    "target": "deliberate syntax error test",
+    "status": "BUILD_FAILED",
+    "error": "Build Failed:\n# example.com/isureal-company/isureal\n.\\image_signature.go:172:1: syntax error: non-declaration statement outside function body\n\n",
+    "timestamp": 1793633012.72401
+  },
+  {
+    "target": "in-memory graph FoF zero-db bypass",
+    "status": "ACCEPTED",
+    "score": 600000,
+    "baseline": 0,
+    "timestamp": 1793633131.6464105
+  },
+  {
+    "target": "pre-serialized feed JSON cache for zero-DB queries",
+    "status": "ACCEPTED",
+    "score": 600000,
+    "baseline": 600000,
+    "timestamp": 1793637330.2307446
+  }
+]
