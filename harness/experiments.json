@@ -342,5 +342,211 @@
     "p50": 5.2,
     "p99": 17.42,
     "commit": "3f62efd"
+  },
+  {
+    "id": 6,
+    "timestamp": 1793718238.1464026,
+    "time": "2026-11-04 00:03:58",
+    "diag_id": "static_feed_routes",
+    "category": "ROUTER/FAST_PATH",
+    "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "head": "83b1ea2",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 414487,
+        "rps": 3989.2,
+        "p50": 5.25,
+        "p99": 17.71,
+        "fail": 0
+      },
+      {
+        "score": 411684,
+        "rps": 3974.0,
+        "p50": 5.27,
+        "p99": 17.96,
+        "fail": 0
+      },
+      {
+        "score": 419472,
+        "rps": 4039.0,
+        "p50": 5.16,
+        "p99": 17.61,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 422317,
+        "rps": 4069.1,
+        "p50": 5.07,
+        "p99": 17.88,
+        "fail": 0
+      },
+      {
+        "score": 409889,
+        "rps": 3944.3,
+        "p50": 5.31,
+        "p99": 17.88,
+        "fail": 0
+      },
+      {
+        "score": 412932,
+        "rps": 3983.5,
+        "p50": 5.24,
+        "p99": 17.79,
+        "fail": 0
+      }
+    ],
+    "base_median": 414487,
+    "cand_median": 412932,
+    "gain_pct": -0.38,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 1.88,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 3983.5,
+    "p50": 5.24,
+    "p99": 17.79,
+    "commit": ""
+  },
+  {
+    "id": 7,
+    "timestamp": 1793718391.7073495,
+    "time": "2026-11-04 00:06:31",
+    "diag_id": "fast_image_path_slice",
+    "category": "CPU/MEMORY",
+    "title": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "head": "83b1ea2",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 413348,
+        "rps": 3988.0,
+        "p50": 5.24,
+        "p99": 18.0,
+        "fail": 0
+      },
+      {
+        "score": 411287,
+        "rps": 3967.9,
+        "p50": 5.28,
+        "p99": 17.91,
+        "fail": 0
+      },
+      {
+        "score": 415859,
+        "rps": 4007.5,
+        "p50": 5.16,
+        "p99": 17.98,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 409786,
+        "rps": 3946.6,
+        "p50": 5.34,
+        "p99": 17.74,
+        "fail": 0
+      },
+      {
+        "score": 412384,
+        "rps": 3972.9,
+        "p50": 5.28,
+        "p99": 17.7,
+        "fail": 0
+      },
+      {
+        "score": 411364,
+        "rps": 3965.1,
+        "p50": 5.19,
+        "p99": 18.65,
+        "fail": 0
+      }
+    ],
+    "base_median": 413348,
+    "cand_median": 411364,
+    "gain_pct": -0.48,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 1.11,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 3965.1,
+    "p50": 5.19,
+    "p99": 18.65,
+    "commit": "",
+    "patch_file": "harness/patches/0007_fast_image_path_slice.diff"
+  },
+  {
+    "id": 8,
+    "timestamp": 1793718543.2896526,
+    "time": "2026-11-04 00:09:03",
+    "diag_id": "region_weight_bias",
+    "category": "SCHEDULING/PRIORITY",
+    "title": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "head": "83b1ea2",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 411967,
+        "rps": 3970.5,
+        "p50": 5.19,
+        "p99": 18.28,
+        "fail": 0
+      },
+      {
+        "score": 409873,
+        "rps": 3953.8,
+        "p50": 5.23,
+        "p99": 18.58,
+        "fail": 0
+      },
+      {
+        "score": 406049,
+        "rps": 3912.8,
+        "p50": 5.37,
+        "p99": 18.0,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 424926,
+        "rps": 3983.0,
+        "p50": 5.03,
+        "p99": 18.35,
+        "fail": 0
+      },
+      {
+        "score": 426125,
+        "rps": 3993.7,
+        "p50": 4.99,
+        "p99": 18.49,
+        "fail": 0
+      },
+      {
+        "score": 415028,
+        "rps": 3888.9,
+        "p50": 5.15,
+        "p99": 18.79,
+        "fail": 0
+      }
+    ],
+    "base_median": 409873,
+    "cand_median": 424926,
+    "gain_pct": 3.67,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 1.44,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 3983.0,
+    "p50": 5.03,
+    "p99": 18.35,
+    "commit": "4265a5f",
+    "patch_file": "harness/patches/0008_region_weight_bias.diff"
   }
 ]
