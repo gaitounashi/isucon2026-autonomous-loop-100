@@ -68,7 +68,7 @@ func (g *InMemGraph) ComputeFoFAuthors(viewerID string) map[string]int64 {
 		}
 	}
 
-	mutualCounts := make(map[string]int64)
+	mutualCounts := make(map[string]int64, 512)
 
 	// viewer の友だちを走査
 	for fid := range myFriends {
