@@ -137,6 +137,7 @@ func main() {
 			sigStr := base64.RawURLEncoding.EncodeToString(sig)
 			imageURLs[i] = fmt.Sprintf("/api/images/%s?exp=%d&sig=%s", imgID, exp, sigStr)
 		}
+		c.Response().Header().Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
 		return c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])
 	})
 
