@@ -136,5 +136,74 @@
     "p99": 19.17,
     "commit": "",
     "patch_file": "harness/patches/0002_fixed_array_lookup.diff"
+  },
+  {
+    "id": 3,
+    "timestamp": 1793717779.1059172,
+    "time": "2026-11-03 23:56:19",
+    "diag_id": "combo_feed_direct_and_fixed_array",
+    "category": "COMBO/ZERO_COPY_AND_ALGO",
+    "title": "combo: direct zero-copy ResponseWriter for feeds AND fixed-size array O(1) image signatures",
+    "head": "febaa22",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 353012,
+        "rps": 3395.7,
+        "p50": 6.04,
+        "p99": 22.26,
+        "fail": 0
+      },
+      {
+        "score": 395751,
+        "rps": 3814.0,
+        "p50": 5.42,
+        "p99": 19.4,
+        "fail": 0
+      },
+      {
+        "score": 251813,
+        "rps": 2427.1,
+        "p50": 1.18,
+        "p99": 75.09,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 382009,
+        "rps": 3675.8,
+        "p50": 5.59,
+        "p99": 20.03,
+        "fail": 0
+      },
+      {
+        "score": 378131,
+        "rps": 3648.2,
+        "p50": 5.69,
+        "p99": 19.89,
+        "fail": 0
+      },
+      {
+        "score": 327124,
+        "rps": 3168.9,
+        "p50": 4.99,
+        "p99": 54.2,
+        "fail": 0
+      }
+    ],
+    "base_median": 353012,
+    "cand_median": 378131,
+    "gain_pct": 7.12,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 40.77,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 3648.2,
+    "p50": 5.69,
+    "p99": 19.89,
+    "commit": "fcb5ec8",
+    "patch_file": "harness/patches/0003_combo_feed_direct_and_fixed_array.diff"
   }
 ]
