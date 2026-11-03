@@ -165,15 +165,10 @@ def set_current_baseline(score: int):
     with open(BASELINE_FILE, "w", encoding="utf-8") as f:
         json.dump({"baseline": score, "updated_at": time.time()}, f, indent=2)
 
-def update_dashboard_live(score: int, desc: str, accepted: bool):
-    if not DASHBOARD_FILE.exists():
-        return
-    try:
-        all_time_best = get_all_time_best()
-        tag = "ACCEPTED" if accepted else "REJECTED"
-        print(f"[*] Dashboard sync: {score:,} pts ({tag}) | All-Time Best: {all_time_best:,} pts")
-    except Exception as e:
-        print(f"[!] Dashboard sync failed: {e}")
+def update_dashboard_live(score: int = 0, desc: str = "", accepted: bool = False):
+    """履歴からダッシュボードを再生成 (experiment.refresh_dashboard に委譲)"""
+    import experiment as ex
+    ex.refresh_dashboard()
 
 # ==============================================================================
 # 実測診断エンジン (Measurement-Driven Diagnostic Engine)
@@ -266,7 +261,7 @@ def diagnose_bottlenecks() -> list[dict]:
         })
 
     # ボトルネック 3: HTTP Keep-Alive / TCP チューニング
-    if "TCPKeepAlive" not in ns_code:
+    if False and "TCPKeepAlive" not in ns_code:  # 無効化: 実体のない no-op パッチだった
         candidates.append({
             "id": "node_server_tcp_tuning",
             "category": "NETWORK/TCP",
@@ -383,6 +378,8 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
 
         if action == "apply_feed_direct_writer":
             content = ns_target.read_text(encoding="utf-8")
+            nl = "\r\n" if "\r\n" in content else "\n"
+            content = content.replace("\r\n", "\n")
             old_feed = """\tc.Response().Header().Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
 \t\treturn c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])"""
             new_feed = """\tw := c.Response()
@@ -394,7 +391,7 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
 \t\treturn err"""
             if old_feed in content:
                 content = content.replace(old_feed, new_feed)
-                ns_target.write_text(content, encoding="utf-8")
+                ns_target.write_text(content.replace("\n", nl), encoding="utf-8")
                 return True, title
             return False, "old_feed not matched"
 
@@ -402,36 +399,51 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
             content = ns_target.read_text(encoding="utf-8")
             if "precomputedSigArr" in content:
                 return False, "already applied"
+            nl = "\r\n" if "\r\n" in content else "\n"
+            content = content.replace("\r\n", "\n")
+            # グローバル変数: 画像 0..199 の署名とリダイレクト先を固定長配列で保持
             content = content.replace(
                 "precomputedRedirects = make(map[string]string, 4096)\n)",
-                "precomputedRedirects = make(map[string]string, 4096)\n\tprecomputedSigArr [200]string\n\tprecomputedRedirArr [200]string\n)"
+                "precomputedRedirects = make(map[string]string, 4096)\n\tprecomputedSigArr [200]string\n\tprecomputedRedirArr [200]string\n)",
             )
             content = content.replace(
                 'precomputedRedirects[imgID] = "/_imgcache/" + imgID + ".jpg"',
-                'precomputedRedirects[imgID] = "/_imgcache/" + imgID + ".jpg"\n\t\tprecomputedRedirArr[i] = "/_imgcache/" + imgID + ".jpg"'
+                'precomputedRedirects[imgID] = "/_imgcache/" + imgID + ".jpg"\n\t\tprecomputedRedirArr[i] = "/_imgcache/" + imgID + ".jpg"',
             )
+            # 署名文字列を配列にも格納 (fmt.Sscanf は 2 値返却なので使わず、数字チェック付きで自前パース)
             content = content.replace(
-                'precomputedSigStrs[imageID] = base64.RawURLEncoding.EncodeToString(sum[:])',
-                'sigStr := base64.RawURLEncoding.EncodeToString(sum[:])\n\tprecomputedSigStrs[imageID] = sigStr\n\tvar idx int\n\tif fmt.Sscanf(imageID, "image-%04d", &idx) == 1 && idx < 200 {\n\t\tprecomputedSigArr[idx] = sigStr\n\t}'
+                "precomputedSigStrs[imageID] = base64.RawURLEncoding.EncodeToString(sum[:])",
+                "sigStr := base64.RawURLEncoding.EncodeToString(sum[:])\n\tprecomputedSigStrs[imageID] = sigStr\n\tif idx := imageIndex(imageID); idx >= 0 {\n\t\tprecomputedSigArr[idx] = sigStr\n\t}",
             )
-            old_verify = 'if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {'
-            new_verify = """var idx int
-\t\tif len(imageID) == 10 && imageID[:6] == "image-" {
-\t\t\tidx = int(imageID[6]-'0')*1000 + int(imageID[7]-'0')*100 + int(imageID[8]-'0')*10 + int(imageID[9]-'0')
-\t\t} else {
-\t\t\tidx = -1
-\t\t}
-\t\tif idx >= 0 && idx < 200 && exp == fixedGlobalExp && precomputedSigArr[idx] == sigStr {
-\t\t\tc.Response().Header().Set("Cache-Control", "public, max-age=86400")
-\t\t\tc.Response().Header().Set("X-Accel-Redirect", precomputedRedirArr[idx])
-\t\t\treturn c.NoContent(http.StatusOK)
-\t\t}
-\t\tif exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {"""
-            if old_verify in content:
-                content = content.replace(old_verify, new_verify)
-                ns_target.write_text(content, encoding="utf-8")
-                return True, title
-            return False, "old_verify not matched"
+            # "image-0123" -> 123 (形式不一致・非数字・範囲外は -1)
+            helper = (
+                "func imageIndex(id string) int {\n"
+                "\tif len(id) != 10 || id[:6] != \"image-\" {\n\t\treturn -1\n\t}\n"
+                "\tn := 0\n"
+                "\tfor i := 6; i < 10; i++ {\n"
+                "\t\tch := id[i]\n"
+                "\t\tif ch < '0' || ch > '9' {\n\t\t\treturn -1\n\t\t}\n"
+                "\t\tn = n*10 + int(ch-'0')\n"
+                "\t}\n"
+                "\tif n >= 200 {\n\t\treturn -1\n\t}\n"
+                "\treturn n\n"
+                "}\n\n"
+            )
+            content = content.replace("func fastVerifySigString(", helper + "func fastVerifySigString(", 1)
+            old_verify = "if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {"
+            new_verify = (
+                "if idx := imageIndex(imageID); idx >= 0 && exp == fixedGlobalExp && precomputedSigArr[idx] == sigStr {\n"
+                "\t\t\tc.Response().Header().Set(\"Cache-Control\", \"public, max-age=86400\")\n"
+                "\t\t\tc.Response().Header().Set(\"X-Accel-Redirect\", precomputedRedirArr[idx])\n"
+                "\t\t\treturn c.NoContent(http.StatusOK)\n"
+                "\t\t}\n"
+                "\t\t" + old_verify
+            )
+            if old_verify not in content or "precomputedSigArr [200]string" not in content:
+                return False, "anchor not matched"
+            content = content.replace(old_verify, new_verify, 1)
+            ns_target.write_text(content.replace("\n", nl), encoding="utf-8")
+            return True, title
 
         elif action == "apply_region_weight_bias":
             content = ns_target.read_text(encoding="utf-8")
@@ -813,7 +825,7 @@ def run_measurement_driven_loop(max_accepted_cycles: int = 100, timeout_sec: int
     print("       MEASUREMENT-DRIVEN AUTONOMOUS OPTIMIZATION LOOP")
     print(f"       Target Accepted Cycles: {max_accepted_cycles} | Timeout: {timeout_sec}s")
     print("       Theory: Benchmark ➔ Measurement ➔ Diagnosis ➔ Pinpoint Patch ➔ Verify")
-    print(f"       Current Baseline: {get_current_baseline():,} pts | Best: {get_all_time_best():,} pts")
+    print("       Judge: paired A/B (HEAD vs candidate, same time window) -- no fixed absolute baseline")
     print("=" * 70)
 
     start_time = time.time()
@@ -853,17 +865,20 @@ def run_measurement_driven_loop(max_accepted_cycles: int = 100, timeout_sec: int
         applied, msg = apply_diagnostic_patch(target_diag)
         if not applied:
             print(f"[X] Patch generation failed: {msg}. Marking as failed.")
+            import experiment as ex
+            ex.record_experiment({"diag_id": diag_id, "category": category, "title": diag_title,
+                                  "head": ex.head_commit(), "status": "PATCH_FAIL", "error": msg})
             failed_diagnostics.add(diag_id)
+            safe_rollback()
             continue
 
         # 3. 3-Gate 包括検証 (Gate 0: vet ➔ Gate 1: build ➔ Gate 2: test ➔ Gate 3: bench)
-        res = eval_change(diag_title)
+        res = eval_change(diag_title, target_diag)
 
         # 4. 判定とフィードバック
         if not res["valid"]:
             print(f"[!] >> Attempt {total_attempts} DISCARDED (Build/Test Fail). NOT counted.")
             failed_diagnostics.add(diag_id)
-            apply_cooldown(min_seconds=3.0, max_wait_sec=10.0, target_timewait=100)
             continue
 
         if not res["accepted"]:
@@ -873,87 +888,130 @@ def run_measurement_driven_loop(max_accepted_cycles: int = 100, timeout_sec: int
 
         # 採択 (ACCEPTED): スコア向上！
         accepted_cycles += 1
-        print(f"[★] >> ACCEPTED CYCLE {accepted_cycles}/{max_accepted_cycles} RECORDED! New Score: {res['score']:,} pts (Committed & Pushed)")
+        print(f"[★] >> ACCEPTED CYCLE {accepted_cycles}/{max_accepted_cycles} RECORDED! A/B gain {res['gain_pct']:+.2f}% (Committed & Pushed)")
         # 成功した場合は失敗リストをリフレッシュ（ボトルネックがシフトしたため）
         failed_diagnostics.clear()
 
     total_time = time.time() - start_time
     print("\n" + "=" * 70)
     print(f"       MEASUREMENT-DRIVEN LOOP FINISHED: {accepted_cycles} ACCEPTED CYCLES in {total_time:.1f}s")
-    print(f"       Final Baseline: {get_current_baseline():,} pts | All-Time Best: {get_all_time_best():,} pts")
+    print(f"       Last accepted candidate median: {get_current_baseline():,} pts")
     print("=" * 70)
+    _git_sync_history(f"chore: sync experiment history after loop ({total_attempts} attempts, {accepted_cycles} accepted)")
 
-def eval_change(desc: str) -> dict:
-    """3-Gate 包括検証"""
+def _git_sync_history(message: str) -> None:
+    """実験履歴・パッチ差分・ダッシュボードを 1 コミットにまとめて push"""
+    run_cmd(["git", "add", "harness/experiments.json", "harness/patches", "dashboard.html"])
+    code, out, _ = run_cmd(["git", "diff", "--cached", "--quiet"])
+    if code != 0:
+        run_cmd(["git", "commit", "-m", message])
+        run_cmd(["git", "push", "origin", "main"])
+
+
+def eval_change(desc: str, diag: dict | None = None) -> dict:
+    """
+    4-Gate 検証:
+      Gate 1/2: vet / build / test (webapp-go) + node_server ビルド
+      Gate 3  : HEAD(A) と候補(B) の交互 A/B 測定 (同じ時間帯の差分だけで判定)
+    すべての結果を experiments.json に記録し、ダッシュボードを再生成する。
+    """
+    import experiment as ex
+
+    diag = diag or {}
+    meta = {
+        "diag_id": diag.get("id", "manual"),
+        "category": diag.get("category", ""),
+        "title": desc,
+        "head": ex.head_commit(),
+        "min_gain_pct": ex.MIN_GAIN_PCT,
+    }
+    diff_text = ex.current_diff()
     print(f"\n[*] Evaluating Candidate Patch: {desc}")
 
     passed, msg = check_build_and_tests()
     if not passed:
         print(f"[X] Gate 1/2 FAILED: {msg}")
+        ex.record_experiment({**meta, "status": "BUILD_FAIL", "error": msg[-3000:]}, diff_text)
         safe_rollback()
+        ex.refresh_dashboard()
         return {"valid": False, "accepted": False, "score": 0, "reason": msg}
-
     print("[+] Gate 1 & 2 PASSED: Code builds and passes all tests.")
 
-    print("[*] Gate 3: Running 3-Node Topology Benchmark...")
-    res = run_benchmark_cycle()
-    if "error" in res:
-        print(f"[X] Benchmark failed: {res['error']}")
+    ok, err = ex.build_head_base()
+    if not ok:
+        print(f"[X] HEAD base build failed: {err}")
+        ex.record_experiment({**meta, "status": "BENCH_FAIL", "error": "HEAD base build failed:\n" + err[-3000:]}, diff_text)
         safe_rollback()
-        return {"valid": False, "accepted": False, "score": 0, "reason": res["error"]}
+        ex.refresh_dashboard()
+        return {"valid": False, "accepted": False, "score": 0, "reason": err}
 
-    score = res["cluster_score"]
-    rps = res["cluster_rps"]
-    p50 = res["latency_p50_ms"]
-    p99 = res["latency_p99_ms"]
-    baseline = get_current_baseline()
-    all_time_best = get_all_time_best()
+    print(f"[*] Gate 3: Paired A/B benchmark (HEAD vs candidate, {ex.AB_ROUNDS} rounds interleaved)...")
+    ab = ex.paired_ab(log=print)
+    if "error" in ab:
+        print(f"[X] Benchmark failed: {ab['error']}")
+        ex.record_experiment({**meta, "status": "BENCH_FAIL", "error": ab["error"]}, diff_text)
+        safe_rollback()
+        ex.refresh_dashboard()
+        return {"valid": False, "accepted": False, "score": 0, "reason": ab["error"]}
 
-    print(f"[*] Benchmark Result: Score = {score:,} pts (RPS: {rps}, P50: {p50}ms, P99: {p99}ms)")
-    print(f"[*] Baseline: {baseline:,} pts | Best: {all_time_best:,} pts")
+    accepted = ab.pop("accepted")
+    runs = sorted(ab["cand_runs"], key=lambda r: r["score"])
+    mid = runs[len(runs) // 2]
+    print(f"[*] A/B Result: HEAD median {ab['base_median']:,} | candidate median {ab['cand_median']:,} "
+          f"| gain {ab['gain_pct']:+.2f}% | wins {ab['wins']}/{ab['rounds']} | HEAD noise {ab['base_noise_pct']}%")
 
-    threshold = int(baseline * 1.01)
-    is_step_up = score >= threshold
-    is_all_time_record = score > all_time_best
-
-    accepted = is_step_up or is_all_time_record
-
+    commit = ""
     if accepted:
-        tag = "NEW ALL-TIME BEST ★" if is_all_time_record else f"Step-Up (+{score - baseline:,} pts)"
-        commit_msg = f"perf: {desc} ({tag}: {score:,} pts, RPS: {rps})"
-        print(f"[★] ACCEPTED ({tag}): {commit_msg}")
-        set_current_baseline(score)
-
-        run_cmd(["git", "add", "webapp-go", "arena"])
+        commit_msg = (f"perf: {desc} (A/B {ab['gain_pct']:+.2f}%: {ab['base_median']:,} -> "
+                      f"{ab['cand_median']:,} pts, wins {ab['wins']}/{ab['rounds']})")
+        print(f"[★] ACCEPTED: {commit_msg}")
+        run_cmd(["git", "add", "arena/node_server.go", "webapp-go"])
         run_cmd(["git", "commit", "-m", commit_msg])
-        run_cmd(["git", "push", "origin", "main"])
+        commit = ex.head_commit()
+        set_current_baseline(ab["cand_median"])
     else:
-        diff_pts = score - baseline
-        print(f"[-] REJECTED: Score {score:,} pts did not meet threshold {threshold:,} pts (diff: {diff_pts:,} pts). Rolling back.")
+        print(f"[-] REJECTED (rule: {ab['rule']}). Rolling back.")
         safe_rollback()
 
-    history = []
-    if HISTORY_FILE.exists():
-        try:
-            with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-                history = json.load(f)
-        except Exception:
-            pass
+    ex.record_experiment({
+        **meta,
+        "status": "ACCEPTED" if accepted else "REJECTED",
+        **ab,
+        "rps": mid["rps"], "p50": mid["p50"], "p99": mid["p99"],
+        "commit": commit,
+    }, diff_text)
+    ex.refresh_dashboard()
+    if accepted:
+        _git_sync_history(f"chore: record experiment history ({desc})")
 
-    history.append({
-        "desc": desc,
-        "score": score,
-        "rps": rps,
-        "accepted": accepted,
-        "baseline_before": baseline,
-        "timestamp": time.time()
-    })
-    with open(HISTORY_FILE, "w", encoding="utf-8") as f:
-        json.dump(history, f, indent=2, ensure_ascii=False)
+    apply_cooldown(min_seconds=3.0, max_wait_sec=15.0, target_timewait=100)
+    return {"valid": True, "accepted": accepted, "score": ab["cand_median"], "rps": mid["rps"],
+            "baseline": ab["base_median"], "gain_pct": ab["gain_pct"]}
 
-    update_dashboard_live(score, desc, accepted)
-    apply_cooldown(min_seconds=8.0, max_wait_sec=25.0, target_timewait=100)
-    return {"valid": True, "accepted": accepted, "score": score, "rps": rps, "baseline": baseline}
+
+def eval_diagnoses(diag_ids: list[str]) -> None:
+    """指定した診断 ID のパッチを順に A/B 評価 (採択されたものは HEAD に積み上がる)"""
+    import experiment as ex
+    for diag_id in diag_ids:
+        code, out, _ = run_cmd(["git", "status", "--porcelain", "--", "arena/node_server.go", "webapp-go"])
+        if out.strip():
+            print(f"[!] Working tree not clean, rolling back before {diag_id}")
+            safe_rollback()
+        cands = {c["id"]: c for c in diagnose_bottlenecks()}
+        if diag_id not in cands:
+            print(f"[-] {diag_id}: not applicable to current HEAD (already applied or anchor missing). Skipped.")
+            continue
+        diag = cands[diag_id]
+        applied, msg = apply_diagnostic_patch(diag)
+        if not applied:
+            print(f"[X] {diag_id}: patch generation failed: {msg}")
+            ex.record_experiment({"diag_id": diag_id, "category": diag.get("category", ""), "title": diag["title"],
+                                  "head": ex.head_commit(), "status": "PATCH_FAIL", "error": msg})
+            ex.refresh_dashboard()
+            continue
+        eval_change(diag["title"], diag)
+    _git_sync_history("chore: sync experiment history and dashboard")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Measurement-Driven Autonomous Autopilot Orchestrator")
@@ -966,6 +1024,11 @@ if __name__ == "__main__":
     run_parser.add_argument("--max-cycles", type=int, default=100, help="Number of ACCEPTED cycles to achieve")
     run_parser.add_argument("--timeout", type=int, default=7200, help="Timeout in seconds")
 
+    diag_parser = subparsers.add_parser("eval-diag", help="evaluate specific diagnosis ids with paired A/B")
+    diag_parser.add_argument("ids", nargs="+")
+
+    subparsers.add_parser("dashboard", help="regenerate dashboard.html from history")
+
     set_base_parser = subparsers.add_parser("set-baseline")
     set_base_parser.add_argument("score", type=int, help="Set baseline score")
 
@@ -975,6 +1038,11 @@ if __name__ == "__main__":
         eval_change(args.desc)
     elif args.command == "run":
         run_measurement_driven_loop(max_accepted_cycles=args.max_cycles, timeout_sec=args.timeout)
+    elif args.command == "eval-diag":
+        eval_diagnoses(args.ids)
+    elif args.command == "dashboard":
+        import experiment as ex
+        ex.refresh_dashboard()
     elif args.command == "set-baseline":
         set_current_baseline(args.score)
         print(f"[+] Baseline set to {args.score:,} pts")
