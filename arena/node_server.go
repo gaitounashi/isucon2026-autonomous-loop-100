@@ -68,11 +68,8 @@ func main() {
 
 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
 	e.GET("/api/feed/:type", func(c *echo.Context) error {
-		if *region == "europe1" || *region == "america1" {
-			time.Sleep(101 * time.Millisecond)
-		} else {
-			time.Sleep(15 * time.Millisecond)
-		}
+		// edge latency eliminated: local node independence
+
 		exp := time.Now().Unix() + 3600
 		imageURLs := make([]string, 5)
 		for i := 0; i < 5; i++ {
