@@ -238,6 +238,17 @@ def diagnose_bottlenecks() -> list[dict]:
     # 新アーキテクチャ診断 (公式参加記 / 優勝チーム Typing Bears 625k 準拠)
     # ==============================================================================
 
+    # ボトルネック A0 (黄金コンビ): 直書きゼロコピー + 固定長配列 O(1) 署名参照の複合投入
+    # 根拠: feed_direct_writer (+1.55%) と fixed_array_lookup (+1.01%) の相乗効果で +2.5%〜+3.0% 超えを確実に狙う
+    if 'precomputedSigArr' not in ns_code and 'c.Blob(http.StatusOK' in ns_code:
+        candidates.append({
+            "id": "combo_feed_direct_and_fixed_array",
+            "category": "COMBO/ZERO_COPY_AND_ALGO",
+            "priority": 0,
+            "title": "combo: direct zero-copy ResponseWriter for feeds AND fixed-size array O(1) image signatures",
+            "action": "apply_combo_feed_direct_and_fixed_array"
+        })
+
     # ボトルネック A1: レスポンス直書きゼロコピー (Echo c.Blob / c.NoContent のオーバーヘッド完全消去)
     if 'c.Response().Writer' not in ns_code and 'c.Blob(http.StatusOK' in ns_code:
         candidates.append({
@@ -427,6 +438,15 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
 
     try:
         ns_target = ARENA_DIR / "node_server.go"
+
+        if action == "apply_combo_feed_direct_and_fixed_array":
+            # 1. feed_direct_writer を適用
+            ok1, m1 = apply_diagnostic_patch({"action": "apply_feed_direct_writer", "title": "feed"})
+            # 2. fixed_array_lookup を適用
+            ok2, m2 = apply_diagnostic_patch({"action": "apply_fixed_array_lookup", "title": "array"})
+            if ok1 and ok2:
+                return True, title
+            return False, f"combo failed: feed={ok1}({m1}), array={ok2}({m2})"
 
         if action == "apply_feed_direct_writer":
             content = ns_target.read_text(encoding="utf-8")
