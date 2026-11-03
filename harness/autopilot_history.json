@@ -2758,5 +2758,357 @@
     "accepted": false,
     "baseline_before": 455485,
     "timestamp": 1793697003.1747804
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 234602,
+    "rps": 2256.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700683.7913983
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 229333,
+    "rps": 2219.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700731.4971657
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 255624,
+    "rps": 2459.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700779.1180549
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 245122,
+    "rps": 2356.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700826.5004358
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 254048,
+    "rps": 2439.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700873.9064412
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 239969,
+    "rps": 2318.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700918.461874
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 230030,
+    "rps": 2222.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700948.3447502
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 247209,
+    "rps": 2389.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793700995.9171324
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 257656,
+    "rps": 2472.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701043.0559516
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 253332,
+    "rps": 2452.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701090.4522164
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 241731,
+    "rps": 2327.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701153.839022
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 252058,
+    "rps": 2421.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701181.5969477
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 248502,
+    "rps": 2410.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701212.5670867
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 379213,
+    "rps": 3653.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701259.8007703
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 378739,
+    "rps": 3639.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701304.9605975
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 386048,
+    "rps": 3716.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701348.2396133
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 388149,
+    "rps": 3742.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701369.974853
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 383223,
+    "rps": 3693.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701392.515
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 400209,
+    "rps": 3852.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701437.6201582
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 394078,
+    "rps": 3796.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701484.7532768
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 395898,
+    "rps": 3805.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701528.9335508
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 392848,
+    "rps": 3780.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701550.5821898
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 399308,
+    "rps": 3842.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701572.1467414
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 379105,
+    "rps": 3656.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701618.3030217
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 379770,
+    "rps": 3658.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701665.365462
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 372896,
+    "rps": 3597.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701700.3748248
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 378466,
+    "rps": 3637.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701747.7118044
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 387796,
+    "rps": 3739.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701794.9426875
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 375547,
+    "rps": 3600.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701822.7262678
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 383389,
+    "rps": 3680.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701844.4514685
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 377217,
+    "rps": 3620.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701893.7853732
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 375572,
+    "rps": 3616.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701927.821448
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 250223,
+    "rps": 2408.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793701955.8774793
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 258488,
+    "rps": 2490.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702003.3983865
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 253206,
+    "rps": 2435.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702050.7950692
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 245860,
+    "rps": 2385.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702092.8867717
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 256014,
+    "rps": 2454.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702114.6059494
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 241121,
+    "rps": 2333.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702136.3542647
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 248501,
+    "rps": 2397.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702183.8209143
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 242899,
+    "rps": 2359.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702226.0867639
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 238786,
+    "rps": 2306.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702261.060517
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 238680,
+    "rps": 2301.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702282.5500474
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 250912,
+    "rps": 2454.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702316.7530024
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 240979,
+    "rps": 2336.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793702359.1676075
   }
 ]

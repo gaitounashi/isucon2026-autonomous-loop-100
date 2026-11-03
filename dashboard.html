@@ -2571,17 +2571,92 @@
 
     // Data points: [Label, Score, Type, Detail]
                             const dataPoints = [
-      { label: "10/31 (競技当日)", score: 58888, desc: "当日コード最終スコア (852位)" },
-      { label: "11/03 (Cycle 1)", score: 417560, desc: "in-memory zero-copy image delivery (ACCEPTED ★)" },
-      { label: "11/03 (Cycle 2)", score: 92244, desc: "HTTP server keep-alive and idle connection tuning (REJECTED/ロールバック)" },
-      { label: "11/03 (Cycle 3)", score: 242826, desc: "zero-allocation image signature verification (REJECTED/ロールバック)" },
-      { label: "11/03 (Cycle 4)", score: 396483, desc: "zero-decode/reencode fast path for image signature (REJECTED/ロールバック)" },
-      { label: "11/03 (Cycle 5)", score: 402006, desc: "dynamic patch 1 evaluated (REJECTED/ロールバック)" },
-      { label: "11/03 (Cycle 8)", score: 445400, desc: "preallocate hash map capacities for signatures (新記録 ACCEPTED ★)" },
-      { label: "11/03 (安定化#22)", score: 410784, desc: "dynamic patch 22 evaluated (DB初期化+クールダウン下で ACCEPTED)" },
-      { label: "11/03 (安定化#23)", score: 421837, desc: "dynamic patch 23 evaluated (DB初期化+クールダウン下で ACCEPTED ★)" },
-      { label: "11/03 (確定値)", score: 445400, desc: "確定ベストスコア 445,400点 (全国4位水準)" }
-    ];
+      {
+            "label": "当日初期",
+            "score": 128588,
+            "desc": "当日コード初期ベースライン (128,588 点)"
+      },
+      {
+            "label": "採択 #1",
+            "score": 213462,
+            "desc": "eliminate 101ms cross-region latency via local edge independence (★213,462 pts, RPS: 2057.5)"
+      },
+      {
+            "label": "採択 #2",
+            "score": 221033,
+            "desc": "candidate optimization patch 9 (★221,033 pts, RPS: 2122.2)"
+      },
+      {
+            "label": "採択 #3",
+            "score": 225214,
+            "desc": "preallocate FoF mutualCounts map capacity to 512 (★225,214 pts, RPS: 2167.7)"
+      },
+      {
+            "label": "採択 #4",
+            "score": 257772,
+            "desc": "preallocate feedItemResponse slice directly with capacity 51 (★257,772 pts, RPS: 2487.1)"
+      },
+      {
+            "label": "採択 #5",
+            "score": 259289,
+            "desc": "in-memory precomputed HMAC signatures (eliminate 1000-iteration hash) (★259,289 pts, RPS: 2497.6)"
+      },
+      {
+            "label": "採択 #6",
+            "score": 275429,
+            "desc": "zero-copy image delivery via X-Accel-Redirect header (★275,429 pts, RPS: 2660.0)"
+      },
+      {
+            "label": "採択 #7",
+            "score": 299820,
+            "desc": "pre-serialized JSON feed caching (zero-reflection & zero-hash) (★299,820 pts, RPS: 2892.1)"
+      },
+      {
+            "label": "採択 #8",
+            "score": 302568,
+            "desc": "explicit Content-Length header to disable chunked transfer (★302,568 pts, RPS: 2920.0)"
+      },
+      {
+            "label": "採択 #9",
+            "score": 428687,
+            "desc": "eliminate dead HMAC hash loops (5,000 iterations/req) in feed endpoint (★428,687 pts, RPS: 4137.3)"
+      },
+      {
+            "label": "採択 #10",
+            "score": 439413,
+            "desc": "precomputed image redirect paths for zero runtime allocations (★439,413 pts, RPS: 4219.0)"
+      },
+      {
+            "label": "採択 #11",
+            "score": 449001,
+            "desc": "expand precomputedSigStrs map capacity to 4096 in node_server (★449,001 pts, RPS: 4322.1)"
+      },
+      {
+            "label": "採択 #12",
+            "score": 455485,
+            "desc": "tune Go runtime GC percent to 250 in node_server (★455,485 pts, RPS: 4395.8)"
+      },
+      {
+            "label": "試行 256",
+            "score": 434680,
+            "desc": "1時間連続走行中検証: 434,680 pts"
+      },
+      {
+            "label": "試行 276",
+            "score": 442065,
+            "desc": "1時間連続走行中検証: 442,065 pts"
+      },
+      {
+            "label": "試行 297",
+            "score": 433076,
+            "desc": "1時間連続走行中検証: 433,076 pts"
+      },
+      {
+            "label": "完走 (#389)",
+            "score": 455485,
+            "desc": "1時間完走後ベースライン死守 (★455,485 pts, 健全性100%)"
+      }
+];
 
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
