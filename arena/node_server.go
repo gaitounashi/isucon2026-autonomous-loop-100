@@ -19,9 +19,9 @@ var (
 	fixedGlobalExp int64
 	fixedGlobalExpStr string
 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
-	precomputedSigStrs = make(map[string]string, 2048)
+	precomputedSigStrs = make(map[string]string, 4096)
 	precomputedFeedJSONs = make(map[string][]byte)
-	precomputedRedirects = make(map[string]string, 256)
+	precomputedRedirects = make(map[string]string, 4096)
 )
 
 func init() {
