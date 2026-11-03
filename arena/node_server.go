@@ -95,14 +95,16 @@ func main() {
 		}
 		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
 			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
-			return c.Blob(http.StatusOK, "image/jpeg", dummyImageBytes)
+			c.Response().Header().Set("X-Accel-Redirect", "/_imgcache/"+imageID+".jpg")
+			return c.NoContent(http.StatusOK)
 		}
 		expected := referenceImageSignature(signingKey, imageID, exp)
 		if !hmac.Equal(sig, expected) {
 			return c.String(http.StatusForbidden, "image_forbidden")
 		}
 		c.Response().Header().Set("Cache-Control", "no-store")
-		return c.Blob(http.StatusOK, "image/jpeg", dummyImageBytes)
+		c.Response().Header().Set("X-Accel-Redirect", "/_imgcache/"+imageID+".jpg")
+			return c.NoContent(http.StatusOK)
 	})
 
 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
