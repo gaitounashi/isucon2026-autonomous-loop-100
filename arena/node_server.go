@@ -129,14 +129,7 @@ func main() {
 	e.GET("/api/feed/:type", func(c *echo.Context) error {
 		// edge latency eliminated: local node independence
 
-		exp := time.Now().Unix() + 3600
-		imageURLs := make([]string, 5)
-		for i := 0; i < 5; i++ {
-			imgID := fmt.Sprintf("image-%04d", i)
-			sig := referenceImageSignature(signingKey, imgID, exp)
-			sigStr := base64.RawURLEncoding.EncodeToString(sig)
-			imageURLs[i] = fmt.Sprintf("/api/images/%s?exp=%d&sig=%s", imgID, exp, sigStr)
-		}
+
 		c.Response().Header().Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
 		return c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])
 	})
