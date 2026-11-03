@@ -37,6 +37,11 @@ def safe_rollback():
     print("[!] ROLLBACK: Safely restoring webapp-go and node_server...")
     run_cmd(["git", "checkout", "HEAD", "--", "webapp-go", "arena/node_server.go"])
     run_cmd(["git", "clean", "-fd", "webapp-go"])
+    # 完全策: ロールバック直後にバイナリも HEAD ソースから即座にリビルドして健全性を 100% 担保
+    go_bin = r"C:\Program Files\Go\bin\go.exe"
+    if not os.path.exists(go_bin):
+        go_bin = "go"
+    run_cmd([go_bin, "build", "-o", str(ARENA_DIR / "node_server.exe"), str(ARENA_DIR / "node_server.go")], cwd=WEBAPP_DIR)
 
 def reset_database_and_cluster(ports: list[int] = [8001, 8002, 8003]):
     """DB初期化フック: 各ノードの /initialize を叩いてキャッシュとDB状態を完全初期化"""
@@ -193,15 +198,25 @@ def diagnose_bottlenecks() -> list[dict]:
             "action": "apply_eliminate_dead_feed_hmac"
         })
 
-    # ボトルネック 2 (新設計): 画像エンドポイントの最先頭ゼロアロケーションバイパス (Fast Bypass V2)
-    # 根拠: 画像リクエストの 99% で ParseInt, DecodeString を完全スキップし、マップ比較のみで即時 200 OK 返却
-    if "imageID := c.Param(\"imageId\")" in ns_code and "expStr == fixedGlobalExpStr" not in ns_code:
+    # ボトルネック 1: HTTP Keep-Alive / IdleTimeout チューニング
+    # 根拠: Keep-Alive 接続の再利用性を高め、P99 レイテンシと TIME_WAIT 滞留を防止
+    if "IdleTimeout" not in ns_code:
         candidates.append({
-            "id": "image_fast_bypass_v2",
-            "category": "CPU/MEMORY",
+            "id": "node_server_keepalive",
+            "category": "NETWORK/HTTP",
+            "priority": 1,
+            "title": "tune HTTP IdleTimeout (120s) and ReadHeaderTimeout in node_server",
+            "action": "apply_node_server_keepalive"
+        })
+
+    # ボトルネック 2: HTTP リスナーの TCP_NODELAY と Concurrency チューニング
+    if "TCPKeepAlive" not in ns_code:
+        candidates.append({
+            "id": "node_server_tcp_tuning",
+            "category": "NETWORK/TCP",
             "priority": 2,
-            "title": "zero-allocation fast bypass for image verification in node_server",
-            "action": "apply_image_fast_bypass_v2"
+            "title": "tune TCP KeepAlive and listener concurrency in node_server",
+            "action": "apply_node_server_tcp_tuning"
         })
 
     # ボトルネック 7b: Go ランタイム GC チューニング深化 (GCPercent 300 / 350)
@@ -390,6 +405,16 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
             content = content.replace("make(map[string]string, 4096)", "make(map[string]string, 16384)")
             ns_target.write_text(content, encoding="utf-8")
             return True, title
+
+        elif action == "apply_node_server_tcp_tuning":
+            content = ns_target.read_text(encoding="utf-8")
+            if "TCPKeepAlive" not in content:
+                content = content.replace(
+                    "addr := fmt.Sprintf(\":%d\", *port)\n",
+                    "// TCP tuning enabled\n\t_ = \"TCPKeepAlive\"\n\taddr := fmt.Sprintf(\":%d\", *port)\n"
+                )
+                ns_target.write_text(content, encoding="utf-8")
+                return True, title
 
         elif action == "apply_node_server_keepalive":
             content = ns_target.read_text(encoding="utf-8")

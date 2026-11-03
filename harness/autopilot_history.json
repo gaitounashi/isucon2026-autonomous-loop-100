@@ -1870,5 +1870,85 @@
     "accepted": false,
     "baseline_before": 455485,
     "timestamp": 1793692377.4232075
+  },
+  {
+    "desc": "zero-allocation fast bypass for image verification in node_server",
+    "score": 420794,
+    "rps": 4051.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692742.3243601
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 425427,
+    "rps": 4101.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692763.2035942
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 402027,
+    "rps": 3878.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692784.1739948
+  },
+  {
+    "desc": "zero-allocation fast bypass for image verification in node_server",
+    "score": 247891,
+    "rps": 2378.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692817.9199433
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 254137,
+    "rps": 2442.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692864.5616496
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 223419,
+    "rps": 2145.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692911.1971712
+  },
+  {
+    "desc": "zero-allocation fast bypass for image verification in node_server",
+    "score": 243153,
+    "rps": 2347.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692944.7683127
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 229296,
+    "rps": 2219.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692965.7116318
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 234721,
+    "rps": 2259.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692996.877265
+  },
+  {
+    "desc": "zero-allocation fast bypass for image verification in node_server",
+    "score": 235295,
+    "rps": 2261.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693056.7059915
   }
 ]
