@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "desc": "initial day-of baseline verification",
+    "score": 128588,
+    "rps": 1414.6,
+    "accepted": true,
+    "baseline_before": 110000,
+    "timestamp": 1793683471.3936808
+  }
+]
