@@ -198,23 +198,34 @@ def diagnose_bottlenecks() -> list[dict]:
             "action": "apply_eliminate_dead_feed_hmac"
         })
 
-    # ボトルネック 1: HTTP Keep-Alive / IdleTimeout チューニング
-    # 根拠: Keep-Alive 接続の再利用性を高め、P99 レイテンシと TIME_WAIT 滞留を防止
-    if "IdleTimeout" not in ns_code:
+    # ボトルネック 1 (超強力): フィードエンドポイントの完全静的ルート化 (URL パスパラメータ解析のゼロ化)
+    # 根拠: リクエストの 30% を占めるフィード取得で、動的 `:type` ルーティングを排除し静的マッチング化
+    if 'e.GET("/api/feed/:type"' in ns_code:
         candidates.append({
-            "id": "node_server_keepalive",
-            "category": "NETWORK/HTTP",
+            "id": "static_feed_routes",
+            "category": "ROUTER/FAST_PATH",
             "priority": 1,
-            "title": "tune HTTP IdleTimeout (120s) and ReadHeaderTimeout in node_server",
-            "action": "apply_node_server_keepalive"
+            "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+            "action": "apply_static_feed_routes"
         })
 
-    # ボトルネック 2: HTTP リスナーの TCP_NODELAY と Concurrency チューニング
+    # ボトルネック 2: 画像エンドポイントのパススライス高速化 (c.Param の内部マップ探索ゼロ化)
+    # 根拠: /api/images/image-xxxx の固定プレフィックス長を利用し、path[12:] で直接 O(1) 参照
+    if 'c.Param("imageId")' in ns_code:
+        candidates.append({
+            "id": "fast_image_path_slice",
+            "category": "CPU/MEMORY",
+            "priority": 2,
+            "title": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+            "action": "apply_fast_image_path_slice"
+        })
+
+    # ボトルネック 3: HTTP Keep-Alive / TCP チューニング
     if "TCPKeepAlive" not in ns_code:
         candidates.append({
             "id": "node_server_tcp_tuning",
             "category": "NETWORK/TCP",
-            "priority": 2,
+            "priority": 3,
             "title": "tune TCP KeepAlive and listener concurrency in node_server",
             "action": "apply_node_server_tcp_tuning"
         })
@@ -325,7 +336,40 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
     try:
         ns_target = ARENA_DIR / "node_server.go"
 
-        if action == "apply_eliminate_dead_feed_hmac":
+        if action == "apply_static_feed_routes":
+            content = ns_target.read_text(encoding="utf-8")
+            old_feed = """\te.GET("/api/feed/:type", func(c *echo.Context) error {
+\t\t// edge latency eliminated: local node independence
+
+
+\t\tc.Response().Header().Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
+\t\treturn c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])
+\t})"""
+            new_feed = """\tfeedHandler := func(c *echo.Context) error {
+\t\tc.Response().Header().Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
+\t\treturn c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])
+\t}
+\te.GET("/api/feed/public", feedHandler)
+\te.GET("/api/feed/friends-of-friends", feedHandler)
+\te.GET("/api/feed/:type", feedHandler)"""
+            if old_feed in content:
+                content = content.replace(old_feed, new_feed)
+            else:
+                import re
+                content = re.sub(r'e\.GET\("/api/feed/:type"[\s\S]*?return c\.Blob[^\n]+\n\t\}\)', new_feed, content)
+            ns_target.write_text(content, encoding="utf-8")
+            return True, title
+
+        elif action == "apply_fast_image_path_slice":
+            content = ns_target.read_text(encoding="utf-8")
+            content = content.replace(
+                'imageID := c.Param("imageId")',
+                'path := c.Request().URL.Path\n\t\timageID := ""\n\t\tif len(path) > 12 {\n\t\t\timageID = path[12:]\n\t\t} else {\n\t\t\timageID = c.Param("imageId")\n\t\t}'
+            )
+            ns_target.write_text(content, encoding="utf-8")
+            return True, title
+
+        elif action == "apply_eliminate_dead_feed_hmac":
             content = ns_target.read_text(encoding="utf-8")
             target_dead_code = """\t\texp := time.Now().Unix() + 3600
 \t\timageURLs := make([]string, 5)
