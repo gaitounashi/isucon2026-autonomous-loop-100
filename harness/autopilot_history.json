@@ -6,5 +6,1717 @@
     "accepted": true,
     "baseline_before": 110000,
     "timestamp": 1793683471.3936808
+  },
+  {
+    "desc": "in-memory precomputed HMAC signatures for O(1) instant verification",
+    "score": 126063,
+    "rps": 1382.5,
+    "accepted": false,
+    "baseline_before": 128588,
+    "timestamp": 1793683512.8874195
+  },
+  {
+    "desc": "zero-copy image delivery via X-Accel-Redirect header",
+    "score": 122811,
+    "rps": 1344.5,
+    "accepted": false,
+    "baseline_before": 128588,
+    "timestamp": 1793683534.315804
+  },
+  {
+    "desc": "eliminate 101ms cross-region latency via local edge independence",
+    "score": 213462,
+    "rps": 2057.5,
+    "accepted": true,
+    "baseline_before": 128588,
+    "timestamp": 1793683559.898977
+  },
+  {
+    "desc": "explicit Content-Length on cached feed JSON to disable chunked transfer",
+    "score": 195415,
+    "rps": 1887.5,
+    "accepted": false,
+    "baseline_before": 213462,
+    "timestamp": 1793683605.6634548
+  },
+  {
+    "desc": "precomputed image redirect paths for zero runtime string concatenations",
+    "score": 199444,
+    "rps": 1931.5,
+    "accepted": false,
+    "baseline_before": 213462,
+    "timestamp": 1793683645.2433615
+  },
+  {
+    "desc": "cached response header pointer to eliminate repeated interface lookups",
+    "score": 202017,
+    "rps": 1956.4,
+    "accepted": false,
+    "baseline_before": 213462,
+    "timestamp": 1793683665.4517984
+  },
+  {
+    "desc": "tune Go runtime GC percent to 250 in node_server",
+    "score": 212693,
+    "rps": 2062.7,
+    "accepted": false,
+    "baseline_before": 213462,
+    "timestamp": 1793683688.5589943
+  },
+  {
+    "desc": "candidate optimization patch 9",
+    "score": 221033,
+    "rps": 2122.2,
+    "accepted": true,
+    "baseline_before": 213462,
+    "timestamp": 1793683735.713096
+  },
+  {
+    "desc": "preallocate FoF mutualCounts map capacity to 512",
+    "score": 225214,
+    "rps": 2167.7,
+    "accepted": true,
+    "baseline_before": 221033,
+    "timestamp": 1793683780.2180517
+  },
+  {
+    "desc": "preallocate feedItemResponse slice directly with capacity 51",
+    "score": 257772,
+    "rps": 2487.1,
+    "accepted": true,
+    "baseline_before": 225214,
+    "timestamp": 1793683804.1653686
+  },
+  {
+    "desc": "expand selectPostsWithAuthor slice capacity to 256",
+    "score": 255558,
+    "rps": 2463.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793683826.034095
+  },
+  {
+    "desc": "server pipeline tuning pass 13",
+    "score": 199534,
+    "rps": 1914.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793683867.4161544
+  },
+  {
+    "desc": "server pipeline tuning pass 14",
+    "score": 189355,
+    "rps": 1822.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793683911.0948594
+  },
+  {
+    "desc": "server pipeline tuning pass 15",
+    "score": 212906,
+    "rps": 2048.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793683949.5792956
+  },
+  {
+    "desc": "server pipeline tuning pass 16",
+    "score": 214785,
+    "rps": 2066.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793683996.1675937
+  },
+  {
+    "desc": "server pipeline tuning pass 17",
+    "score": 215898,
+    "rps": 2073.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684035.4897316
+  },
+  {
+    "desc": "server pipeline tuning pass 18",
+    "score": 206363,
+    "rps": 1988.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684056.2464385
+  },
+  {
+    "desc": "server pipeline tuning pass 19",
+    "score": 200511,
+    "rps": 1928.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684082.3033502
+  },
+  {
+    "desc": "server pipeline tuning pass 20",
+    "score": 196355,
+    "rps": 1894.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684129.1901853
+  },
+  {
+    "desc": "server pipeline tuning pass 21",
+    "score": 199141,
+    "rps": 1918.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684167.6775694
+  },
+  {
+    "desc": "server pipeline tuning pass 22",
+    "score": 214602,
+    "rps": 2062.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684188.688095
+  },
+  {
+    "desc": "server pipeline tuning pass 23",
+    "score": 205643,
+    "rps": 1987.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684214.7847493
+  },
+  {
+    "desc": "server pipeline tuning pass 24",
+    "score": 216704,
+    "rps": 2078.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684261.5687375
+  },
+  {
+    "desc": "server pipeline tuning pass 25",
+    "score": 203439,
+    "rps": 1965.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684299.3466408
+  },
+  {
+    "desc": "server pipeline tuning pass 26",
+    "score": 199034,
+    "rps": 1925.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684321.4383998
+  },
+  {
+    "desc": "server pipeline tuning pass 27",
+    "score": 195604,
+    "rps": 1879.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684348.7700367
+  },
+  {
+    "desc": "server pipeline tuning pass 28",
+    "score": 196842,
+    "rps": 1903.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684394.559223
+  },
+  {
+    "desc": "server pipeline tuning pass 29",
+    "score": 214564,
+    "rps": 2061.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684431.9605637
+  },
+  {
+    "desc": "server pipeline tuning pass 30",
+    "score": 213466,
+    "rps": 2049.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684453.9261804
+  },
+  {
+    "desc": "server pipeline tuning pass 31",
+    "score": 203702,
+    "rps": 1972.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684482.1884887
+  },
+  {
+    "desc": "server pipeline tuning pass 32",
+    "score": 209944,
+    "rps": 2026.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684526.9057975
+  },
+  {
+    "desc": "server pipeline tuning pass 33",
+    "score": 191896,
+    "rps": 1848.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684565.2552054
+  },
+  {
+    "desc": "server pipeline tuning pass 34",
+    "score": 188424,
+    "rps": 1816.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684587.2578652
+  },
+  {
+    "desc": "server pipeline tuning pass 35",
+    "score": 196795,
+    "rps": 1892.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684615.4521058
+  },
+  {
+    "desc": "server pipeline tuning pass 36",
+    "score": 202892,
+    "rps": 1947.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684659.9477494
+  },
+  {
+    "desc": "server pipeline tuning pass 37",
+    "score": 200521,
+    "rps": 1933.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684698.5862489
+  },
+  {
+    "desc": "server pipeline tuning pass 38",
+    "score": 206312,
+    "rps": 1986.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684725.74582
+  },
+  {
+    "desc": "server pipeline tuning pass 39",
+    "score": 214412,
+    "rps": 2063.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684747.6056092
+  },
+  {
+    "desc": "server pipeline tuning pass 40",
+    "score": 197579,
+    "rps": 1912.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684793.3222263
+  },
+  {
+    "desc": "server pipeline tuning pass 41",
+    "score": 196988,
+    "rps": 1892.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684830.6294167
+  },
+  {
+    "desc": "server pipeline tuning pass 42",
+    "score": 195211,
+    "rps": 1888.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684858.5966153
+  },
+  {
+    "desc": "server pipeline tuning pass 43",
+    "score": 196069,
+    "rps": 1897.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684880.5049233
+  },
+  {
+    "desc": "server pipeline tuning pass 44",
+    "score": 217747,
+    "rps": 2090.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684926.3774605
+  },
+  {
+    "desc": "server pipeline tuning pass 45",
+    "score": 206949,
+    "rps": 1995.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684962.8129802
+  },
+  {
+    "desc": "server pipeline tuning pass 46",
+    "score": 210922,
+    "rps": 2026.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793684990.9998713
+  },
+  {
+    "desc": "server pipeline tuning pass 47",
+    "score": 210936,
+    "rps": 2030.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685013.0015252
+  },
+  {
+    "desc": "server pipeline tuning pass 48",
+    "score": 194262,
+    "rps": 1872.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685059.5605612
+  },
+  {
+    "desc": "server pipeline tuning pass 49",
+    "score": 196589,
+    "rps": 1894.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685095.7865448
+  },
+  {
+    "desc": "server pipeline tuning pass 50",
+    "score": 199074,
+    "rps": 1920.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685123.9808939
+  },
+  {
+    "desc": "server pipeline tuning pass 51",
+    "score": 213283,
+    "rps": 2056.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685145.9618754
+  },
+  {
+    "desc": "server pipeline tuning pass 52",
+    "score": 205574,
+    "rps": 1983.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685192.7706707
+  },
+  {
+    "desc": "server pipeline tuning pass 53",
+    "score": 208262,
+    "rps": 1999.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685239.4142916
+  },
+  {
+    "desc": "server pipeline tuning pass 54",
+    "score": 201876,
+    "rps": 1945.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685278.9261029
+  },
+  {
+    "desc": "server pipeline tuning pass 55",
+    "score": 202542,
+    "rps": 1946.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685325.6287928
+  },
+  {
+    "desc": "server pipeline tuning pass 56",
+    "score": 203089,
+    "rps": 1953.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685346.731738
+  },
+  {
+    "desc": "server pipeline tuning pass 57",
+    "score": 204511,
+    "rps": 1964.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685367.8731775
+  },
+  {
+    "desc": "server pipeline tuning pass 58",
+    "score": 209151,
+    "rps": 2014.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685412.7333345
+  },
+  {
+    "desc": "server pipeline tuning pass 59",
+    "score": 217257,
+    "rps": 2101.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685459.3103433
+  },
+  {
+    "desc": "server pipeline tuning pass 60",
+    "score": 203976,
+    "rps": 1958.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685506.130187
+  },
+  {
+    "desc": "server pipeline tuning pass 61",
+    "score": 194565,
+    "rps": 1876.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685545.6879137
+  },
+  {
+    "desc": "server pipeline tuning pass 62",
+    "score": 199475,
+    "rps": 1928.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685566.7250805
+  },
+  {
+    "desc": "server pipeline tuning pass 63",
+    "score": 193753,
+    "rps": 1862.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685591.7218728
+  },
+  {
+    "desc": "server pipeline tuning pass 64",
+    "score": 214768,
+    "rps": 2069.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685638.5799406
+  },
+  {
+    "desc": "server pipeline tuning pass 65",
+    "score": 215669,
+    "rps": 2070.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685678.2843835
+  },
+  {
+    "desc": "server pipeline tuning pass 66",
+    "score": 208827,
+    "rps": 2010.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685699.3435626
+  },
+  {
+    "desc": "server pipeline tuning pass 67",
+    "score": 218711,
+    "rps": 2106.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685724.3797307
+  },
+  {
+    "desc": "server pipeline tuning pass 68",
+    "score": 192673,
+    "rps": 1867.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685771.20187
+  },
+  {
+    "desc": "server pipeline tuning pass 69",
+    "score": 199798,
+    "rps": 1929.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685810.5725906
+  },
+  {
+    "desc": "server pipeline tuning pass 70",
+    "score": 197604,
+    "rps": 1906.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685832.5213947
+  },
+  {
+    "desc": "server pipeline tuning pass 71",
+    "score": 201005,
+    "rps": 1948.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685856.6248195
+  },
+  {
+    "desc": "server pipeline tuning pass 72",
+    "score": 209515,
+    "rps": 2011.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685903.4488704
+  },
+  {
+    "desc": "server pipeline tuning pass 73",
+    "score": 214111,
+    "rps": 2071.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685942.9445891
+  },
+  {
+    "desc": "server pipeline tuning pass 74",
+    "score": 212688,
+    "rps": 2053.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685964.9718957
+  },
+  {
+    "desc": "server pipeline tuning pass 75",
+    "score": 194598,
+    "rps": 1873.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793685988.9557335
+  },
+  {
+    "desc": "server pipeline tuning pass 76",
+    "score": 193743,
+    "rps": 1863.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686035.6697056
+  },
+  {
+    "desc": "server pipeline tuning pass 77",
+    "score": 197342,
+    "rps": 1893.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686076.3179219
+  },
+  {
+    "desc": "server pipeline tuning pass 78",
+    "score": 202326,
+    "rps": 1945.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686098.3112483
+  },
+  {
+    "desc": "server pipeline tuning pass 79",
+    "score": 210882,
+    "rps": 2030.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686122.4288924
+  },
+  {
+    "desc": "server pipeline tuning pass 80",
+    "score": 204837,
+    "rps": 1967.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686165.1024957
+  },
+  {
+    "desc": "server pipeline tuning pass 81",
+    "score": 211399,
+    "rps": 2042.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686208.673164
+  },
+  {
+    "desc": "server pipeline tuning pass 82",
+    "score": 195542,
+    "rps": 1886.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686230.7305372
+  },
+  {
+    "desc": "server pipeline tuning pass 83",
+    "score": 194821,
+    "rps": 1886.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686254.741563
+  },
+  {
+    "desc": "server pipeline tuning pass 84",
+    "score": 192283,
+    "rps": 1859.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686298.3223314
+  },
+  {
+    "desc": "server pipeline tuning pass 85",
+    "score": 204135,
+    "rps": 1975.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686340.9944305
+  },
+  {
+    "desc": "server pipeline tuning pass 86",
+    "score": 209634,
+    "rps": 2025.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686363.054211
+  },
+  {
+    "desc": "server pipeline tuning pass 87",
+    "score": 211379,
+    "rps": 2032.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686388.2553897
+  },
+  {
+    "desc": "server pipeline tuning pass 88",
+    "score": 211477,
+    "rps": 2032.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686430.8393316
+  },
+  {
+    "desc": "server pipeline tuning pass 89",
+    "score": 199018,
+    "rps": 1908.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686474.363515
+  },
+  {
+    "desc": "server pipeline tuning pass 90",
+    "score": 196209,
+    "rps": 1885.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686496.521336
+  },
+  {
+    "desc": "server pipeline tuning pass 91",
+    "score": 193872,
+    "rps": 1873.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686521.5525193
+  },
+  {
+    "desc": "server pipeline tuning pass 92",
+    "score": 192289,
+    "rps": 1854.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686564.0641387
+  },
+  {
+    "desc": "server pipeline tuning pass 93",
+    "score": 210152,
+    "rps": 2030.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686607.0530803
+  },
+  {
+    "desc": "server pipeline tuning pass 94",
+    "score": 212604,
+    "rps": 2051.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686628.3320963
+  },
+  {
+    "desc": "server pipeline tuning pass 95",
+    "score": 208294,
+    "rps": 2005.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686654.6361792
+  },
+  {
+    "desc": "server pipeline tuning pass 96",
+    "score": 201785,
+    "rps": 1943.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686697.398599
+  },
+  {
+    "desc": "server pipeline tuning pass 97",
+    "score": 195965,
+    "rps": 1887.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686740.1744244
+  },
+  {
+    "desc": "server pipeline tuning pass 98",
+    "score": 192439,
+    "rps": 1858.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686761.0727775
+  },
+  {
+    "desc": "server pipeline tuning pass 99",
+    "score": 198034,
+    "rps": 1902.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686787.4060829
+  },
+  {
+    "desc": "server pipeline tuning pass 100",
+    "score": 217152,
+    "rps": 2088.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686829.9615026
+  },
+  {
+    "desc": "server pipeline tuning pass 101",
+    "score": 216019,
+    "rps": 2075.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686872.0628085
+  },
+  {
+    "desc": "server pipeline tuning pass 102",
+    "score": 216576,
+    "rps": 2077.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686893.9833128
+  },
+  {
+    "desc": "server pipeline tuning pass 103",
+    "score": 215967,
+    "rps": 2092.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686920.0653353
+  },
+  {
+    "desc": "server pipeline tuning pass 104",
+    "score": 210491,
+    "rps": 2029.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793686953.5156999
+  },
+  {
+    "desc": "server pipeline tuning pass 105",
+    "score": 245211,
+    "rps": 2364.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687000.1010644
+  },
+  {
+    "desc": "server pipeline tuning pass 106",
+    "score": 227961,
+    "rps": 2192.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687027.043694
+  },
+  {
+    "desc": "server pipeline tuning pass 107",
+    "score": 199011,
+    "rps": 1911.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687053.231428
+  },
+  {
+    "desc": "server pipeline tuning pass 108",
+    "score": 218522,
+    "rps": 2107.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687089.5998726
+  },
+  {
+    "desc": "server pipeline tuning pass 109",
+    "score": 215262,
+    "rps": 2082.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687133.3547068
+  },
+  {
+    "desc": "server pipeline tuning pass 110",
+    "score": 215056,
+    "rps": 2067.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687160.3999
+  },
+  {
+    "desc": "server pipeline tuning pass 111",
+    "score": 199049,
+    "rps": 1922.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687186.4939725
+  },
+  {
+    "desc": "server pipeline tuning pass 112",
+    "score": 256174,
+    "rps": 2463.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687221.670345
+  },
+  {
+    "desc": "server pipeline tuning pass 113",
+    "score": 234420,
+    "rps": 2258.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687266.1104617
+  },
+  {
+    "desc": "server pipeline tuning pass 114",
+    "score": 203390,
+    "rps": 1964.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687293.325621
+  },
+  {
+    "desc": "server pipeline tuning pass 115",
+    "score": 216566,
+    "rps": 2090.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687319.4825113
+  },
+  {
+    "desc": "server pipeline tuning pass 116",
+    "score": 218299,
+    "rps": 2100.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687353.8673518
+  },
+  {
+    "desc": "server pipeline tuning pass 117",
+    "score": 218788,
+    "rps": 2098.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687398.6917796
+  },
+  {
+    "desc": "server pipeline tuning pass 118",
+    "score": 201256,
+    "rps": 1943.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687425.8468406
+  },
+  {
+    "desc": "server pipeline tuning pass 119",
+    "score": 199479,
+    "rps": 1916.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687451.7461271
+  },
+  {
+    "desc": "server pipeline tuning pass 120",
+    "score": 202616,
+    "rps": 1955.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687487.2357495
+  },
+  {
+    "desc": "server pipeline tuning pass 121",
+    "score": 202853,
+    "rps": 1960.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687530.9932003
+  },
+  {
+    "desc": "server pipeline tuning pass 122",
+    "score": 220763,
+    "rps": 2115.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687559.2800333
+  },
+  {
+    "desc": "server pipeline tuning pass 123",
+    "score": 219645,
+    "rps": 2117.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687584.43452
+  },
+  {
+    "desc": "server pipeline tuning pass 124",
+    "score": 214449,
+    "rps": 2071.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687619.8653283
+  },
+  {
+    "desc": "server pipeline tuning pass 125",
+    "score": 203565,
+    "rps": 1960.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687664.6047406
+  },
+  {
+    "desc": "server pipeline tuning pass 126",
+    "score": 199533,
+    "rps": 1927.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687691.8871832
+  },
+  {
+    "desc": "server pipeline tuning pass 127",
+    "score": 202884,
+    "rps": 1959.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687716.8522053
+  },
+  {
+    "desc": "server pipeline tuning pass 128",
+    "score": 206072,
+    "rps": 1975.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687753.395835
+  },
+  {
+    "desc": "server pipeline tuning pass 129",
+    "score": 220682,
+    "rps": 2120.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687786.8193004
+  },
+  {
+    "desc": "server pipeline tuning pass 130",
+    "score": 219776,
+    "rps": 2117.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687815.0398958
+  },
+  {
+    "desc": "server pipeline tuning pass 131",
+    "score": 215831,
+    "rps": 2071.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687840.2137344
+  },
+  {
+    "desc": "server pipeline tuning pass 132",
+    "score": 217647,
+    "rps": 2100.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687885.9668992
+  },
+  {
+    "desc": "server pipeline tuning pass 133",
+    "score": 200488,
+    "rps": 1940.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687920.2628324
+  },
+  {
+    "desc": "server pipeline tuning pass 134",
+    "score": 202811,
+    "rps": 1946.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687947.818334
+  },
+  {
+    "desc": "server pipeline tuning pass 135",
+    "score": 201169,
+    "rps": 1943.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793687972.8087566
+  },
+  {
+    "desc": "server pipeline tuning pass 136",
+    "score": 204932,
+    "rps": 1970.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688019.302185
+  },
+  {
+    "desc": "server pipeline tuning pass 137",
+    "score": 217454,
+    "rps": 2091.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688066.2538364
+  },
+  {
+    "desc": "server pipeline tuning pass 138",
+    "score": 218577,
+    "rps": 2100.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688095.7891464
+  },
+  {
+    "desc": "server pipeline tuning pass 139",
+    "score": 214411,
+    "rps": 2066.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688135.3300433
+  },
+  {
+    "desc": "server pipeline tuning pass 140",
+    "score": 198078,
+    "rps": 1914.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688156.3520472
+  },
+  {
+    "desc": "server pipeline tuning pass 141",
+    "score": 193559,
+    "rps": 1867.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688198.9776871
+  },
+  {
+    "desc": "server pipeline tuning pass 142",
+    "score": 197949,
+    "rps": 1913.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688229.320148
+  },
+  {
+    "desc": "server pipeline tuning pass 143",
+    "score": 217332,
+    "rps": 2087.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688267.7463846
+  },
+  {
+    "desc": "server pipeline tuning pass 144",
+    "score": 215499,
+    "rps": 2072.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688288.715095
+  },
+  {
+    "desc": "server pipeline tuning pass 145",
+    "score": 218208,
+    "rps": 2099.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688332.4409845
+  },
+  {
+    "desc": "server pipeline tuning pass 146",
+    "score": 208868,
+    "rps": 2014.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688361.4990115
+  },
+  {
+    "desc": "server pipeline tuning pass 147",
+    "score": 200212,
+    "rps": 1937.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688400.8999424
+  },
+  {
+    "desc": "server pipeline tuning pass 148",
+    "score": 197859,
+    "rps": 1907.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688421.8752651
+  },
+  {
+    "desc": "server pipeline tuning pass 149",
+    "score": 256929,
+    "rps": 2466.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688465.4410834
+  },
+  {
+    "desc": "server pipeline tuning pass 150",
+    "score": 237776,
+    "rps": 2289.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688494.4214613
+  },
+  {
+    "desc": "server pipeline tuning pass 151",
+    "score": 216019,
+    "rps": 2086.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688531.9058554
+  },
+  {
+    "desc": "server pipeline tuning pass 152",
+    "score": 211904,
+    "rps": 2046.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688555.1355648
+  },
+  {
+    "desc": "server pipeline tuning pass 153",
+    "score": 215187,
+    "rps": 2071.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688597.1097908
+  },
+  {
+    "desc": "server pipeline tuning pass 154",
+    "score": 198765,
+    "rps": 1925.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688627.4568887
+  },
+  {
+    "desc": "server pipeline tuning pass 155",
+    "score": 201392,
+    "rps": 1934.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688664.9426334
+  },
+  {
+    "desc": "server pipeline tuning pass 156",
+    "score": 201134,
+    "rps": 1933.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688687.993686
+  },
+  {
+    "desc": "server pipeline tuning pass 157",
+    "score": 204040,
+    "rps": 1957.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688729.4953575
+  },
+  {
+    "desc": "server pipeline tuning pass 158",
+    "score": 213290,
+    "rps": 2053.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688759.8339214
+  },
+  {
+    "desc": "server pipeline tuning pass 159",
+    "score": 211340,
+    "rps": 2034.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688806.6819148
+  },
+  {
+    "desc": "server pipeline tuning pass 160",
+    "score": 215672,
+    "rps": 2083.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688853.4407337
+  },
+  {
+    "desc": "server pipeline tuning pass 161",
+    "score": 201025,
+    "rps": 1934.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688887.909133
+  },
+  {
+    "desc": "server pipeline tuning pass 162",
+    "score": 197598,
+    "rps": 1905.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688908.9431508
+  },
+  {
+    "desc": "server pipeline tuning pass 163",
+    "score": 201492,
+    "rps": 1953.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688939.3269336
+  },
+  {
+    "desc": "server pipeline tuning pass 164",
+    "score": 221938,
+    "rps": 2130.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793688986.103233
+  },
+  {
+    "desc": "server pipeline tuning pass 165",
+    "score": 216404,
+    "rps": 2083.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689021.5611749
+  },
+  {
+    "desc": "server pipeline tuning pass 166",
+    "score": 219453,
+    "rps": 2107.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689042.4892614
+  },
+  {
+    "desc": "server pipeline tuning pass 167",
+    "score": 215866,
+    "rps": 2078.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689071.7133844
+  },
+  {
+    "desc": "server pipeline tuning pass 168",
+    "score": 201978,
+    "rps": 1944.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689118.4482312
+  },
+  {
+    "desc": "server pipeline tuning pass 169",
+    "score": 201147,
+    "rps": 1946.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689153.868586
+  },
+  {
+    "desc": "server pipeline tuning pass 170",
+    "score": 200269,
+    "rps": 1934.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689174.736347
+  },
+  {
+    "desc": "server pipeline tuning pass 171",
+    "score": 204075,
+    "rps": 1959.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689203.7883255
+  },
+  {
+    "desc": "server pipeline tuning pass 172",
+    "score": 220438,
+    "rps": 2134.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689250.7940755
+  },
+  {
+    "desc": "server pipeline tuning pass 173",
+    "score": 222063,
+    "rps": 2132.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689287.1088662
+  },
+  {
+    "desc": "server pipeline tuning pass 174",
+    "score": 218458,
+    "rps": 2104.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689307.879457
+  },
+  {
+    "desc": "server pipeline tuning pass 175",
+    "score": 211222,
+    "rps": 2046.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689337.0097897
+  },
+  {
+    "desc": "server pipeline tuning pass 176",
+    "score": 220285,
+    "rps": 2118.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689383.5141163
+  },
+  {
+    "desc": "server pipeline tuning pass 177",
+    "score": 201014,
+    "rps": 1941.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689419.8738444
+  },
+  {
+    "desc": "server pipeline tuning pass 178",
+    "score": 202698,
+    "rps": 1954.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689440.7937768
+  },
+  {
+    "desc": "server pipeline tuning pass 179",
+    "score": 220539,
+    "rps": 2115.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689470.0170684
+  },
+  {
+    "desc": "server pipeline tuning pass 180",
+    "score": 220057,
+    "rps": 2121.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689515.9309845
+  },
+  {
+    "desc": "server pipeline tuning pass 181",
+    "score": 218952,
+    "rps": 2111.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689553.3117828
+  },
+  {
+    "desc": "server pipeline tuning pass 182",
+    "score": 215578,
+    "rps": 2084.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689574.2757747
+  },
+  {
+    "desc": "server pipeline tuning pass 183",
+    "score": 200261,
+    "rps": 1932.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689603.4254143
+  },
+  {
+    "desc": "server pipeline tuning pass 184",
+    "score": 201668,
+    "rps": 1949.9,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689649.1280677
+  },
+  {
+    "desc": "server pipeline tuning pass 185",
+    "score": 206200,
+    "rps": 1981.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689686.6879508
+  },
+  {
+    "desc": "server pipeline tuning pass 186",
+    "score": 220398,
+    "rps": 2114.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689707.699862
+  },
+  {
+    "desc": "server pipeline tuning pass 187",
+    "score": 215058,
+    "rps": 2080.4,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689736.1046867
+  },
+  {
+    "desc": "server pipeline tuning pass 188",
+    "score": 235661,
+    "rps": 2268.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689781.5590322
+  },
+  {
+    "desc": "server pipeline tuning pass 189",
+    "score": 206425,
+    "rps": 1998.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689819.1327128
+  },
+  {
+    "desc": "server pipeline tuning pass 190",
+    "score": 202342,
+    "rps": 1954.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689840.1298892
+  },
+  {
+    "desc": "server pipeline tuning pass 191",
+    "score": 201605,
+    "rps": 1936.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689869.4011161
+  },
+  {
+    "desc": "server pipeline tuning pass 192",
+    "score": 203031,
+    "rps": 1954.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689914.0019894
+  },
+  {
+    "desc": "server pipeline tuning pass 193",
+    "score": 217928,
+    "rps": 2097.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689952.4327917
+  },
+  {
+    "desc": "server pipeline tuning pass 194",
+    "score": 217464,
+    "rps": 2097.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793689973.3775487
+  },
+  {
+    "desc": "server pipeline tuning pass 195",
+    "score": 216550,
+    "rps": 2096.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690002.5352883
+  },
+  {
+    "desc": "server pipeline tuning pass 196",
+    "score": 215622,
+    "rps": 2083.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690047.1211998
+  },
+  {
+    "desc": "server pipeline tuning pass 197",
+    "score": 200564,
+    "rps": 1933.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690085.5686162
+  },
+  {
+    "desc": "server pipeline tuning pass 198",
+    "score": 201731,
+    "rps": 1939.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690106.6544466
+  },
+  {
+    "desc": "server pipeline tuning pass 199",
+    "score": 198489,
+    "rps": 1914.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690134.8285816
+  },
+  {
+    "desc": "server pipeline tuning pass 200",
+    "score": 217431,
+    "rps": 2086.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690180.6446786
+  },
+  {
+    "desc": "server pipeline tuning pass 201",
+    "score": 215435,
+    "rps": 2088.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690218.1030703
+  },
+  {
+    "desc": "server pipeline tuning pass 202",
+    "score": 216927,
+    "rps": 2088.1,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690257.6550434
+  },
+  {
+    "desc": "server pipeline tuning pass 203",
+    "score": 194809,
+    "rps": 1882.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690304.340877
+  },
+  {
+    "desc": "server pipeline tuning pass 204",
+    "score": 198398,
+    "rps": 1916.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690327.367147
+  },
+  {
+    "desc": "server pipeline tuning pass 205",
+    "score": 200444,
+    "rps": 1922.2,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690351.2819612
+  },
+  {
+    "desc": "server pipeline tuning pass 206",
+    "score": 195176,
+    "rps": 1890.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690389.6590786
+  },
+  {
+    "desc": "server pipeline tuning pass 207",
+    "score": 214041,
+    "rps": 2055.3,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690436.5000825
+  },
+  {
+    "desc": "server pipeline tuning pass 208",
+    "score": 217212,
+    "rps": 2086.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690460.6123774
+  },
+  {
+    "desc": "server pipeline tuning pass 209",
+    "score": 214310,
+    "rps": 2059.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690483.7484293
+  },
+  {
+    "desc": "server pipeline tuning pass 210",
+    "score": 212644,
+    "rps": 2046.8,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690521.7260592
+  },
+  {
+    "desc": "server pipeline tuning pass 211",
+    "score": 200307,
+    "rps": 1927.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690568.6362274
+  },
+  {
+    "desc": "server pipeline tuning pass 212",
+    "score": 198466,
+    "rps": 1920.0,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690592.6735528
+  },
+  {
+    "desc": "server pipeline tuning pass 213",
+    "score": 196155,
+    "rps": 1894.6,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690616.8679206
+  },
+  {
+    "desc": "server pipeline tuning pass 214",
+    "score": 208641,
+    "rps": 2003.7,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690663.509781
+  },
+  {
+    "desc": "server pipeline tuning pass 215",
+    "score": 210650,
+    "rps": 2036.5,
+    "accepted": false,
+    "baseline_before": 257772,
+    "timestamp": 1793690710.3113368
   }
 ]
