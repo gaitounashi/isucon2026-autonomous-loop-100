@@ -136,7 +136,59 @@ def check_build_and_tests() -> tuple[bool, str]:
     if code != 0:
         return False, f"Node Server Build Failed:\n{err}\n{out}"
 
+    ok, fmsg = verify_node_server_functional(ARENA_DIR / "node_server.exe")
+    if not ok:
+        return False, f"Node Server Functional Check Failed: {fmsg}"
+
     return True, "Build & Tests Passed"
+
+
+def verify_node_server_functional(exe_path: Path, port: int = 8097) -> tuple[bool, str]:
+    """node_server.exe を実際に起動し、フィード JSON・正常画像 200・改ざん署名 403・別画像流用 403 を検証"""
+    import urllib.request
+    import urllib.error
+
+    def _get(u: str):
+        try:
+            with urllib.request.urlopen(u, timeout=2.0) as r:
+                return r.status, r.read(), dict(r.headers)
+        except urllib.error.HTTPError as e:
+            return e.code, e.read(), dict(e.headers)
+
+    proc = subprocess.Popen([str(exe_path), "-port", str(port), "-region", "europe1"],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        time.sleep(0.4)
+        st, body, hdr = _get(f"http://127.0.0.1:{port}/api/feed/public")
+        if st != 200:
+            return False, f"/api/feed/public status={st}"
+        feed = json.loads(body.decode("utf-8"))
+        if feed.get("region") != "europe1" or len(feed.get("image_urls", [])) != 5:
+            return False, f"unexpected feed payload: {feed}"
+        if not hdr.get("Content-Type", "").startswith("application/json"):
+            return False, f"unexpected Content-Type: {hdr.get('Content-Type')}"
+        url = feed["image_urls"][2]
+        st, _, hdr = _get(f"http://127.0.0.1:{port}{url}")
+        if st != 200 or hdr.get("X-Accel-Redirect") != "/_imgcache/image-0002.jpg":
+            return False, f"valid image failed: status={st} X-Accel-Redirect={hdr.get('X-Accel-Redirect')}"
+        bad = url[:-4] + ("AAAA" if not url.endswith("AAAA") else "BBBB")
+        st, _, _ = _get(f"http://127.0.0.1:{port}{bad}")
+        if st != 403:
+            return False, f"tampered signature returned {st} (expected 403)"
+        cross = url.replace("image-0002", "image-0003")
+        st, _, _ = _get(f"http://127.0.0.1:{port}{cross}")
+        if st != 403:
+            return False, f"cross-image signature returned {st} (expected 403)"
+        non_digit = url.replace("image-0002", "image-00:2")
+        st, _, _ = _get(f"http://127.0.0.1:{port}{non_digit}")
+        if st != 403:
+            return False, f"non-digit image id returned {st} (expected 403)"
+        return True, "OK"
+    except Exception as exc:
+        return False, str(exc)
+    finally:
+        proc.terminate()
+        proc.wait()
 
 def get_all_time_best() -> int:
     best = 257772
@@ -430,9 +482,9 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
                 "}\n\n"
             )
             content = content.replace("func fastVerifySigString(", helper + "func fastVerifySigString(", 1)
-            old_verify = "if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {"
+            old_verify = "exp, err := strconv.ParseInt(expStr, 10, 64)"
             new_verify = (
-                "if idx := imageIndex(imageID); idx >= 0 && exp == fixedGlobalExp && precomputedSigArr[idx] == sigStr {\n"
+                "if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {\n"
                 "\t\t\tc.Response().Header().Set(\"Cache-Control\", \"public, max-age=86400\")\n"
                 "\t\t\tc.Response().Header().Set(\"X-Accel-Redirect\", precomputedRedirArr[idx])\n"
                 "\t\t\treturn c.NoContent(http.StatusOK)\n"
