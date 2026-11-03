@@ -109,7 +109,7 @@ func initPrecomputedFeeds() {
 }
 
 func main() {
-	debug.SetGCPercent(250)
+	debug.SetGCPercent(300)
 	port := flag.Int("port", 8001, "listen port")
 	region := flag.String("region", "asia1", "server region: asia1, europe1, america1")
 	flag.Parse()
