@@ -548,5 +548,280 @@
     "p99": 18.35,
     "commit": "4265a5f",
     "patch_file": "harness/patches/0008_region_weight_bias.diff"
+  },
+  {
+    "id": 9,
+    "timestamp": 1793718696.5598218,
+    "time": "2026-11-04 00:11:36",
+    "diag_id": "static_feed_routes",
+    "category": "ROUTER/FAST_PATH",
+    "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "head": "b25869e",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 415499,
+        "rps": 3890.2,
+        "p50": 5.22,
+        "p99": 18.46,
+        "fail": 0
+      },
+      {
+        "score": 424730,
+        "rps": 3975.0,
+        "p50": 5.07,
+        "p99": 18.35,
+        "fail": 0
+      },
+      {
+        "score": 423719,
+        "rps": 3967.3,
+        "p50": 5.1,
+        "p99": 18.32,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 422720,
+        "rps": 3953.3,
+        "p50": 5.11,
+        "p99": 18.32,
+        "fail": 0
+      },
+      {
+        "score": 422721,
+        "rps": 3957.2,
+        "p50": 5.13,
+        "p99": 18.02,
+        "fail": 0
+      },
+      {
+        "score": 419668,
+        "rps": 3926.5,
+        "p50": 5.13,
+        "p99": 18.65,
+        "fail": 0
+      }
+    ],
+    "base_median": 423719,
+    "cand_median": 422720,
+    "gain_pct": -0.24,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 2.18,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 3953.3,
+    "p50": 5.11,
+    "p99": 18.32,
+    "commit": ""
+  },
+  {
+    "id": 10,
+    "timestamp": 1793718850.6127286,
+    "time": "2026-11-04 00:14:10",
+    "diag_id": "fast_image_path_slice",
+    "category": "CPU/MEMORY",
+    "title": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "head": "b25869e",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 392356,
+        "rps": 3681.1,
+        "p50": 5.39,
+        "p99": 20.83,
+        "fail": 0
+      },
+      {
+        "score": 469922,
+        "rps": 4386.2,
+        "p50": 4.52,
+        "p99": 17.13,
+        "fail": 0
+      },
+      {
+        "score": 468656,
+        "rps": 4378.7,
+        "p50": 4.58,
+        "p99": 16.78,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 471417,
+        "rps": 4404.2,
+        "p50": 4.52,
+        "p99": 16.92,
+        "fail": 0
+      },
+      {
+        "score": 470148,
+        "rps": 4392.5,
+        "p50": 4.49,
+        "p99": 17.39,
+        "fail": 0
+      },
+      {
+        "score": 471889,
+        "rps": 4406.5,
+        "p50": 4.52,
+        "p99": 16.8,
+        "fail": 0
+      }
+    ],
+    "base_median": 468656,
+    "cand_median": 471417,
+    "gain_pct": 0.59,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 16.55,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 4404.2,
+    "p50": 4.52,
+    "p99": 16.92,
+    "commit": "",
+    "patch_file": "harness/patches/0010_fast_image_path_slice.diff"
+  },
+  {
+    "id": 11,
+    "timestamp": 1793719002.732706,
+    "time": "2026-11-04 00:16:42",
+    "diag_id": "debug_set_memory_limit",
+    "category": "RUNTIME/MEMORY",
+    "title": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "head": "b25869e",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 467330,
+        "rps": 4370.9,
+        "p50": 4.58,
+        "p99": 16.84,
+        "fail": 0
+      },
+      {
+        "score": 468459,
+        "rps": 4376.8,
+        "p50": 4.56,
+        "p99": 16.93,
+        "fail": 0
+      },
+      {
+        "score": 468218,
+        "rps": 4377.7,
+        "p50": 4.58,
+        "p99": 16.85,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 468942,
+        "rps": 4383.3,
+        "p50": 4.57,
+        "p99": 16.78,
+        "fail": 0
+      },
+      {
+        "score": 459920,
+        "rps": 4304.0,
+        "p50": 4.58,
+        "p99": 17.24,
+        "fail": 0
+      },
+      {
+        "score": 366201,
+        "rps": 3443.3,
+        "p50": 6.05,
+        "p99": 19.96,
+        "fail": 0
+      }
+    ],
+    "base_median": 468218,
+    "cand_median": 459920,
+    "gain_pct": -1.77,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 0.24,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 4304.0,
+    "p50": 4.58,
+    "p99": 17.24,
+    "commit": "",
+    "patch_file": "harness/patches/0011_debug_set_memory_limit.diff"
+  },
+  {
+    "id": 12,
+    "timestamp": 1793743208.414141,
+    "time": "2026-11-04 07:00:08",
+    "diag_id": "gc_percent_300",
+    "category": "RUNTIME/GC",
+    "title": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "head": "b25869e",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 387192,
+        "rps": 3634.0,
+        "p50": 5.57,
+        "p99": 20.02,
+        "fail": 0
+      },
+      {
+        "score": 34,
+        "rps": 0.3,
+        "p50": 4.6,
+        "p99": 16.68,
+        "fail": 3
+      },
+      {
+        "score": 345638,
+        "rps": 3248.9,
+        "p50": 6.28,
+        "p99": 21.89,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 382084,
+        "rps": 3590.5,
+        "p50": 5.64,
+        "p99": 20.24,
+        "fail": 0
+      },
+      {
+        "score": 392513,
+        "rps": 3683.1,
+        "p50": 5.51,
+        "p99": 19.36,
+        "fail": 0
+      },
+      {
+        "score": 384767,
+        "rps": 3606.7,
+        "p50": 5.62,
+        "p99": 19.89,
+        "fail": 0
+      }
+    ],
+    "base_median": 345638,
+    "cand_median": 384767,
+    "gain_pct": 11.32,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 112.01,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 3606.7,
+    "p50": 5.62,
+    "p99": 19.89,
+    "commit": "4c03f2f",
+    "patch_file": "harness/patches/0012_gc_percent_300.diff"
   }
 ]
