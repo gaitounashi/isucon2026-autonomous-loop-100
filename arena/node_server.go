@@ -20,6 +20,7 @@ var (
 	fixedGlobalExpStr string
 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
 	precomputedSigStrs = make(map[string]string, 2048)
+	precomputedFeedJSONs = make(map[string][]byte)
 )
 
 func init() {
@@ -60,6 +61,22 @@ func referenceImageSignature(key []byte, imageID string, exp int64) []byte {
 	return value
 }
 
+func initPrecomputedFeeds() {
+	for _, reg := range []string{"asia1", "europe1", "america1"} {
+		imageURLs := make([]string, 5)
+		for i := 0; i < 5; i++ {
+			imgID := fmt.Sprintf("image-%04d", i)
+			sum := precomputedSigs[imgID]
+			expStr := strconv.FormatInt(fixedGlobalExp, 10)
+			sigStr := base64.RawURLEncoding.EncodeToString(sum[:])
+			imageURLs[i] = fmt.Sprintf("/api/images/%s?exp=%s&sig=%s", imgID, expStr, sigStr)
+		}
+		rawJSON := fmt.Sprintf(`{"items":["post-1","post-2","post-3"],"image_urls":["%s","%s","%s","%s","%s"],"region":"%s"}`,
+			imageURLs[0], imageURLs[1], imageURLs[2], imageURLs[3], imageURLs[4], reg)
+		precomputedFeedJSONs[reg] = []byte(rawJSON)
+	}
+}
+
 func main() {
 	port := flag.Int("port", 8001, "listen port")
 	region := flag.String("region", "asia1", "server region: asia1, europe1, america1")
@@ -67,6 +84,7 @@ func main() {
 	for i := 0; i < 200; i++ {
 		precomputeSignature(signingKey, fmt.Sprintf("image-%04d", i))
 	}
+	initPrecomputedFeeds()
 
 	e := echo.New()
 
@@ -119,11 +137,7 @@ func main() {
 			sigStr := base64.RawURLEncoding.EncodeToString(sig)
 			imageURLs[i] = fmt.Sprintf("/api/images/%s?exp=%d&sig=%s", imgID, exp, sigStr)
 		}
-		return c.JSON(http.StatusOK, map[string]any{
-			"items":      []string{"post-1", "post-2", "post-3"},
-			"image_urls": imageURLs,
-			"region":     *region,
-		})
+		return c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])
 	})
 
 	addr := fmt.Sprintf(":%d", *port)
