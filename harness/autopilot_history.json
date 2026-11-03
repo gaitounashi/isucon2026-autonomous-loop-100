@@ -1718,5 +1718,69 @@
     "accepted": false,
     "baseline_before": 257772,
     "timestamp": 1793690710.3113368
+  },
+  {
+    "desc": "in-memory precomputed HMAC signatures (eliminate 1000-iteration hash)",
+    "score": 259289,
+    "rps": 2497.6,
+    "accepted": true,
+    "baseline_before": 257772,
+    "timestamp": 1793691717.354024
+  },
+  {
+    "desc": "zero-copy image delivery via X-Accel-Redirect header",
+    "score": 275429,
+    "rps": 2660.0,
+    "accepted": true,
+    "baseline_before": 259289,
+    "timestamp": 1793691743.2181604
+  },
+  {
+    "desc": "pre-serialized JSON feed caching (zero-reflection & zero-hash)",
+    "score": 299820,
+    "rps": 2892.1,
+    "accepted": true,
+    "baseline_before": 275429,
+    "timestamp": 1793691769.0464575
+  },
+  {
+    "desc": "explicit Content-Length header to disable chunked transfer",
+    "score": 302568,
+    "rps": 2920.0,
+    "accepted": true,
+    "baseline_before": 299820,
+    "timestamp": 1793691794.7910438
+  },
+  {
+    "desc": "precomputed image redirect paths for zero runtime allocations",
+    "score": 216342,
+    "rps": 2087.4,
+    "accepted": false,
+    "baseline_before": 302568,
+    "timestamp": 1793691841.5469992
+  },
+  {
+    "desc": "cached response header pointer in node_server",
+    "score": 242474,
+    "rps": 2334.7,
+    "accepted": false,
+    "baseline_before": 302568,
+    "timestamp": 1793691870.816468
+  },
+  {
+    "desc": "tune Go runtime GC percent to 250 in node_server",
+    "score": 260648,
+    "rps": 2531.5,
+    "accepted": false,
+    "baseline_before": 302568,
+    "timestamp": 1793691917.6095884
+  },
+  {
+    "desc": "expand selectPostsWithAuthor slice capacity to 256 in post.go",
+    "score": 226863,
+    "rps": 2188.7,
+    "accepted": false,
+    "baseline_before": 302568,
+    "timestamp": 1793691939.5256572
   }
 ]

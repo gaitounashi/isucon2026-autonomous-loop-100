@@ -182,34 +182,36 @@ def diagnose_bottlenecks() -> list[dict]:
     ns_target = ARENA_DIR / "node_server.go"
     ns_code = ns_target.read_text(encoding="utf-8") if ns_target.exists() else ""
 
-    # ボトルネック 1: 画像シグネチャの HMAC-SHA256 1000回ループ計算
-    # 根拠: リクエストの 70% で 1000 回のハッシュ計算が行われており、CPU の 90% 以上を占有
-    if "for range 1000" in ns_code and "precomputedSigs" not in ns_code:
+    # ボトルネック 1 (超特大): 公開フィードハンドラ内のデッドコード HMAC 計算ループ
+    # 根拠: precomputedFeedJSONs を返しているにもかかわらず、直前で毎リクエスト 5 回の 1000 回 HMAC (計 5,000 回) が無駄計算されている
+    if "referenceImageSignature(signingKey, imgID, exp)" in ns_code:
         candidates.append({
-            "id": "hmac_precompute",
+            "id": "eliminate_dead_feed_hmac",
+            "category": "CPU/DEAD_CODE",
             "priority": 1,
-            "title": "in-memory precomputed HMAC signatures (eliminate 1000-iteration hash)",
-            "action": "apply_hmac_precompute"
+            "title": "eliminate dead HMAC hash loops (5,000 iterations/req) in feed endpoint",
+            "action": "apply_eliminate_dead_feed_hmac"
         })
 
-    # ボトルネック 2: 画像配信の 64KB メモリコピー
-    # 根拠: 70% の画像リクエストで 64KB メモリを都度コピー返却しており、転送オーバーヘッドとGCを圧迫
-    if "dummyImageBytes" in ns_code and "X-Accel-Redirect" not in ns_code:
+    # ボトルネック 2: 画像エンドポイントの超高速バイパス (Ultra-Fast Path)
+    # 根拠: 有効期限とシグネチャのインメモリ合致判定を ParseInt / DecodeString より前に実施しゼロアロケーション化
+    if "fastVerifySigString" in ns_code and "expStr == fixedGlobalExpStr" not in ns_code:
         candidates.append({
-            "id": "zero_copy_image",
+            "id": "image_ultra_fast_path",
+            "category": "CPU/MEMORY",
             "priority": 2,
-            "title": "zero-copy image delivery via X-Accel-Redirect header",
-            "action": "apply_zero_copy_image"
+            "title": "ultra-fast path for image verification bypassing Base64 and integer parse",
+            "action": "apply_image_ultra_fast_path"
         })
 
-    # ボトルネック 3: 公開フィードの動的署名計算 & JSON Marshal
-    # 根拠: 30% のフィード取得毎に 5 回の署名計算と JSON 反射シリアライズが走っている
-    if "precomputedFeedJSONs" not in ns_code:
+    # ボトルネック 3: Echo サーバーのバナーおよびポート出力を無効化して起動・リクエスト処理を静音高速化
+    if "e.HideBanner = true" not in ns_code:
         candidates.append({
-            "id": "preserialized_feed",
+            "id": "echo_server_tuning",
+            "category": "SERVER/IO",
             "priority": 3,
-            "title": "pre-serialized JSON feed caching (zero-reflection & zero-hash)",
-            "action": "apply_preserialized_feed"
+            "title": "hide Echo banner and port logging to minimize stdout IO latency",
+            "action": "apply_echo_server_tuning"
         })
 
     # ボトルネック 4: フィードレスポンスの Content-Length 未指定 (チャンク転送)
@@ -297,7 +299,43 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
     try:
         ns_target = ARENA_DIR / "node_server.go"
 
-        if action == "apply_hmac_precompute":
+        if action == "apply_eliminate_dead_feed_hmac":
+            content = ns_target.read_text(encoding="utf-8")
+            target_dead_code = """\t\texp := time.Now().Unix() + 3600
+\t\timageURLs := make([]string, 5)
+\t\tfor i := 0; i < 5; i++ {
+\t\t\timgID := fmt.Sprintf("image-%04d", i)
+\t\t\tsig := referenceImageSignature(signingKey, imgID, exp)
+\t\t\tsigStr := base64.RawURLEncoding.EncodeToString(sig)
+\t\t\timageURLs[i] = fmt.Sprintf("/api/images/%s?exp=%d&sig=%s", imgID, exp, sigStr)
+\t\t}"""
+            if target_dead_code in content:
+                content = content.replace(target_dead_code, "")
+            else:
+                import re
+                content = re.sub(r'exp := time\.Now\(\)\.Unix\(\) \+ 3600[\s\S]*?imageURLs\[i\] = fmt\.Sprintf\([^\n]+\n\t\t\}', '', content)
+            ns_target.write_text(content, encoding="utf-8")
+            return True, title
+
+        elif action == "apply_image_ultra_fast_path":
+            content = ns_target.read_text(encoding="utf-8")
+            fast_block = """\t\tif expStr == fixedGlobalExpStr && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+\t\t\tc.Response().Header().Set("Cache-Control", "public, max-age=86400")
+\t\t\tc.Response().Header().Set("X-Accel-Redirect", "/_imgcache/"+imageID+".jpg")
+\t\t\treturn c.NoContent(http.StatusOK)
+\t\t}"""
+            target_pos = 'sigStr := c.QueryParam("sig")\n'
+            content = content.replace(target_pos, target_pos + "\n" + fast_block + "\n")
+            ns_target.write_text(content, encoding="utf-8")
+            return True, title
+
+        elif action == "apply_echo_server_tuning":
+            content = ns_target.read_text(encoding="utf-8")
+            content = content.replace("e := echo.New()\n", "e := echo.New()\n\te.HideBanner = true\n\te.HidePort = true\n")
+            ns_target.write_text(content, encoding="utf-8")
+            return True, title
+
+        elif action == "apply_hmac_precompute":
             content = ns_target.read_text(encoding="utf-8")
             if "precomputedSigs" in content:
                 return False, "already applied"
