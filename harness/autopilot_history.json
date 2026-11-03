@@ -1950,5 +1950,813 @@
     "accepted": false,
     "baseline_before": 455485,
     "timestamp": 1793693056.7059915
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 327716,
+    "rps": 3139.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693422.137863
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 399899,
+    "rps": 3851.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693443.902021
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 400844,
+    "rps": 3856.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693465.635632
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 231257,
+    "rps": 2222.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693511.0628119
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 287524,
+    "rps": 2769.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693558.5480368
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 237424,
+    "rps": 2296.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693598.6807096
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 225073,
+    "rps": 2168.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693633.5642729
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 240096,
+    "rps": 2303.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693655.094322
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 241630,
+    "rps": 2323.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693691.2985978
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 397233,
+    "rps": 3831.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693744.7112248
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 402846,
+    "rps": 3880.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693766.3689523
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 416613,
+    "rps": 4020.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693788.044079
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 434680,
+    "rps": 4190.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693837.4340963
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 231124,
+    "rps": 2238.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693877.6157005
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 236194,
+    "rps": 2260.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693899.2685237
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 236752,
+    "rps": 2287.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693934.1640024
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 227889,
+    "rps": 2183.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793693970.4410555
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 237114,
+    "rps": 2276.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694010.6933734
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 236994,
+    "rps": 2308.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694045.5518231
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 227040,
+    "rps": 2208.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694067.4501748
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 228678,
+    "rps": 2210.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694102.543651
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 245199,
+    "rps": 2368.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694183.8888283
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 242168,
+    "rps": 2347.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694231.2507005
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 248870,
+    "rps": 2402.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694253.001419
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 245882,
+    "rps": 2392.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694323.7629666
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 253686,
+    "rps": 2444.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694345.3924468
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 247753,
+    "rps": 2392.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694366.9967334
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 237266,
+    "rps": 2286.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694448.331329
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 244274,
+    "rps": 2356.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694471.031014
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 244561,
+    "rps": 2372.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694499.7971928
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 441546,
+    "rps": 4251.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694580.2057948
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 432770,
+    "rps": 4158.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694603.90977
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 442065,
+    "rps": 4251.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694632.6707864
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 440314,
+    "rps": 4240.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694683.0797095
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 241966,
+    "rps": 2338.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694713.0595927
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 246096,
+    "rps": 2371.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694736.7979496
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 233238,
+    "rps": 2248.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694778.7678533
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 223304,
+    "rps": 2156.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694815.8782716
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 243403,
+    "rps": 2324.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694845.9927268
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 236114,
+    "rps": 2269.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694882.9287906
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 237277,
+    "rps": 2295.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694911.918591
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 230716,
+    "rps": 2200.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694949.017873
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 237461,
+    "rps": 2307.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793694992.1588707
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 225102,
+    "rps": 2192.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695015.8694217
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 230252,
+    "rps": 2199.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695044.983188
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 241787,
+    "rps": 2309.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695091.4367235
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 236983,
+    "rps": 2275.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695124.4501429
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 244206,
+    "rps": 2359.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695149.1902223
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 238740,
+    "rps": 2313.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695191.3700023
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 246794,
+    "rps": 2402.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695223.3264205
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 230345,
+    "rps": 2213.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695256.44348
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 219282,
+    "rps": 2105.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695295.59466
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 248604,
+    "rps": 2402.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695323.3142269
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 433076,
+    "rps": 4175.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695370.856606
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 242114,
+    "rps": 2331.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695437.8085408
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 246285,
+    "rps": 2383.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695459.5472806
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 240315,
+    "rps": 2315.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695493.5536327
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 253028,
+    "rps": 2436.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695530.5143542
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 233725,
+    "rps": 2261.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695570.672029
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 244558,
+    "rps": 2359.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695592.4414465
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 244125,
+    "rps": 2347.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695638.9251077
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 247443,
+    "rps": 2386.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695662.598444
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 247178,
+    "rps": 2368.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695704.228315
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 250974,
+    "rps": 2431.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695739.3772042
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 244081,
+    "rps": 2357.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695771.210283
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 247990,
+    "rps": 2379.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695796.096712
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 249841,
+    "rps": 2414.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695850.7820458
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 249299,
+    "rps": 2407.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695872.5340319
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 248426,
+    "rps": 2396.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695903.546955
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 250667,
+    "rps": 2424.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695941.809418
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 249685,
+    "rps": 2401.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793695984.047029
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 250180,
+    "rps": 2419.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696005.726581
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 247789,
+    "rps": 2393.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696049.1735084
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 249981,
+    "rps": 2412.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696075.0674791
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 262263,
+    "rps": 2529.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696117.3363082
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 249102,
+    "rps": 2400.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696152.5197942
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 247937,
+    "rps": 2405.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696181.3964932
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 248810,
+    "rps": 2395.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696208.3957727
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 244159,
+    "rps": 2353.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696262.9734101
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 250791,
+    "rps": 2428.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696284.6782796
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 245366,
+    "rps": 2370.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696313.5833247
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 253542,
+    "rps": 2437.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696353.8898695
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 246150,
+    "rps": 2384.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696396.198089
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 254222,
+    "rps": 2451.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696417.9861686
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 252719,
+    "rps": 2445.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696459.3534417
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 250497,
+    "rps": 2413.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696487.21205
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 252148,
+    "rps": 2417.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696528.3723507
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 242035,
+    "rps": 2321.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696564.4268537
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 247629,
+    "rps": 2396.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696592.3116446
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 251434,
+    "rps": 2430.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696620.0703259
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 250519,
+    "rps": 2421.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696674.7522757
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 262020,
+    "rps": 2531.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696696.6624775
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 250007,
+    "rps": 2402.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696724.469243
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 263575,
+    "rps": 2551.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696766.7185493
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 253791,
+    "rps": 2452.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696807.8144798
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 251965,
+    "rps": 2424.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696829.5457816
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 243404,
+    "rps": 2355.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696870.0033627
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 263089,
+    "rps": 2534.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696900.1098418
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 255398,
+    "rps": 2467.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696941.3398666
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 246631,
+    "rps": 2390.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793696976.3887432
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 251773,
+    "rps": 2410.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793697003.1747804
   }
 ]
