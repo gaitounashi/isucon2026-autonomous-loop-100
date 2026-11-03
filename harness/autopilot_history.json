@@ -1782,5 +1782,93 @@
     "accepted": false,
     "baseline_before": 302568,
     "timestamp": 1793691939.5256572
+  },
+  {
+    "desc": "eliminate dead HMAC hash loops (5,000 iterations/req) in feed endpoint",
+    "score": 428687,
+    "rps": 4137.3,
+    "accepted": true,
+    "baseline_before": 302568,
+    "timestamp": 1793692053.5534947
+  },
+  {
+    "desc": "ultra-fast path for image verification bypassing Base64 and integer parse",
+    "score": 413820,
+    "rps": 3982.6,
+    "accepted": false,
+    "baseline_before": 428687,
+    "timestamp": 1793692074.5243666
+  },
+  {
+    "desc": "precomputed image redirect paths for zero runtime allocations",
+    "score": 439413,
+    "rps": 4219.0,
+    "accepted": true,
+    "baseline_before": 428687,
+    "timestamp": 1793692104.0715284
+  },
+  {
+    "desc": "ultra-fast path for image verification bypassing Base64 and integer parse",
+    "score": 430659,
+    "rps": 4137.8,
+    "accepted": false,
+    "baseline_before": 439413,
+    "timestamp": 1793692125.1007285
+  },
+  {
+    "desc": "tune Go runtime GC percent to 250 in node_server",
+    "score": 432702,
+    "rps": 4163.8,
+    "accepted": false,
+    "baseline_before": 439413,
+    "timestamp": 1793692185.6984155
+  },
+  {
+    "desc": "expand selectPostsWithAuthor slice capacity to 256 in post.go",
+    "score": 436170,
+    "rps": 4199.6,
+    "accepted": false,
+    "baseline_before": 439413,
+    "timestamp": 1793692206.614622
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 4096 in node_server",
+    "score": 449001,
+    "rps": 4322.1,
+    "accepted": true,
+    "baseline_before": 439413,
+    "timestamp": 1793692234.968748
+  },
+  {
+    "desc": "ultra-fast path for image verification bypassing Base64 and integer parse",
+    "score": 441398,
+    "rps": 4252.7,
+    "accepted": false,
+    "baseline_before": 449001,
+    "timestamp": 1793692257.8225725
+  },
+  {
+    "desc": "tune Go runtime GC percent to 250 in node_server",
+    "score": 455485,
+    "rps": 4395.8,
+    "accepted": true,
+    "baseline_before": 449001,
+    "timestamp": 1793692327.4995558
+  },
+  {
+    "desc": "ultra-fast path for image verification bypassing Base64 and integer parse",
+    "score": 439533,
+    "rps": 4230.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692348.4190266
+  },
+  {
+    "desc": "expand selectPostsWithAuthor slice capacity to 256 in post.go",
+    "score": 395938,
+    "rps": 3803.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793692377.4232075
   }
 ]
