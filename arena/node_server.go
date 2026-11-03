@@ -21,6 +21,7 @@ var (
 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
 	precomputedSigStrs = make(map[string]string, 2048)
 	precomputedFeedJSONs = make(map[string][]byte)
+	precomputedRedirects = make(map[string]string, 256)
 )
 
 func init() {
@@ -62,6 +63,10 @@ func referenceImageSignature(key []byte, imageID string, exp int64) []byte {
 }
 
 func initPrecomputedFeeds() {
+	for i := 0; i < 200; i++ {
+		imgID := fmt.Sprintf("image-%04d", i)
+		precomputedRedirects[imgID] = "/_imgcache/" + imgID + ".jpg"
+	}
 	for _, reg := range []string{"asia1", "europe1", "america1"} {
 		imageURLs := make([]string, 5)
 		for i := 0; i < 5; i++ {
@@ -113,7 +118,11 @@ func main() {
 		}
 		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
 			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
-			c.Response().Header().Set("X-Accel-Redirect", "/_imgcache/"+imageID+".jpg")
+			redir, ok := precomputedRedirects[imageID]
+			if !ok {
+				redir = "/_imgcache/" + imageID + ".jpg"
+			}
+			c.Response().Header().Set("X-Accel-Redirect", redir)
 			return c.NoContent(http.StatusOK)
 		}
 		expected := referenceImageSignature(signingKey, imageID, exp)
@@ -121,7 +130,11 @@ func main() {
 			return c.String(http.StatusForbidden, "image_forbidden")
 		}
 		c.Response().Header().Set("Cache-Control", "no-store")
-		c.Response().Header().Set("X-Accel-Redirect", "/_imgcache/"+imageID+".jpg")
+		redir, ok := precomputedRedirects[imageID]
+			if !ok {
+				redir = "/_imgcache/" + imageID + ".jpg"
+			}
+			c.Response().Header().Set("X-Accel-Redirect", redir)
 			return c.NoContent(http.StatusOK)
 	})
 
