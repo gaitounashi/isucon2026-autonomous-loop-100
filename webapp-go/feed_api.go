@@ -144,7 +144,7 @@ func getFeedHandler(h *HandlerContext) echo.HandlerFunc {
 			if err != nil {
 				return err
 			}
-			items := make([]feedItemResponse, 0, min(len(posts), 50))
+			items := make([]feedItemResponse, 0, 51)
 			for i := 0; i < len(posts) && i < 50; i++ {
 				items = append(items, feedItemResponse{createPostResponse: newPostResponse(posts[i].Post, posts[i].Author)})
 			}
