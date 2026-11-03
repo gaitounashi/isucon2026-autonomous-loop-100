@@ -3110,5 +3110,829 @@
     "accepted": false,
     "baseline_before": 455485,
     "timestamp": 1793702359.1676075
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 330046,
+    "rps": 3171.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710351.0600562
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 416163,
+    "rps": 4000.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710376.854006
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 371285,
+    "rps": 3471.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710398.7786322
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 228831,
+    "rps": 2209.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710446.198127
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 234765,
+    "rps": 2280.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710493.7086067
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 228489,
+    "rps": 2199.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710521.2282474
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 215921,
+    "rps": 2078.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710543.0505211
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 246278,
+    "rps": 2373.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710597.1043367
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 239188,
+    "rps": 2289.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710631.3889887
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 246130,
+    "rps": 2292.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710654.1692693
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 238052,
+    "rps": 2303.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710675.8682368
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 238951,
+    "rps": 2318.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710723.3371139
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 244298,
+    "rps": 2376.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710763.616861
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 227344,
+    "rps": 2160.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710786.3240755
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 250237,
+    "rps": 2407.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710826.5191667
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 249818,
+    "rps": 2402.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710859.8294005
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 237495,
+    "rps": 2213.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710897.157385
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 228883,
+    "rps": 2214.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710918.784522
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 244550,
+    "rps": 2354.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793710966.4679534
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 244925,
+    "rps": 2349.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711013.9572694
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 231837,
+    "rps": 2229.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711052.1683376
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 247000,
+    "rps": 2372.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711091.257124
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 242222,
+    "rps": 2343.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711117.1546636
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 232306,
+    "rps": 2162.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711138.865365
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 229994,
+    "rps": 2183.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711175.136611
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 249431,
+    "rps": 2413.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711222.6210175
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 229529,
+    "rps": 2218.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711249.5378075
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 236945,
+    "rps": 2293.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711272.335941
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 232510,
+    "rps": 2238.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711324.7961166
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 236572,
+    "rps": 2279.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711359.924426
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 237224,
+    "rps": 2216.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711381.744228
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 234982,
+    "rps": 2295.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711404.4960523
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 240480,
+    "rps": 2308.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711451.0391355
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 245793,
+    "rps": 2377.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711492.4671977
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 235891,
+    "rps": 2278.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711515.1844146
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 242228,
+    "rps": 2318.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711554.0989788
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 241335,
+    "rps": 2321.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711588.4422967
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 225185,
+    "rps": 2102.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711624.6106043
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 249096,
+    "rps": 2376.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711647.2900345
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 251716,
+    "rps": 2400.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711686.5616522
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 239486,
+    "rps": 2300.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711733.8767996
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 249555,
+    "rps": 2405.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711769.8786728
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 243392,
+    "rps": 2358.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711826.507644
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 238459,
+    "rps": 2322.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711852.3639216
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 252624,
+    "rps": 2360.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711874.161439
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 239934,
+    "rps": 2339.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711903.034628
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 245802,
+    "rps": 2366.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711950.4440548
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 226228,
+    "rps": 2214.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793711984.5433626
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 242785,
+    "rps": 2349.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712006.9867184
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 229331,
+    "rps": 2216.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712053.263242
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 232942,
+    "rps": 2235.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712087.302064
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 434819,
+    "rps": 4073.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712117.2032297
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 439287,
+    "rps": 4229.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712139.8889728
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 404922,
+    "rps": 3896.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712186.0982795
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 405302,
+    "rps": 3891.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712220.2367477
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 417359,
+    "rps": 4014.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712250.1184435
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 409326,
+    "rps": 3942.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712290.3428285
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 351179,
+    "rps": 3375.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712316.2634711
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 257679,
+    "rps": 2418.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712352.1973033
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 250684,
+    "rps": 2423.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712399.4768028
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 261257,
+    "rps": 2525.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712438.6458342
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 255818,
+    "rps": 2467.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712460.2453513
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 255903,
+    "rps": 2465.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712485.0691004
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 434868,
+    "rps": 4176.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712549.6040466
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 434040,
+    "rps": 4175.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712576.3391113
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 438105,
+    "rps": 4096.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712597.9757833
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 425737,
+    "rps": 4095.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712619.6207664
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 430344,
+    "rps": 4144.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712666.888462
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 363406,
+    "rps": 3497.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712714.1796534
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 368250,
+    "rps": 3552.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712753.1828659
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 357317,
+    "rps": 3444.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712816.8425689
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 361206,
+    "rps": 3468.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712842.6272154
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 374653,
+    "rps": 3513.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712864.344889
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 359179,
+    "rps": 3449.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712885.907567
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 354551,
+    "rps": 3416.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712933.1249385
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 359098,
+    "rps": 3463.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712976.2520702
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 391146,
+    "rps": 3763.8,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793712997.935449
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 420665,
+    "rps": 4048.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713036.4412296
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 428334,
+    "rps": 4127.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713079.412109
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 414943,
+    "rps": 3887.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713112.4659758
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 392948,
+    "rps": 3781.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713134.219269
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 359409,
+    "rps": 3452.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713169.228431
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 436630,
+    "rps": 4198.3,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713212.3973281
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 449061,
+    "rps": 4317.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713244.274095
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 398568,
+    "rps": 3836.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713284.556463
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 245099,
+    "rps": 2374.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713344.213534
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 261738,
+    "rps": 2435.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713377.2943442
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 247470,
+    "rps": 2383.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713416.4719813
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 249098,
+    "rps": 2392.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713464.0387218
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 252549,
+    "rps": 2421.0,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713503.6348114
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 257143,
+    "rps": 2459.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713525.3651938
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 261649,
+    "rps": 2500.5,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713566.9655921
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 266812,
+    "rps": 2579.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713601.1351945
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 268330,
+    "rps": 2508.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713636.296493
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 252950,
+    "rps": 2445.4,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713657.9682522
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 258059,
+    "rps": 2486.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713700.334102
+  },
+  {
+    "desc": "tune Go runtime GC percent to 300 for zero-alloc heap in node_server",
+    "score": 247728,
+    "rps": 2383.7,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713733.4776525
+  },
+  {
+    "desc": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "score": 222581,
+    "rps": 2167.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713768.783505
+  },
+  {
+    "desc": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "score": 242320,
+    "rps": 2337.1,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713807.584917
+  },
+  {
+    "desc": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "score": 237045,
+    "rps": 2272.2,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713836.3608108
+  },
+  {
+    "desc": "prioritize 1.5x multiplier regions (Typing Bears 625k strategy: throttle asia1 by 8ms)",
+    "score": 244488,
+    "rps": 2277.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713865.2596376
+  },
+  {
+    "desc": "tune TCP KeepAlive and listener concurrency in node_server",
+    "score": 232356,
+    "rps": 2240.9,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713901.3021977
+  },
+  {
+    "desc": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "score": 229505,
+    "rps": 2189.6,
+    "accepted": false,
+    "baseline_before": 455485,
+    "timestamp": 1793713940.6522834
   }
 ]
