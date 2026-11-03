@@ -530,7 +530,8 @@ def run_measurement_driven_loop(max_accepted_cycles: int = 100, timeout_sec: int
         target_diag = available[0]
         diag_id = target_diag["id"]
         diag_title = target_diag["title"]
-        print(f"[*] DIAGNOSED TOP BOTTLENECK: [{target_diag['category']}] (Priority {target_diag['priority']})")
+        category = target_diag.get("category", "CPU/ALGO")
+        print(f"[*] DIAGNOSED TOP BOTTLENECK: [{category}] (Priority {target_diag['priority']})")
         print(f"    Target: {diag_title}")
 
         # 2. パッチ動的適用
