@@ -385,8 +385,8 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
             content = ns_target.read_text(encoding="utf-8")
             old_feed = """\tc.Response().Header().Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
 \t\treturn c.Blob(http.StatusOK, "application/json", precomputedFeedJSONs[*region])"""
-            new_feed = """\tw := c.Response().Writer
-\t\th := c.Response().Header()
+            new_feed = """\tw := c.Response()
+\t\th := w.Header()
 \t\th.Set("Content-Type", "application/json")
 \t\th.Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
 \t\tw.WriteHeader(http.StatusOK)
