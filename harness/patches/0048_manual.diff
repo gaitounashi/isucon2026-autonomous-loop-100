@@ -1,0 +1,14 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 9e5099b..0a0aaf5 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -111,7 +111,8 @@ func initPrecomputedFeeds() {
+ }
+ 
+ func main() {
+-	debug.SetGCPercent(300)
++	debug.SetGCPercent(400)
++	debug.SetMemoryLimit(3 * 1024 * 1024 * 1024)
+ 	port := flag.Int("port", 8001, "listen port")
+ 	region := flag.String("region", "asia1", "server region: asia1, europe1, america1")
+ 	flag.Parse()

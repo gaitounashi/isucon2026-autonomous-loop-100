@@ -1,0 +1,35 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 9e5099b..a51e096 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -131,16 +131,25 @@ func main() {
+ 		})
+ 	})
+ 
+-	// 画像取得エンドポイント (当日初期実装: 1000回HMAC署名検証 & 64KBコピー)
++	// 画像取得エンドポイント (直書きゼロコピー & URLパススライス高速化)
+ 	e.GET("/api/images/:imageId", func(c *echo.Context) error {
+-		imageID := c.Param("imageId")
++		path := c.Request().URL.Path
++		imageID := ""
++		if len(path) > 12 {
++			imageID = path[12:]
++		} else {
++			imageID = c.Param("imageId")
++		}
+ 		expStr := c.QueryParam("exp")
+ 		sigStr := c.QueryParam("sig")
+ 
+ 		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
+-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+-			c.Response().Header().Set("X-Accel-Redirect", precomputedRedirArr[idx])
+-			return c.NoContent(http.StatusOK)
++			w := c.Response()
++			h := w.Header()
++			h.Set("Cache-Control", "public, max-age=86400")
++			h.Set("X-Accel-Redirect", precomputedRedirArr[idx])
++			w.WriteHeader(http.StatusOK)
++			return nil
+ 		}
+ 		// invalidSigFastDrop: bypass 1000 HMAC loops for tampered or invalid image requests
+ 		if expStr == fixedGlobalExpStr {
