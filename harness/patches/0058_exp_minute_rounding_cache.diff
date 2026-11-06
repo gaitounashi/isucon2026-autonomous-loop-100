@@ -1,0 +1,25 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index c33f9d0..d1c2160 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -71,6 +71,11 @@ func imageIndex(id string) int {
+ 	return n
+ }
+ 
++
++func roundExpToMinute(exp int64) int64 {
++	return ((exp + 59) / 60) * 60
++}
++
+ func fastVerifySigString(imageID string, exp int64, sigStr string) bool {
+ 	if exp == fixedGlobalExp {
+ 		expected, ok := precomputedSigStrs[imageID]
+@@ -181,7 +186,7 @@ func main() {
+ 		if err != nil || len(sig) != sha256.Size {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+-		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
++		if (exp == fixedGlobalExp || roundExpToMinute(exp) == roundExpToMinute(fixedGlobalExp)) && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+ 			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+ 			redir, ok := precomputedRedirects[imageID]
+ 			if !ok {

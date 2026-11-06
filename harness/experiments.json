@@ -3184,5 +3184,317 @@
     "p99": 25.65,
     "commit": "",
     "patch_file": "harness/patches/0056_manual.diff"
+  },
+  {
+    "id": 57,
+    "timestamp": 1793979682.4158719,
+    "time": "2026-11-07 00:41:22",
+    "diag_id": "fast_post_handler",
+    "category": "elite_strategy",
+    "title": "fast post handler with io.Discard and static Content-Length",
+    "head": "4f97fdb",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 226063,
+        "rps": 2099.3,
+        "p50": 6.31,
+        "p99": 68.19,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 200751,
+        "rps": 1874.7,
+        "p50": 7.81,
+        "p99": 69.42,
+        "fail": 0
+      }
+    ],
+    "base_median": 226063,
+    "cand_median": 200751,
+    "gain_pct": -11.2,
+    "wins": 0,
+    "rounds": 1,
+    "base_noise_pct": 0.0,
+    "accepted": false,
+    "rule": "gain >= 2.0% and wins > 0/1 (Early Rejected: Candidate regressed by -11.20% in round 1 (< -5.0%))",
+    "early_terminated": true,
+    "commit": "",
+    "patch_file": "harness/patches/0057_fast_post_handler.diff"
+  },
+  {
+    "id": 58,
+    "timestamp": 1793979827.2926822,
+    "time": "2026-11-07 00:43:47",
+    "diag_id": "exp_minute_rounding_cache",
+    "category": "elite_strategy",
+    "title": "signature expiration minute-rounding cache",
+    "head": "4f97fdb",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 199938,
+        "rps": 1869.8,
+        "p50": 8.03,
+        "p99": 67.01,
+        "fail": 0
+      },
+      {
+        "score": 216126,
+        "rps": 2015.6,
+        "p50": 7.22,
+        "p99": 64.4,
+        "fail": 0
+      },
+      {
+        "score": 223872,
+        "rps": 2069.9,
+        "p50": 7.17,
+        "p99": 58.81,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 205303,
+        "rps": 1914.4,
+        "p50": 7.43,
+        "p99": 67.8,
+        "fail": 0
+      },
+      {
+        "score": 210093,
+        "rps": 1967.8,
+        "p50": 7.48,
+        "p99": 65.22,
+        "fail": 0
+      },
+      {
+        "score": 223405,
+        "rps": 2102.3,
+        "p50": 7.17,
+        "p99": 57.77,
+        "fail": 0
+      }
+    ],
+    "base_median": 216126,
+    "cand_median": 210093,
+    "gain_pct": -2.79,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 11.07,
+    "accepted": false,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "commit": "",
+    "patch_file": "harness/patches/0058_exp_minute_rounding_cache.diff"
+  },
+  {
+    "id": 59,
+    "timestamp": 1793979990.060063,
+    "time": "2026-11-07 00:46:30",
+    "diag_id": "region_weight_throttle_v2",
+    "category": "elite_strategy",
+    "title": "tuned asia1 in-flight throttle thresholds (4/8/16) for 1.5x nodes",
+    "head": "4f97fdb",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 206651,
+        "rps": 1924.0,
+        "p50": 7.56,
+        "p99": 71.33,
+        "fail": 0
+      },
+      {
+        "score": 225538,
+        "rps": 2098.1,
+        "p50": 6.88,
+        "p99": 62.83,
+        "fail": 0
+      },
+      {
+        "score": 218796,
+        "rps": 2052.8,
+        "p50": 7.81,
+        "p99": 57.7,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 205339,
+        "rps": 1935.2,
+        "p50": 8.25,
+        "p99": 60.92,
+        "fail": 0
+      },
+      {
+        "score": 214856,
+        "rps": 1996.7,
+        "p50": 7.13,
+        "p99": 63.08,
+        "fail": 0
+      },
+      {
+        "score": 202569,
+        "rps": 1892.1,
+        "p50": 7.15,
+        "p99": 74.79,
+        "fail": 0
+      }
+    ],
+    "base_median": 218796,
+    "cand_median": 205339,
+    "gain_pct": -6.15,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 8.63,
+    "accepted": false,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "commit": "",
+    "patch_file": "harness/patches/0059_region_weight_throttle_v2.diff"
+  },
+  {
+    "id": 60,
+    "timestamp": 1793980149.7132616,
+    "time": "2026-11-07 00:49:09",
+    "diag_id": "gc_percent_400_and_memlimit",
+    "category": "elite_strategy",
+    "title": "Go runtime SetGCPercent(400) + SetMemoryLimit(3GiB)",
+    "head": "4f97fdb",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 353382,
+        "rps": 3283.4,
+        "p50": 5.94,
+        "p99": 25.42,
+        "fail": 0
+      },
+      {
+        "score": 350169,
+        "rps": 3259.8,
+        "p50": 5.88,
+        "p99": 26.34,
+        "fail": 0
+      },
+      {
+        "score": 364298,
+        "rps": 3385.0,
+        "p50": 5.68,
+        "p99": 25.39,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 350610,
+        "rps": 3259.2,
+        "p50": 5.92,
+        "p99": 26.08,
+        "fail": 0
+      },
+      {
+        "score": 347184,
+        "rps": 3219.7,
+        "p50": 5.97,
+        "p99": 26.53,
+        "fail": 0
+      },
+      {
+        "score": 353556,
+        "rps": 3284.0,
+        "p50": 5.95,
+        "p99": 24.99,
+        "fail": 0
+      }
+    ],
+    "base_median": 353382,
+    "cand_median": 350610,
+    "gain_pct": -0.78,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 4.0,
+    "accepted": false,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "commit": "",
+    "patch_file": "harness/patches/0060_gc_percent_400_and_memlimit.diff"
+  },
+  {
+    "id": 61,
+    "timestamp": 1793980304.2418518,
+    "time": "2026-11-07 00:51:44",
+    "diag_id": "in_memory_sig_lru_cache",
+    "category": "elite_strategy",
+    "title": "in-memory RWMutex cache for dynamic signature verification",
+    "head": "4f97fdb",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 359171,
+        "rps": 3344.6,
+        "p50": 5.75,
+        "p99": 25.52,
+        "fail": 0
+      },
+      {
+        "score": 356949,
+        "rps": 3317.0,
+        "p50": 5.78,
+        "p99": 25.34,
+        "fail": 0
+      },
+      {
+        "score": 353165,
+        "rps": 3283.7,
+        "p50": 5.91,
+        "p99": 25.25,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 359084,
+        "rps": 3343.6,
+        "p50": 5.75,
+        "p99": 25.61,
+        "fail": 0
+      },
+      {
+        "score": 358669,
+        "rps": 3331.6,
+        "p50": 5.8,
+        "p99": 25.38,
+        "fail": 0
+      },
+      {
+        "score": 366967,
+        "rps": 3414.0,
+        "p50": 5.68,
+        "p99": 24.32,
+        "fail": 0
+      }
+    ],
+    "base_median": 356949,
+    "cand_median": 359084,
+    "gain_pct": 0.6,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 1.68,
+    "accepted": false,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "commit": "",
+    "patch_file": "harness/patches/0061_in_memory_sig_lru_cache.diff"
   }
 ]

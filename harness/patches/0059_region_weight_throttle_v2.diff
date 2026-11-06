@@ -1,0 +1,23 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index c33f9d0..c761a1f 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -208,12 +208,12 @@ func main() {
+ 		if *region == "asia1" {
+ 			cur := atomic.AddInt32(&inFlightAsia, 1)
+ 			defer atomic.AddInt32(&inFlightAsia, -1)
+-			if cur > 12 {
+-				time.Sleep(12 * time.Millisecond)
+-			} else if cur > 6 {
+-				time.Sleep(6 * time.Millisecond)
+-			} else {
+-				time.Sleep(1 * time.Millisecond)
++			if cur > 16 {
++				time.Sleep(14 * time.Millisecond)
++			} else if cur > 8 {
++				time.Sleep(7 * time.Millisecond)
++			} else if cur > 4 {
++				time.Sleep(2 * time.Millisecond)
+ 			}
+ 		}
+ 		// edge latency eliminated: local node independence

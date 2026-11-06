@@ -1,0 +1,28 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index c33f9d0..e95c5e4 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -231,15 +231,17 @@ func main() {
+ 	e.GET("/api/feed/friends-of-friends", feedHandler)
+ 	e.GET("/api/feed/:type", feedHandler)
+ 
+-	// 投稿作成エンドポイント (Write系 負荷)
++	// 投稿作成エンドポイント (キラーパッチ: バッファレス受信 & 直書き)
++	staticCreatedJSON := []byte(`{"status":"created"}`)
+ 	e.POST("/api/posts", func(c *echo.Context) error {
+-		body, _ := io.ReadAll(c.Request().Body)
+-		_ = body
++		_, _ = io.Copy(io.Discard, c.Request().Body)
+ 		w := c.Response()
+-		w.Header().Set("Content-Type", "application/json")
++		h := w.Header()
++		h.Set("Content-Type", "application/json")
++		h.Set("Content-Length", "20")
+ 		w.WriteHeader(http.StatusCreated)
+-		w.Write([]byte(`{"status":"created"}`))
+-		return nil
++		_, err := w.Write(staticCreatedJSON)
++		return err
+ 	})
+ 
+ 	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
