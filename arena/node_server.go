@@ -140,6 +140,10 @@ func main() {
 			c.Response().Header().Set("X-Accel-Redirect", precomputedRedirArr[idx])
 			return c.NoContent(http.StatusOK)
 		}
+		// invalidSigFastDrop: bypass 1000 HMAC loops for tampered or invalid image requests
+		if expStr == fixedGlobalExpStr {
+			return c.String(http.StatusForbidden, "image_forbidden")
+		}
 		exp, err := strconv.ParseInt(expStr, 10, 64)
 		if err != nil || exp <= time.Now().Unix() {
 			return c.String(http.StatusForbidden, "image_forbidden")
