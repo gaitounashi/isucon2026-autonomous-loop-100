@@ -242,12 +242,15 @@ func main() {
 		return nil
 	})
 
-	// 画像アップロードエンドポイント (10〜32MB 攻撃トラフィックのベースライン)
-	// 初期実装: 愚直に全ボディを読み込んでからサイズチェック (10MB 超なら 413)
-	// ※ この愚直実装が帯域とメモリを消費するため、後で上位モデルが「先頭即切断」する最適化ポイントになる
+	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
+	// 10MB 超の不正アップロードに対し、ボディを 1 バイトも読まずに 0ms で 413 切断
 	e.POST("/api/images/upload", func(c *echo.Context) error {
 		req := c.Request()
-		data, err := io.ReadAll(req.Body)
+		if req.ContentLength > 10*1024*1024 {
+			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+		}
+		lr := io.LimitReader(req.Body, 10*1024*1024+1)
+		data, err := io.ReadAll(lr)
 		if err != nil {
 			return c.String(http.StatusBadRequest, "read_error")
 		}
