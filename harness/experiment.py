@@ -110,6 +110,8 @@ def bench_exe(exe: Path) -> dict:
 def paired_ab(rounds: int = AB_ROUNDS, log=print) -> dict:
     """A(HEAD) と B(候補) を交互に測定。順序効果を避けるため奇数ラウンドは B→A"""
     base_runs, cand_runs = [], []
+    early_terminated = False
+    early_reason = ""
     for i in range(rounds):
         order = [("A", BASE_EXE), ("B", CAND_EXE)] if i % 2 == 0 else [("B", CAND_EXE), ("A", BASE_EXE)]
         for label, exe in order:
@@ -133,13 +135,34 @@ def paired_ab(rounds: int = AB_ROUNDS, log=print) -> dict:
             except Exception:
                 pass
 
+        # 適応型早期打ち切り (タスク H-2: Adaptive Early Termination)
+        # 第1ラウンドで候補(B)にエラーがあるか、または -5.0% 以上の大差で劣後した場合は残りラウンドをスキップ
+        if i == 0 and rounds > 1:
+            b_first = base_runs[0]
+            c_first = cand_runs[0]
+            if c_first.get("fail", 0) > 0:
+                early_terminated = True
+                early_reason = f"Candidate encountered {c_first['fail']} failures in round 1"
+                log(f"    [!] Early Termination: {early_reason}. Skipping remaining rounds.")
+                break
+            r1_diff = (c_first["score"] - b_first["score"]) / b_first["score"] * 100 if b_first["score"] else -100
+            if r1_diff < -5.0:
+                early_terminated = True
+                early_reason = f"Candidate regressed by {r1_diff:.2f}% in round 1 (< -5.0%)"
+                log(f"    [!] Early Termination: {early_reason}. Skipping remaining rounds.")
+                break
+
+    actual_rounds = len(base_runs)
     b_scores = [r["score"] for r in base_runs]
     c_scores = [r["score"] for r in cand_runs]
     b_med, c_med = statistics.median(b_scores), statistics.median(c_scores)
     gain = (c_med - b_med) / b_med * 100 if b_med else 0.0
     wins = sum(1 for b, c in zip(b_scores, c_scores) if c > b)
-    accepted = gain >= MIN_GAIN_PCT and wins * 2 > rounds
+    accepted = (not early_terminated) and (gain >= MIN_GAIN_PCT) and (wins * 2 > actual_rounds)
     noise = (max(b_scores) - min(b_scores)) / b_med * 100 if b_med else 0.0
+    rule_desc = f"gain >= {MIN_GAIN_PCT}% and wins > {actual_rounds // 2}/{actual_rounds}"
+    if early_terminated:
+        rule_desc += f" (Early Rejected: {early_reason})"
     return {
         "base_runs": base_runs,
         "cand_runs": cand_runs,
@@ -147,10 +170,11 @@ def paired_ab(rounds: int = AB_ROUNDS, log=print) -> dict:
         "cand_median": int(c_med),
         "gain_pct": round(gain, 2),
         "wins": wins,
-        "rounds": rounds,
+        "rounds": actual_rounds,
         "base_noise_pct": round(noise, 2),
         "accepted": accepted,
-        "rule": f"gain >= {MIN_GAIN_PCT}% and wins > {rounds // 2}/{rounds}",
+        "rule": rule_desc,
+        "early_terminated": early_terminated,
     }
 
 
