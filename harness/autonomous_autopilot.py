@@ -27,6 +27,11 @@ DASHBOARD_FILE = REPO_ROOT / "dashboard.html"
 
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(ARENA_DIR))
+sys.path.insert(0, str(HARNESS_DIR))
+
+from critic_reviewer import CriticReviewer
+from optimal_stopping import evaluate_optimal_stopping
+import adhoc_profiler
 
 def run_cmd(cmd: list[str], cwd: Path = REPO_ROOT) -> tuple[int, str, str]:
     res = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace")
@@ -238,6 +243,50 @@ def diagnose_bottlenecks() -> list[dict]:
     # 新アーキテクチャ診断 (公式参加記 / 優勝チーム Typing Bears 625k 準拠)
     # ==============================================================================
 
+    # ==============================================================================
+    # 監査役 & 優勝者 Typing Bears 625k 由来の最新ハイレバレッジ診断
+    # ==============================================================================
+
+    # ボトルネック C1: 不正画像リクエストの即座 403 早期切断 (1,000 回 HMAC 計算の完全バイパス)
+    if 'invalidSigFastDrop' not in ns_code and 'fixedGlobalExpStr' in ns_code and 'precomputedSigArr[idx] == sigStr' in ns_code:
+        candidates.append({
+            "id": "fast_reject_invalid_sig",
+            "category": "SECURITY/FAST_DROP",
+            "priority": -2,
+            "title": "Critic Fix: early 403 rejection on invalid image signatures (bypass 1000 HMAC loops for bad requests)",
+            "action": "apply_fast_reject_invalid_sig"
+        })
+
+    # ボトルネック C2: asia1 レート連動型動的スロットリング (固定 8ms から負荷連動へ昇華)
+    if 'time.Sleep(8 * time.Millisecond)' in ns_code and 'inFlightAsia' not in ns_code:
+        candidates.append({
+            "id": "adaptive_rate_region_bias",
+            "category": "SCHEDULING/DYNAMIC_RATE",
+            "priority": -1,
+            "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (boost 1.5x regions without idle stalls)",
+            "action": "apply_adaptive_rate_region_bias"
+        })
+
+    # ボトルネック C3: 明示的な完全静的フィードルーティング
+    if 'e.GET("/api/feed/:type"' in ns_code and 'e.GET("/api/feed/public"' not in ns_code:
+        candidates.append({
+            "id": "exact_static_feed_routes",
+            "category": "ROUTER/STATIC",
+            "priority": 0,
+            "title": "Critic Fix: register explicit static routes for public/fof feeds to bypass URL parsing",
+            "action": "apply_exact_static_feed_routes"
+        })
+
+    # ボトルネック C4: HTTP コネクションバッファ & タイムアウト調整
+    if 'ReadHeaderTimeout' not in ns_code and 'IdleTimeout' not in ns_code:
+        candidates.append({
+            "id": "connection_buffer_tuning",
+            "category": "NETWORK/HTTP",
+            "priority": 1,
+            "title": "Critic Fix: tune HTTP IdleTimeout and ReadHeaderTimeout to reduce TIME_WAIT bursts",
+            "action": "apply_connection_buffer_tuning"
+        })
+
     # ボトルネック A0 (黄金コンビ): 直書きゼロコピー + 固定長配列 O(1) 署名参照の複合投入
     # 根拠: feed_direct_writer (+1.55%) と fixed_array_lookup (+1.01%) の相乗効果で +2.5%〜+3.0% 超えを確実に狙う
     if 'precomputedSigArr' not in ns_code and 'c.Blob(http.StatusOK' in ns_code:
@@ -438,6 +487,83 @@ def apply_diagnostic_patch(diag: dict) -> tuple[bool, str]:
 
     try:
         ns_target = ARENA_DIR / "node_server.go"
+
+        if action == "apply_fast_reject_invalid_sig":
+            content = ns_target.read_text(encoding="utf-8")
+            if "invalidSigFastDrop" in content:
+                return False, "already applied"
+            anchor = "return c.NoContent(http.StatusOK)\n\t\t}\n"
+            replacement = anchor + "\t\t// invalidSigFastDrop: bypass 1000 HMAC loops for tampered or invalid image requests\n\t\tif expStr == fixedGlobalExpStr {\n\t\t\treturn c.String(http.StatusForbidden, \"image_forbidden\")\n\t\t}\n"
+            if anchor in content:
+                content = content.replace(anchor, replacement, 1)
+                ns_target.write_text(content, encoding="utf-8")
+                return True, title
+            return False, "anchor for invalidSigFastDrop not found"
+
+        elif action == "apply_adaptive_rate_region_bias":
+            content = ns_target.read_text(encoding="utf-8")
+            if "inFlightAsia" in content:
+                return False, "already applied"
+            if 'import (' in content and '"sync/atomic"' not in content:
+                content = content.replace('import (', 'import (\n\t"sync/atomic"', 1)
+            content = content.replace(
+                "precomputedRedirArr [200]string\n)",
+                "precomputedRedirArr [200]string\n\tinFlightAsia int32\n)"
+            )
+            old_sleep = "\t\tif *region == \"asia1\" {\n\t\t\ttime.Sleep(8 * time.Millisecond) // Typing Bears 625k: throttle 1.0x node to boost 1.5x nodes\n\t\t}"
+            new_sleep = """\t\tif *region == "asia1" {
+\t\t\tcur := atomic.AddInt32(&inFlightAsia, 1)
+\t\t\tdefer atomic.AddInt32(&inFlightAsia, -1)
+\t\t\tif cur > 12 {
+\t\t\t\ttime.Sleep(12 * time.Millisecond)
+\t\t\t} else if cur > 6 {
+\t\t\t\ttime.Sleep(6 * time.Millisecond)
+\t\t\t} else {
+\t\t\t\ttime.Sleep(1 * time.Millisecond)
+\t\t\t}
+\t\t}"""
+            if old_sleep in content:
+                content = content.replace(old_sleep, new_sleep, 1)
+                ns_target.write_text(content, encoding="utf-8")
+                return True, title
+            return False, "old_sleep not matched for adaptive_rate_region_bias"
+
+        elif action == "apply_exact_static_feed_routes":
+            content = ns_target.read_text(encoding="utf-8")
+            if "feedHandler :=" in content:
+                return False, "already applied"
+            old_handler_start = 'e.GET("/api/feed/:type", func(c *echo.Context) error {'
+            if old_handler_start not in content:
+                return False, "old feed route not found"
+            content = content.replace(
+                'e.GET("/api/feed/:type", func(c *echo.Context) error {',
+                'feedHandler := func(c *echo.Context) error {',
+                1
+            )
+            old_handler_end = '_, err := w.Write(precomputedFeedJSONs[*region])\n\t\treturn err\n\t})'
+            new_handler_end = """_, err := w.Write(precomputedFeedJSONs[*region])
+\t\treturn err
+\t}
+\te.GET("/api/feed/public", feedHandler)
+\te.GET("/api/feed/friends-of-friends", feedHandler)
+\te.GET("/api/feed/:type", feedHandler)"""
+            if old_handler_end in content:
+                content = content.replace(old_handler_end, new_handler_end, 1)
+                ns_target.write_text(content, encoding="utf-8")
+                return True, title
+            return False, "old_handler_end not matched"
+
+        elif action == "apply_connection_buffer_tuning":
+            content = ns_target.read_text(encoding="utf-8")
+            if "ReadHeaderTimeout" in content:
+                return False, "already applied"
+            content = content.replace(
+                "e := echo.New()\n",
+                "e := echo.New()\n\te.Server.IdleTimeout = 120 * time.Second\n\te.Server.ReadHeaderTimeout = 3 * time.Second\n",
+                1
+            )
+            ns_target.write_text(content, encoding="utf-8")
+            return True, title
 
         if action == "apply_combo_feed_direct_and_fixed_array":
             # 1. feed_direct_writer を適用
@@ -919,6 +1045,17 @@ def run_measurement_driven_loop(max_accepted_cycles: int = 100, timeout_sec: int
         # 既に失敗した仮説を除外
         available = [c for c in candidates if c["id"] not in failed_diagnostics]
 
+        # 監査役 (Critic Reviewer) フック: 探索候補枯渇または連続停滞時に起動
+        critic = CriticReviewer(stagnation_threshold_rejects=2)
+        is_stagnant, stag_reason = critic.check_stagnation()
+        if not available or is_stagnant:
+            print(f"[!] Stagnation Hook Triggered: {stag_reason}. Invoking Critic Reviewer...")
+            critic_proposals = critic.review_and_propose()
+            active_proposals = [p for p in critic_proposals if p["id"] not in failed_diagnostics]
+            if active_proposals:
+                print(f"[★] Critic Reviewer prioritized {len(active_proposals)} high-leverage corrective hypothesis!")
+                available = active_proposals + available
+
         if not available:
             print("[*] All current bottleneck candidates evaluated. Refreshing search space for continuous adaptive exploration...")
             failed_diagnostics.clear()
@@ -963,6 +1100,20 @@ def run_measurement_driven_loop(max_accepted_cycles: int = 100, timeout_sec: int
         print(f"[★] >> ACCEPTED CYCLE {accepted_cycles}/{max_accepted_cycles} RECORDED! A/B gain {res['gain_pct']:+.2f}% (Committed & Pushed)")
         # 成功した場合は失敗リストをリフレッシュ（ボトルネックがシフトしたため）
         failed_diagnostics.clear()
+
+        # 最適停止理論 (Optimal Stopping) 評価: 残り試行の最大期待値と照合
+        stop_eval = evaluate_optimal_stopping(
+            current_score=res["score"],
+            current_cycle=accepted_cycles,
+            max_cycles=max_accepted_cycles,
+            elapsed_sec=time.time() - start_time,
+            timeout_sec=timeout_sec,
+            confidence_ratio=0.96
+        )
+        print(f"[*] Optimal Stopping Audit: E[max_future]={stop_eval['expected_max_future']:,} | Threshold={stop_eval['threshold']:,}")
+        if stop_eval["should_stop"]:
+            print(f"[🏆] OPTIMAL STOPPING TRIGGERED! {stop_eval['reason']}")
+            break
 
     total_time = time.time() - start_time
     print("\n" + "=" * 70)
