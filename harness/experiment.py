@@ -119,14 +119,17 @@ def paired_ab(rounds: int = AB_ROUNDS, log=print) -> dict:
             (base_runs if label == "A" else cand_runs).append(r)
             log(f"    round {i + 1} {label}: {r['score']:,} pts (rps {r['rps']}, p50 {r['p50']}ms, p99 {r['p99']}ms)")
             time.sleep(PAIR_COOLDOWN_SEC)
-            # ソケットドレイン待ち (突発的 TIME_WAIT 滞留による測定ノイズを防止)
+            # 動的ソケットドレイン自動適応 (タスク H-1: TIME_WAIT <= 80 までミリ秒ポーリング)
             try:
                 from autonomous_autopilot import count_timewait_sockets
                 st_w = time.time()
-                while time.time() - st_w < 8.0:
-                    if count_timewait_sockets() <= 120:
+                target_tw = int(os.environ.get("AB_TARGET_TIMEWAIT", "80"))
+                max_drain_sec = float(os.environ.get("AB_MAX_DRAIN_SEC", "10.0"))
+                while time.time() - st_w < max_drain_sec:
+                    tw = count_timewait_sockets()
+                    if tw <= target_tw:
                         break
-                    time.sleep(1.0)
+                    time.sleep(0.4)
             except Exception:
                 pass
 
