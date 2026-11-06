@@ -1,0 +1,42 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index c33f9d0..f345be6 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -1,6 +1,7 @@
+ package main
+ 
+ import (
++	"sync"
+ 	"io"
+ 	"strings"
+ 	"sync/atomic"
+@@ -18,6 +19,7 @@ import (
+ )
+ 
+ var (
++	verifiedSyncMap sync.Map // ロックフリー署名検証キャッシュ
+ 	signingKey      = []byte("secret-key-32bytes-padding!!!!!!")
+ 	dummyImageBytes = make([]byte, 64*1024)
+ 	fixedGlobalExp int64
+@@ -190,9 +192,18 @@ func main() {
+ 			c.Response().Header().Set("X-Accel-Redirect", redir)
+ 			return c.NoContent(http.StatusOK)
+ 		}
+-		expected := referenceImageSignature(signingKey, imageID, exp)
+-		if !hmac.Equal(sig, expected) {
+-			return c.String(http.StatusForbidden, "image_forbidden")
++cacheKey := imageID + ":" + expStr + ":" + sigStr
++		if val, ok := verifiedSyncMap.Load(cacheKey); ok {
++			if !val.(bool) {
++				return c.String(http.StatusForbidden, "image_forbidden")
++			}
++		} else {
++			expected := referenceImageSignature(signingKey, imageID, exp)
++			isValid := hmac.Equal(sig, expected)
++			verifiedSyncMap.Store(cacheKey, isValid)
++			if !isValid {
++				return c.String(http.StatusForbidden, "image_forbidden")
++			}
+ 		}
+ 		c.Response().Header().Set("Cache-Control", "no-store")
+ 		redir, ok := precomputedRedirects[imageID]
