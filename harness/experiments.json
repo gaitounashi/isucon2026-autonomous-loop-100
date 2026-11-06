@@ -2905,5 +2905,74 @@
     "p99": 74.26,
     "commit": "6334966",
     "patch_file": "harness/patches/0052_manual.diff"
+  },
+  {
+    "id": 53,
+    "timestamp": 1793976964.2907763,
+    "time": "2026-11-06 23:56:04",
+    "diag_id": "manual",
+    "category": "",
+    "title": "eliminate precomputedRedirects map hashing with O(1) array lookup and direct writer",
+    "head": "5569bf3",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 427377,
+        "rps": 4099.0,
+        "p50": 5.07,
+        "p99": 17.84,
+        "fail": 0
+      },
+      {
+        "score": 421969,
+        "rps": 4044.2,
+        "p50": 5.13,
+        "p99": 17.74,
+        "fail": 0
+      },
+      {
+        "score": 434144,
+        "rps": 4168.3,
+        "p50": 4.99,
+        "p99": 17.28,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 427724,
+        "rps": 4093.9,
+        "p50": 5.16,
+        "p99": 16.92,
+        "fail": 0
+      },
+      {
+        "score": 425203,
+        "rps": 4083.0,
+        "p50": 5.16,
+        "p99": 16.94,
+        "fail": 0
+      },
+      {
+        "score": 426776,
+        "rps": 4097.4,
+        "p50": 5.01,
+        "p99": 18.1,
+        "fail": 0
+      }
+    ],
+    "base_median": 427377,
+    "cand_median": 426776,
+    "gain_pct": -0.14,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 2.85,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 4097.4,
+    "p50": 5.01,
+    "p99": 18.1,
+    "commit": "",
+    "patch_file": "harness/patches/0053_manual.diff"
   }
 ]

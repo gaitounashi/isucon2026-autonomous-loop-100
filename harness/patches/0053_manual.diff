@@ -1,0 +1,49 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 9a6ab75..73b43fc 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -180,25 +180,31 @@ func main() {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+ 		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+-			redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
++			redir := "/_imgcache/" + imageID + ".jpg"
++			if idx := imageIndex(imageID); idx >= 0 {
++				redir = precomputedRedirArr[idx]
+ 			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++			w := c.Response()
++			h := w.Header()
++			h.Set("Cache-Control", "public, max-age=86400")
++			h.Set("X-Accel-Redirect", redir)
++			w.WriteHeader(http.StatusOK)
++			return nil
+ 		}
+ 		expected := referenceImageSignature(signingKey, imageID, exp)
+ 		if !hmac.Equal(sig, expected) {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+-		c.Response().Header().Set("Cache-Control", "no-store")
+-		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++		redir := "/_imgcache/" + imageID + ".jpg"
++		if idx := imageIndex(imageID); idx >= 0 {
++			redir = precomputedRedirArr[idx]
++		}
++		w := c.Response()
++		h := w.Header()
++		h.Set("Cache-Control", "no-store")
++		h.Set("X-Accel-Redirect", redir)
++		w.WriteHeader(http.StatusOK)
++		return nil
+ 	})
+ 
+ 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
