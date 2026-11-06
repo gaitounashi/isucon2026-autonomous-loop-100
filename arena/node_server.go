@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"strings"
 	"sync/atomic"
 	"runtime/debug"
@@ -228,6 +229,32 @@ func main() {
 	e.GET("/api/feed/public", feedHandler)
 	e.GET("/api/feed/friends-of-friends", feedHandler)
 	e.GET("/api/feed/:type", feedHandler)
+
+	// 投稿作成エンドポイント (Write系 負荷)
+	e.POST("/api/posts", func(c *echo.Context) error {
+		body, _ := io.ReadAll(c.Request().Body)
+		_ = body
+		w := c.Response()
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte(`{"status":"created"}`))
+		return nil
+	})
+
+	// 画像アップロードエンドポイント (10〜32MB 攻撃トラフィックのベースライン)
+	// 初期実装: 愚直に全ボディを読み込んでからサイズチェック (10MB 超なら 413)
+	// ※ この愚直実装が帯域とメモリを消費するため、後で上位モデルが「先頭即切断」する最適化ポイントになる
+	e.POST("/api/images/upload", func(c *echo.Context) error {
+		req := c.Request()
+		data, err := io.ReadAll(req.Body)
+		if err != nil {
+			return c.String(http.StatusBadRequest, "read_error")
+		}
+		if len(data) > 10*1024*1024 {
+			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+		}
+		return c.JSON(http.StatusOK, map[string]string{"status": "ok", "size": strconv.Itoa(len(data))})
+	})
 
 	addr := fmt.Sprintf(":%d", *port)
 	fmt.Printf("[*] Baseline Node Server started on %s (region: %s)\n", addr, *region)
