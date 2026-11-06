@@ -116,6 +116,7 @@ func main() {
 	debug.SetGCPercent(300)
 	port := flag.Int("port", 8001, "listen port")
 	region := flag.String("region", "asia1", "server region: asia1, europe1, america1")
+	_ = flag.String("mode", "optimized", "running mode: baseline or optimized")
 	flag.Parse()
 	for i := 0; i < 200; i++ {
 		precomputeSignature(signingKey, fmt.Sprintf("image-%04d", i))
