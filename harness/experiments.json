@@ -1030,5 +1030,237 @@
     "p99": 49.95,
     "commit": "1608aa8",
     "patch_file": "harness/patches/0015_exact_static_feed_routes.diff"
+  },
+  {
+    "id": 16,
+    "timestamp": 1793970909.577422,
+    "time": "2026-11-06 22:15:09",
+    "diag_id": "adaptive_rate_region_bias",
+    "category": "SCHEDULING/DYNAMIC_RATE",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (boost 1.5x regions without idle stalls)",
+    "head": "0142389",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 253451,
+        "rps": 2385.5,
+        "p50": 6.5,
+        "p99": 56.82,
+        "fail": 0
+      },
+      {
+        "score": 253023,
+        "rps": 2390.6,
+        "p50": 6.51,
+        "p99": 50.65,
+        "fail": 0
+      },
+      {
+        "score": 253798,
+        "rps": 2391.1,
+        "p50": 6.32,
+        "p99": 54.2,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 242208,
+        "rps": 2321.3,
+        "p50": 6.24,
+        "p99": 58.79,
+        "fail": 0
+      },
+      {
+        "score": 252659,
+        "rps": 2410.7,
+        "p50": 6.56,
+        "p99": 52.71,
+        "fail": 0
+      },
+      {
+        "score": 246086,
+        "rps": 2378.1,
+        "p50": 7.67,
+        "p99": 44.26,
+        "fail": 0
+      }
+    ],
+    "base_median": 253451,
+    "cand_median": 246086,
+    "gain_pct": -2.91,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 0.31,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2378.1,
+    "p50": 7.67,
+    "p99": 44.26,
+    "commit": "",
+    "patch_file": "harness/patches/0016_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 17,
+    "timestamp": 1793970929.1655164,
+    "time": "2026-11-06 22:15:29",
+    "diag_id": "connection_buffer_tuning",
+    "category": "NETWORK/HTTP",
+    "title": "Critic Fix: tune HTTP IdleTimeout and ReadHeaderTimeout to reduce TIME_WAIT bursts",
+    "head": "0142389",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0017_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 18,
+    "timestamp": 1793971062.6620677,
+    "time": "2026-11-06 22:17:42",
+    "diag_id": "critic_adaptive_rate_region_bias",
+    "category": "CRITIC/SCHEDULING",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (replace fixed 8ms sleep with load-based delay)",
+    "head": "0142389",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 249352,
+        "rps": 2354.5,
+        "p50": 7.28,
+        "p99": 49.12,
+        "fail": 0
+      },
+      {
+        "score": 250888,
+        "rps": 2365.0,
+        "p50": 7.39,
+        "p99": 48.59,
+        "fail": 0
+      },
+      {
+        "score": 253947,
+        "rps": 2404.6,
+        "p50": 7.23,
+        "p99": 47.85,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 242620,
+        "rps": 2343.7,
+        "p50": 6.31,
+        "p99": 54.32,
+        "fail": 0
+      },
+      {
+        "score": 246067,
+        "rps": 2362.6,
+        "p50": 6.31,
+        "p99": 56.53,
+        "fail": 0
+      },
+      {
+        "score": 258928,
+        "rps": 2474.5,
+        "p50": 6.96,
+        "p99": 42.46,
+        "fail": 0
+      }
+    ],
+    "base_median": 250888,
+    "cand_median": 246067,
+    "gain_pct": -1.92,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 1.83,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2362.6,
+    "p50": 6.31,
+    "p99": 56.53,
+    "commit": "",
+    "patch_file": "harness/patches/0018_critic_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 19,
+    "timestamp": 1793971082.3142784,
+    "time": "2026-11-06 22:18:02",
+    "diag_id": "critic_connection_buffer_tuning",
+    "category": "CRITIC/NETWORK",
+    "title": "Critic Fix: tune HTTP listener read/write buffer and keep-alive to absorb connection bursts",
+    "head": "0142389",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0019_critic_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 20,
+    "timestamp": 1793971214.2116303,
+    "time": "2026-11-06 22:20:14",
+    "diag_id": "static_feed_routes",
+    "category": "ROUTER/FAST_PATH",
+    "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "head": "0142389",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 246183,
+        "rps": 2329.9,
+        "p50": 7.45,
+        "p99": 50.37,
+        "fail": 0
+      },
+      {
+        "score": 249546,
+        "rps": 2356.7,
+        "p50": 7.35,
+        "p99": 48.37,
+        "fail": 0
+      },
+      {
+        "score": 241480,
+        "rps": 2278.5,
+        "p50": 6.66,
+        "p99": 57.21,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 264073,
+        "rps": 2491.7,
+        "p50": 6.4,
+        "p99": 46.49,
+        "fail": 0
+      },
+      {
+        "score": 251334,
+        "rps": 2378.7,
+        "p50": 7.34,
+        "p99": 46.59,
+        "fail": 0
+      },
+      {
+        "score": 249956,
+        "rps": 2357.7,
+        "p50": 6.68,
+        "p99": 57.15,
+        "fail": 0
+      }
+    ],
+    "base_median": 246183,
+    "cand_median": 251334,
+    "gain_pct": 2.09,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 3.28,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2378.7,
+    "p50": 7.34,
+    "p99": 46.59,
+    "commit": "0142389"
   }
 ]
