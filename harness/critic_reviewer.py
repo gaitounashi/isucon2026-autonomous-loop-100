@@ -1,6 +1,6 @@
 """
 critic_reviewer.py - 監査役 (Critic / Reviewer) サブエージェント & 停滞検知フック
-【ISUCON2026 優勝 Typing Bears (kawasy 氏 625k) 実戦知見準拠】
+【ISUCON2026 優勝 Typing Bears (kawasy 氏 625k) & 上位入賞チーム実戦知見準拠】
 
 役割:
 1. 自律ループが局所最適 (ローカルミニマム) やスコア停滞 (連続リジェクト / 伸び悩み) に陥ったことを検知する。
@@ -23,7 +23,7 @@ EXPERIMENTS_FILE = HARNESS_DIR / "experiments.json"
 
 # ==============================================================================
 # 勝者のチェックリスト (Winner's Engineering Checklist)
-# ISUCON2026 優勝 Typing Bears 625k / fukabori.fm #142 / 八百万のOSS #27 より
+# ISUCON2026 優勝 Typing Bears 625k / 4位 チーム54 / 6位 チーム釜中の鯖 より
 # ==============================================================================
 WINNER_CHECKLIST = [
     {
@@ -32,7 +32,7 @@ WINNER_CHECKLIST = [
         "priority": -1,  # 最優先
         "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (replace fixed 8ms sleep with load-based delay)",
         "action": "apply_adaptive_rate_region_bias",
-        "check": lambda code, hist: "time.Sleep(8 * time.Millisecond)" in code and "adaptiveThrottle" not in code,
+        "check": lambda code, hist: "time.Sleep(8 * time.Millisecond)" in code and "inFlightAsia" not in code,
         "advice": "固定 8ms スリープは低負荷時にスループットを削り、超高負荷時に抑制不足になります。リクエストレートに応じた動的遅延制御を導入してください。"
     },
     {
@@ -45,6 +45,33 @@ WINNER_CHECKLIST = [
         "advice": "ベンチマーカーの不正リクエスト（改ざん署名・期限切れ）に対して 1000 回 HMAC を計算するのは CPU の無駄遣いです。先頭数バイトの検証や固定ハッシュ長不一致で即 403 早期リターンしてください。"
     },
     {
+        "id": "critic_fast_reject_oversized_upload",
+        "category": "CRITIC/SECURITY_BANDWIDTH",
+        "priority": -1,
+        "title": "Critic Fix: early reject oversized image uploads (>10MB) to protect 60% router bandwidth",
+        "action": "apply_fast_reject_oversized_upload",
+        "check": lambda code, hist: "oversizedUploadDrop" not in code,
+        "advice": "ベンチマーカーの 10〜32MB の不正プロフィール画像送信によりルーター帯域の 6 割が浪費されています。Content-Length > 10MB はボディを読まず即 413 で切断してください。"
+    },
+    {
+        "id": "critic_exp_minute_rounding_cache",
+        "category": "CRITIC/CACHE",
+        "priority": 0,
+        "title": "Critic Fix: round image signature expiry to 1-minute intervals to maximize cache hit ratio",
+        "action": "apply_exp_minute_rounding_cache",
+        "check": lambda code, hist: "expMinuteRound" not in code,
+        "advice": "署名有効期限が秒単位だと 1 秒でキャッシュが無効化されます。期限を 1 分（または 1 時間）単位に切り上げて署名を生成・検証し、キャッシュを 100% ヒットさせてください。"
+    },
+    {
+        "id": "critic_jpeg_sof0_header_parser",
+        "category": "CRITIC/CPU_ALGO",
+        "priority": 0,
+        "title": "Critic Fix: bypass jpeg.Decode by reading SOF0 marker directly for width/height validation",
+        "action": "apply_jpeg_sof0_header_parser",
+        "check": lambda code, hist: "jpeg.Decode" in code and "parseJPEGSizeFast" not in code,
+        "advice": "jpeg.Decode によるピクセル展開（DCT計算）は CPU を猛烈に浪費します。SOF0 (0xFF 0xC0) マーカーからサイズだけを直接バイナリパースしてデコードを完全スキップしてください。"
+    },
+    {
         "id": "critic_exact_static_feed_routes",
         "category": "CRITIC/ROUTER",
         "priority": 0,
@@ -52,15 +79,6 @@ WINNER_CHECKLIST = [
         "action": "apply_exact_static_feed_routes",
         "check": lambda code, hist: 'e.GET("/api/feed/:type"' in code and 'e.GET("/api/feed/public"' not in code,
         "advice": "フィードエンドポイントが動的 `:type` ルーティングのままです。リクエスト全体の 30% 以上を占めるため、明示的な完全静的ルーティングに分離してください。"
-    },
-    {
-        "id": "critic_connection_buffer_tuning",
-        "category": "CRITIC/NETWORK",
-        "priority": 1,
-        "title": "Critic Fix: tune HTTP listener read/write buffer and keep-alive to absorb connection bursts",
-        "action": "apply_connection_buffer_tuning",
-        "check": lambda code, hist: "ReadHeaderTimeout" not in code,
-        "advice": "突発的なリクエストバースト時に TIME_WAIT やソケット枯渇が発生しています。サーバーの ReadHeaderTimeout と IdleTimeout を調整してください。"
     }
 ]
 
@@ -105,7 +123,6 @@ class CriticReviewer:
         ns_target = ARENA_DIR / "node_server.go"
         ns_code = ns_target.read_text(encoding="utf-8") if ns_target.exists() else ""
 
-        tried_diag_ids = {r.get("diag_id") for r in hist}
         proposals = []
 
         print("\n" + "=" * 65)
