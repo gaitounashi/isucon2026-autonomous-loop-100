@@ -1262,5 +1262,1140 @@
     "p50": 7.34,
     "p99": 46.59,
     "commit": "0142389"
+  },
+  {
+    "id": 21,
+    "timestamp": 1793971369.2081683,
+    "time": "2026-11-06 22:22:49",
+    "diag_id": "adaptive_rate_region_bias",
+    "category": "SCHEDULING/DYNAMIC_RATE",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (boost 1.5x regions without idle stalls)",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 249390,
+        "rps": 2351.4,
+        "p50": 6.62,
+        "p99": 51.34,
+        "fail": 0
+      },
+      {
+        "score": 251618,
+        "rps": 2370.1,
+        "p50": 6.66,
+        "p99": 54.41,
+        "fail": 0
+      },
+      {
+        "score": 247319,
+        "rps": 2333.2,
+        "p50": 6.34,
+        "p99": 52.41,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 245615,
+        "rps": 2365.4,
+        "p50": 6.83,
+        "p99": 49.07,
+        "fail": 0
+      },
+      {
+        "score": 239854,
+        "rps": 2309.8,
+        "p50": 6.49,
+        "p99": 54.16,
+        "fail": 0
+      },
+      {
+        "score": 249803,
+        "rps": 2402.7,
+        "p50": 6.69,
+        "p99": 52.5,
+        "fail": 0
+      }
+    ],
+    "base_median": 249390,
+    "cand_median": 245615,
+    "gain_pct": -1.51,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 1.72,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2365.4,
+    "p50": 6.83,
+    "p99": 49.07,
+    "commit": "",
+    "patch_file": "harness/patches/0021_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 22,
+    "timestamp": 1793971388.8873868,
+    "time": "2026-11-06 22:23:08",
+    "diag_id": "connection_buffer_tuning",
+    "category": "NETWORK/HTTP",
+    "title": "Critic Fix: tune HTTP IdleTimeout and ReadHeaderTimeout to reduce TIME_WAIT bursts",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0022_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 23,
+    "timestamp": 1793971521.183024,
+    "time": "2026-11-06 22:25:21",
+    "diag_id": "critic_adaptive_rate_region_bias",
+    "category": "CRITIC/SCHEDULING",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (replace fixed 8ms sleep with load-based delay)",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 245951,
+        "rps": 2321.3,
+        "p50": 7.13,
+        "p99": 50.56,
+        "fail": 0
+      },
+      {
+        "score": 251812,
+        "rps": 2380.6,
+        "p50": 7.59,
+        "p99": 46.45,
+        "fail": 0
+      },
+      {
+        "score": 254960,
+        "rps": 2405.6,
+        "p50": 6.68,
+        "p99": 53.27,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 244347,
+        "rps": 2354.5,
+        "p50": 6.69,
+        "p99": 54.82,
+        "fail": 0
+      },
+      {
+        "score": 246653,
+        "rps": 2362.9,
+        "p50": 7.2,
+        "p99": 48.18,
+        "fail": 0
+      },
+      {
+        "score": 249675,
+        "rps": 2384.3,
+        "p50": 6.68,
+        "p99": 50.76,
+        "fail": 0
+      }
+    ],
+    "base_median": 251812,
+    "cand_median": 246653,
+    "gain_pct": -2.05,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 3.58,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2362.9,
+    "p50": 7.2,
+    "p99": 48.18,
+    "commit": "",
+    "patch_file": "harness/patches/0023_critic_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 24,
+    "timestamp": 1793971540.8329823,
+    "time": "2026-11-06 22:25:40",
+    "diag_id": "critic_connection_buffer_tuning",
+    "category": "CRITIC/NETWORK",
+    "title": "Critic Fix: tune HTTP listener read/write buffer and keep-alive to absorb connection bursts",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0024_critic_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 25,
+    "timestamp": 1793971671.736028,
+    "time": "2026-11-06 22:27:51",
+    "diag_id": "static_feed_routes",
+    "category": "ROUTER/FAST_PATH",
+    "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 247938,
+        "rps": 2339.3,
+        "p50": 7.35,
+        "p99": 48.37,
+        "fail": 0
+      },
+      {
+        "score": 262969,
+        "rps": 2485.5,
+        "p50": 6.54,
+        "p99": 48.55,
+        "fail": 0
+      },
+      {
+        "score": 249364,
+        "rps": 2367.8,
+        "p50": 7.66,
+        "p99": 45.48,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 242914,
+        "rps": 2288.9,
+        "p50": 7.98,
+        "p99": 50.08,
+        "fail": 0
+      },
+      {
+        "score": 253991,
+        "rps": 2397.9,
+        "p50": 6.38,
+        "p99": 55.62,
+        "fail": 0
+      },
+      {
+        "score": 247387,
+        "rps": 2344.1,
+        "p50": 8.1,
+        "p99": 44.16,
+        "fail": 0
+      }
+    ],
+    "base_median": 249364,
+    "cand_median": 247387,
+    "gain_pct": -0.79,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 6.03,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2344.1,
+    "p50": 8.1,
+    "p99": 44.16,
+    "commit": ""
+  },
+  {
+    "id": 26,
+    "timestamp": 1793971826.9957113,
+    "time": "2026-11-06 22:30:26",
+    "diag_id": "fast_image_path_slice",
+    "category": "CPU/MEMORY",
+    "title": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 252709,
+        "rps": 2384.3,
+        "p50": 7.28,
+        "p99": 47.41,
+        "fail": 0
+      },
+      {
+        "score": 250069,
+        "rps": 2367.9,
+        "p50": 7.19,
+        "p99": 51.8,
+        "fail": 0
+      },
+      {
+        "score": 254324,
+        "rps": 2403.6,
+        "p50": 6.52,
+        "p99": 52.6,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 254142,
+        "rps": 2403.1,
+        "p50": 7.38,
+        "p99": 48.96,
+        "fail": 0
+      },
+      {
+        "score": 253315,
+        "rps": 2388.9,
+        "p50": 6.77,
+        "p99": 50.3,
+        "fail": 0
+      },
+      {
+        "score": 249354,
+        "rps": 2360.2,
+        "p50": 7.29,
+        "p99": 48.81,
+        "fail": 0
+      }
+    ],
+    "base_median": 252709,
+    "cand_median": 253315,
+    "gain_pct": 0.24,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 1.68,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2388.9,
+    "p50": 6.77,
+    "p99": 50.3,
+    "commit": "",
+    "patch_file": "harness/patches/0026_fast_image_path_slice.diff"
+  },
+  {
+    "id": 27,
+    "timestamp": 1793971978.2805622,
+    "time": "2026-11-06 22:32:58",
+    "diag_id": "debug_set_memory_limit",
+    "category": "RUNTIME/MEMORY",
+    "title": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 239066,
+        "rps": 2266.1,
+        "p50": 7.92,
+        "p99": 49.5,
+        "fail": 0
+      },
+      {
+        "score": 256527,
+        "rps": 2429.8,
+        "p50": 7.58,
+        "p99": 44.21,
+        "fail": 0
+      },
+      {
+        "score": 248723,
+        "rps": 2351.0,
+        "p50": 6.3,
+        "p99": 54.09,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 249987,
+        "rps": 2360.1,
+        "p50": 6.15,
+        "p99": 56.38,
+        "fail": 0
+      },
+      {
+        "score": 252819,
+        "rps": 2381.6,
+        "p50": 6.86,
+        "p99": 49.4,
+        "fail": 0
+      },
+      {
+        "score": 252967,
+        "rps": 2385.5,
+        "p50": 6.81,
+        "p99": 50.4,
+        "fail": 0
+      }
+    ],
+    "base_median": 248723,
+    "cand_median": 252819,
+    "gain_pct": 1.65,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 7.02,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2381.6,
+    "p50": 6.86,
+    "p99": 49.4,
+    "commit": ""
+  },
+  {
+    "id": 28,
+    "timestamp": 1793972133.393495,
+    "time": "2026-11-06 22:35:33",
+    "diag_id": "gc_percent_350",
+    "category": "RUNTIME/GC",
+    "title": "tune Go runtime GC percent to 350 for zero-alloc heap in node_server",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 254127,
+        "rps": 2403.5,
+        "p50": 8.02,
+        "p99": 41.75,
+        "fail": 0
+      },
+      {
+        "score": 255462,
+        "rps": 2409.1,
+        "p50": 7.25,
+        "p99": 46.0,
+        "fail": 0
+      },
+      {
+        "score": 250826,
+        "rps": 2363.6,
+        "p50": 7.17,
+        "p99": 50.78,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 249637,
+        "rps": 2360.0,
+        "p50": 6.62,
+        "p99": 51.73,
+        "fail": 0
+      },
+      {
+        "score": 243689,
+        "rps": 2306.8,
+        "p50": 7.0,
+        "p99": 53.7,
+        "fail": 0
+      },
+      {
+        "score": 249025,
+        "rps": 2349.1,
+        "p50": 6.84,
+        "p99": 53.08,
+        "fail": 0
+      }
+    ],
+    "base_median": 254127,
+    "cand_median": 249025,
+    "gain_pct": -2.01,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 1.82,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2349.1,
+    "p50": 6.84,
+    "p99": 53.08,
+    "commit": "",
+    "patch_file": "harness/patches/0028_gc_percent_350.diff"
+  },
+  {
+    "id": 29,
+    "timestamp": 1793972286.1112328,
+    "time": "2026-11-06 22:38:06",
+    "diag_id": "sig_strs_capacity_16384",
+    "category": "MEMORY/MAP",
+    "title": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 252829,
+        "rps": 2385.8,
+        "p50": 6.85,
+        "p99": 50.6,
+        "fail": 0
+      },
+      {
+        "score": 252599,
+        "rps": 2386.6,
+        "p50": 7.37,
+        "p99": 45.67,
+        "fail": 0
+      },
+      {
+        "score": 248738,
+        "rps": 2351.5,
+        "p50": 6.98,
+        "p99": 50.28,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 255237,
+        "rps": 2412.3,
+        "p50": 6.83,
+        "p99": 50.3,
+        "fail": 0
+      },
+      {
+        "score": 254163,
+        "rps": 2392.9,
+        "p50": 7.12,
+        "p99": 49.26,
+        "fail": 0
+      },
+      {
+        "score": 251093,
+        "rps": 2365.4,
+        "p50": 6.21,
+        "p99": 54.94,
+        "fail": 0
+      }
+    ],
+    "base_median": 252599,
+    "cand_median": 254163,
+    "gain_pct": 0.62,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 1.62,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2392.9,
+    "p50": 7.12,
+    "p99": 49.26,
+    "commit": "",
+    "patch_file": "harness/patches/0029_sig_strs_capacity_16384.diff"
+  },
+  {
+    "id": 30,
+    "timestamp": 1793972305.7643328,
+    "time": "2026-11-06 22:38:25",
+    "diag_id": "node_server_keepalive",
+    "category": "NETWORK/HTTP",
+    "title": "tune HTTP IdleTimeout and ReadHeaderTimeout in node_server",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0030_node_server_keepalive.diff"
+  },
+  {
+    "id": 31,
+    "timestamp": 1793972307.104381,
+    "time": "2026-11-06 22:38:27",
+    "diag_id": "image_redirect_array",
+    "category": "CPU/ALGO",
+    "title": "replace map lookup with zero-hash fixed slice lookup for image redirects",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:94:3: undefined: precomputedRedirectArray\n\n",
+    "patch_file": "harness/patches/0031_image_redirect_array.diff"
+  },
+  {
+    "id": 32,
+    "timestamp": 1793972438.905653,
+    "time": "2026-11-06 22:40:38",
+    "diag_id": "critic_adaptive_rate_region_bias",
+    "category": "CRITIC/SCHEDULING",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (replace fixed 8ms sleep with load-based delay)",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 254461,
+        "rps": 2406.2,
+        "p50": 7.0,
+        "p99": 50.89,
+        "fail": 0
+      },
+      {
+        "score": 232129,
+        "rps": 2172.8,
+        "p50": 2.16,
+        "p99": 75.34,
+        "fail": 0
+      },
+      {
+        "score": 247160,
+        "rps": 2325.7,
+        "p50": 2.37,
+        "p99": 74.07,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 254302,
+        "rps": 2420.2,
+        "p50": 5.87,
+        "p99": 59.63,
+        "fail": 0
+      },
+      {
+        "score": 251986,
+        "rps": 2412.6,
+        "p50": 4.08,
+        "p99": 68.42,
+        "fail": 0
+      },
+      {
+        "score": 237879,
+        "rps": 2256.6,
+        "p50": 1.69,
+        "p99": 87.23,
+        "fail": 0
+      }
+    ],
+    "base_median": 247160,
+    "cand_median": 251986,
+    "gain_pct": 1.95,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 9.04,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2412.6,
+    "p50": 4.08,
+    "p99": 68.42,
+    "commit": "",
+    "patch_file": "harness/patches/0032_critic_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 33,
+    "timestamp": 1793972458.6533625,
+    "time": "2026-11-06 22:40:58",
+    "diag_id": "critic_connection_buffer_tuning",
+    "category": "CRITIC/NETWORK",
+    "title": "Critic Fix: tune HTTP listener read/write buffer and keep-alive to absorb connection bursts",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0033_critic_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 34,
+    "timestamp": 1793972590.8899274,
+    "time": "2026-11-06 22:43:10",
+    "diag_id": "adaptive_rate_region_bias",
+    "category": "SCHEDULING/DYNAMIC_RATE",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (boost 1.5x regions without idle stalls)",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 243800,
+        "rps": 2272.2,
+        "p50": 1.59,
+        "p99": 84.28,
+        "fail": 0
+      },
+      {
+        "score": 248689,
+        "rps": 2330.1,
+        "p50": 1.34,
+        "p99": 73.84,
+        "fail": 0
+      },
+      {
+        "score": 233674,
+        "rps": 2184.6,
+        "p50": 3.09,
+        "p99": 73.69,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 232574,
+        "rps": 2202.9,
+        "p50": 1.29,
+        "p99": 91.75,
+        "fail": 0
+      },
+      {
+        "score": 242960,
+        "rps": 2279.6,
+        "p50": 0.78,
+        "p99": 93.33,
+        "fail": 0
+      },
+      {
+        "score": 249332,
+        "rps": 2363.0,
+        "p50": 3.81,
+        "p99": 69.22,
+        "fail": 0
+      }
+    ],
+    "base_median": 243800,
+    "cand_median": 242960,
+    "gain_pct": -0.34,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 6.16,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2279.6,
+    "p50": 0.78,
+    "p99": 93.33,
+    "commit": "",
+    "patch_file": "harness/patches/0034_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 35,
+    "timestamp": 1793972610.528848,
+    "time": "2026-11-06 22:43:30",
+    "diag_id": "connection_buffer_tuning",
+    "category": "NETWORK/HTTP",
+    "title": "Critic Fix: tune HTTP IdleTimeout and ReadHeaderTimeout to reduce TIME_WAIT bursts",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0035_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 36,
+    "timestamp": 1793973134.248463,
+    "time": "2026-11-06 22:52:14",
+    "diag_id": "static_feed_routes",
+    "category": "ROUTER/FAST_PATH",
+    "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 244501,
+        "rps": 2330.2,
+        "p50": 8.36,
+        "p99": 40.83,
+        "fail": 0
+      },
+      {
+        "score": 235436,
+        "rps": 2213.8,
+        "p50": 7.47,
+        "p99": 51.33,
+        "fail": 0
+      },
+      {
+        "score": 244120,
+        "rps": 2299.3,
+        "p50": 7.26,
+        "p99": 51.31,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 250403,
+        "rps": 2357.8,
+        "p50": 6.97,
+        "p99": 58.19,
+        "fail": 0
+      },
+      {
+        "score": 246898,
+        "rps": 2314.5,
+        "p50": 5.64,
+        "p99": 63.2,
+        "fail": 0
+      },
+      {
+        "score": 237080,
+        "rps": 2218.5,
+        "p50": 3.13,
+        "p99": 78.21,
+        "fail": 0
+      }
+    ],
+    "base_median": 244120,
+    "cand_median": 246898,
+    "gain_pct": 1.14,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 3.71,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2314.5,
+    "p50": 5.64,
+    "p99": 63.2,
+    "commit": ""
+  },
+  {
+    "id": 37,
+    "timestamp": 1793973277.4192848,
+    "time": "2026-11-06 22:54:37",
+    "diag_id": "fast_image_path_slice",
+    "category": "CPU/MEMORY",
+    "title": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 248024,
+        "rps": 2314.5,
+        "p50": 3.61,
+        "p99": 71.33,
+        "fail": 0
+      },
+      {
+        "score": 237965,
+        "rps": 2219.1,
+        "p50": 3.37,
+        "p99": 78.38,
+        "fail": 0
+      },
+      {
+        "score": 247642,
+        "rps": 2321.7,
+        "p50": 4.98,
+        "p99": 66.02,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 250754,
+        "rps": 2330.7,
+        "p50": 1.67,
+        "p99": 79.3,
+        "fail": 0
+      },
+      {
+        "score": 238797,
+        "rps": 2226.2,
+        "p50": 2.47,
+        "p99": 74.66,
+        "fail": 0
+      },
+      {
+        "score": 255900,
+        "rps": 2383.5,
+        "p50": 2.88,
+        "p99": 76.78,
+        "fail": 0
+      }
+    ],
+    "base_median": 247642,
+    "cand_median": 250754,
+    "gain_pct": 1.26,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 4.06,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2330.7,
+    "p50": 1.67,
+    "p99": 79.3,
+    "commit": "",
+    "patch_file": "harness/patches/0037_fast_image_path_slice.diff"
+  },
+  {
+    "id": 38,
+    "timestamp": 1793973427.763317,
+    "time": "2026-11-06 22:57:07",
+    "diag_id": "debug_set_memory_limit",
+    "category": "RUNTIME/MEMORY",
+    "title": "set Go runtime MemoryLimit to 3GiB to eliminate GC pauses during burst load",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 250601,
+        "rps": 2322.6,
+        "p50": 1.41,
+        "p99": 79.57,
+        "fail": 0
+      },
+      {
+        "score": 240864,
+        "rps": 2262.2,
+        "p50": 3.82,
+        "p99": 69.01,
+        "fail": 0
+      },
+      {
+        "score": 265199,
+        "rps": 2475.6,
+        "p50": 3.18,
+        "p99": 63.27,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 246862,
+        "rps": 2311.3,
+        "p50": 3.25,
+        "p99": 74.53,
+        "fail": 0
+      },
+      {
+        "score": 235815,
+        "rps": 2209.4,
+        "p50": 4.24,
+        "p99": 69.22,
+        "fail": 0
+      },
+      {
+        "score": 254343,
+        "rps": 2381.7,
+        "p50": 5.0,
+        "p99": 59.83,
+        "fail": 0
+      }
+    ],
+    "base_median": 250601,
+    "cand_median": 246862,
+    "gain_pct": -1.49,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 9.71,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2311.3,
+    "p50": 3.25,
+    "p99": 74.53,
+    "commit": ""
+  },
+  {
+    "id": 39,
+    "timestamp": 1793973582.6172776,
+    "time": "2026-11-06 22:59:42",
+    "diag_id": "gc_percent_350",
+    "category": "RUNTIME/GC",
+    "title": "tune Go runtime GC percent to 350 for zero-alloc heap in node_server",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 236954,
+        "rps": 2213.1,
+        "p50": 2.18,
+        "p99": 83.21,
+        "fail": 0
+      },
+      {
+        "score": 235369,
+        "rps": 2206.6,
+        "p50": 4.03,
+        "p99": 80.44,
+        "fail": 0
+      },
+      {
+        "score": 248820,
+        "rps": 2327.8,
+        "p50": 1.04,
+        "p99": 79.1,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 236790,
+        "rps": 2213.4,
+        "p50": 1.29,
+        "p99": 81.39,
+        "fail": 0
+      },
+      {
+        "score": 238331,
+        "rps": 2241.1,
+        "p50": 4.02,
+        "p99": 72.32,
+        "fail": 0
+      },
+      {
+        "score": 235794,
+        "rps": 2202.5,
+        "p50": 1.37,
+        "p99": 76.9,
+        "fail": 0
+      }
+    ],
+    "base_median": 236954,
+    "cand_median": 236790,
+    "gain_pct": -0.07,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 5.68,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2213.4,
+    "p50": 1.29,
+    "p99": 81.39,
+    "commit": "",
+    "patch_file": "harness/patches/0039_gc_percent_350.diff"
+  },
+  {
+    "id": 40,
+    "timestamp": 1793973735.5775454,
+    "time": "2026-11-06 23:02:15",
+    "diag_id": "sig_strs_capacity_16384",
+    "category": "MEMORY/MAP",
+    "title": "expand precomputedSigStrs map capacity to 16384 in node_server",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 239707,
+        "rps": 2240.3,
+        "p50": 2.56,
+        "p99": 78.23,
+        "fail": 0
+      },
+      {
+        "score": 216206,
+        "rps": 2042.2,
+        "p50": 7.15,
+        "p99": 74.22,
+        "fail": 0
+      },
+      {
+        "score": 242547,
+        "rps": 2271.7,
+        "p50": 4.74,
+        "p99": 78.86,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 246807,
+        "rps": 2309.8,
+        "p50": 1.01,
+        "p99": 78.53,
+        "fail": 0
+      },
+      {
+        "score": 242229,
+        "rps": 2254.9,
+        "p50": 0.8,
+        "p99": 92.98,
+        "fail": 0
+      },
+      {
+        "score": 233256,
+        "rps": 2192.4,
+        "p50": 5.75,
+        "p99": 68.89,
+        "fail": 0
+      }
+    ],
+    "base_median": 239707,
+    "cand_median": 242229,
+    "gain_pct": 1.05,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 10.99,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2254.9,
+    "p50": 0.8,
+    "p99": 92.98,
+    "commit": "",
+    "patch_file": "harness/patches/0040_sig_strs_capacity_16384.diff"
+  },
+  {
+    "id": 41,
+    "timestamp": 1793973755.261993,
+    "time": "2026-11-06 23:02:35",
+    "diag_id": "node_server_keepalive",
+    "category": "NETWORK/HTTP",
+    "title": "tune HTTP IdleTimeout and ReadHeaderTimeout in node_server",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:122:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:123:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0041_node_server_keepalive.diff"
+  },
+  {
+    "id": 42,
+    "timestamp": 1793973756.539382,
+    "time": "2026-11-06 23:02:36",
+    "diag_id": "image_redirect_array",
+    "category": "CPU/ALGO",
+    "title": "replace map lookup with zero-hash fixed slice lookup for image redirects",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:94:3: undefined: precomputedRedirectArray\n\n",
+    "patch_file": "harness/patches/0042_image_redirect_array.diff"
+  },
+  {
+    "id": 43,
+    "timestamp": 1793973885.4866645,
+    "time": "2026-11-06 23:04:45",
+    "diag_id": "critic_adaptive_rate_region_bias",
+    "category": "CRITIC/SCHEDULING",
+    "title": "Critic Fix: adaptive rate-based dynamic throttling for asia1 (replace fixed 8ms sleep with load-based delay)",
+    "head": "fde65dc",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 234677,
+        "rps": 2190.6,
+        "p50": 1.63,
+        "p99": 78.53,
+        "fail": 0
+      },
+      {
+        "score": 235036,
+        "rps": 2198.9,
+        "p50": 5.18,
+        "p99": 69.9,
+        "fail": 0
+      },
+      {
+        "score": 244105,
+        "rps": 2281.9,
+        "p50": 3.17,
+        "p99": 70.13,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 245292,
+        "rps": 2332.5,
+        "p50": 3.75,
+        "p99": 75.8,
+        "fail": 0
+      },
+      {
+        "score": 236367,
+        "rps": 2263.0,
+        "p50": 5.33,
+        "p99": 69.17,
+        "fail": 0
+      },
+      {
+        "score": 246331,
+        "rps": 2371.5,
+        "p50": 4.47,
+        "p99": 60.88,
+        "fail": 0
+      }
+    ],
+    "base_median": 235036,
+    "cand_median": 245292,
+    "gain_pct": 4.36,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 4.01,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2332.5,
+    "p50": 3.75,
+    "p99": 75.8,
+    "commit": "917c87a",
+    "patch_file": "harness/patches/0043_critic_adaptive_rate_region_bias.diff"
   }
 ]

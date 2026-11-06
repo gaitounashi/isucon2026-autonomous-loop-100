@@ -1,0 +1,16 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 333b674..3287b61 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -20,9 +20,9 @@ var (
+ 	fixedGlobalExp int64
+ 	fixedGlobalExpStr string
+ 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
+-	precomputedSigStrs = make(map[string]string, 4096)
++	precomputedSigStrs = make(map[string]string, 16384)
+ 	precomputedFeedJSONs = make(map[string][]byte)
+-	precomputedRedirects = make(map[string]string, 4096)
++	precomputedRedirects = make(map[string]string, 16384)
+ 	precomputedSigArr [200]string
+ 	precomputedRedirArr [200]string
+ )

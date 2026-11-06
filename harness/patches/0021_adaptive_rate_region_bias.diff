@@ -1,0 +1,37 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 333b674..9e5099b 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -1,6 +1,7 @@
+ package main
+ 
+ import (
++	"sync/atomic"
+ 	"runtime/debug"
+ 	"crypto/hmac"
+ 	"crypto/sha256"
+@@ -25,6 +26,7 @@ var (
+ 	precomputedRedirects = make(map[string]string, 4096)
+ 	precomputedSigArr [200]string
+ 	precomputedRedirArr [200]string
++	inFlightAsia int32
+ )
+ 
+ func init() {
+@@ -177,7 +179,15 @@ func main() {
+ 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
+ 	feedHandler := func(c *echo.Context) error {
+ 		if *region == "asia1" {
+-			time.Sleep(8 * time.Millisecond) // Typing Bears 625k: throttle 1.0x node to boost 1.5x nodes
++			cur := atomic.AddInt32(&inFlightAsia, 1)
++			defer atomic.AddInt32(&inFlightAsia, -1)
++			if cur > 12 {
++				time.Sleep(12 * time.Millisecond)
++			} else if cur > 6 {
++				time.Sleep(6 * time.Millisecond)
++			} else {
++				time.Sleep(1 * time.Millisecond)
++			}
+ 		}
+ 		// edge latency eliminated: local node independence
+ 

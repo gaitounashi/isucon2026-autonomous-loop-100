@@ -1,0 +1,13 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 333b674..0df4646 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -119,6 +119,8 @@ func main() {
+ 	initPrecomputedFeeds()
+ 
+ 	e := echo.New()
++	e.Server.IdleTimeout = 120 * time.Second
++	e.Server.ReadHeaderTimeout = 3 * time.Second
+ 
+ 	// 初期化エンドポイント
+ 	e.POST("/initialize", func(c *echo.Context) error {

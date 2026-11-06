@@ -1,0 +1,12 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 333b674..f522ffb 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -91,6 +91,7 @@ func initPrecomputedFeeds() {
+ 	for i := 0; i < 200; i++ {
+ 		imgID := fmt.Sprintf("image-%04d", i)
+ 		precomputedRedirects[imgID] = "/_imgcache/" + imgID + ".jpg"
++		precomputedRedirectArray[i] = "/_imgcache/" + imgID + ".jpg"
+ 		precomputedRedirArr[i] = "/_imgcache/" + imgID + ".jpg"
+ 	}
+ 	for _, reg := range []string{"asia1", "europe1", "america1"} {
