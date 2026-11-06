@@ -1,0 +1,19 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 9e5099b..7e80f8b 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -133,7 +133,13 @@ func main() {
+ 
+ 	// 画像取得エンドポイント (当日初期実装: 1000回HMAC署名検証 & 64KBコピー)
+ 	e.GET("/api/images/:imageId", func(c *echo.Context) error {
+-		imageID := c.Param("imageId")
++		path := c.Request().URL.Path
++		imageID := ""
++		if len(path) > 12 {
++			imageID = path[12:]
++		} else {
++			imageID = c.Param("imageId")
++		}
+ 		expStr := c.QueryParam("exp")
+ 		sigStr := c.QueryParam("sig")
+ 

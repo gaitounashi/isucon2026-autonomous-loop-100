@@ -2397,5 +2397,168 @@
     "p99": 75.8,
     "commit": "917c87a",
     "patch_file": "harness/patches/0043_critic_adaptive_rate_region_bias.diff"
+  },
+  {
+    "id": 44,
+    "timestamp": 1793973907.6424205,
+    "time": "2026-11-06 23:05:07",
+    "diag_id": "connection_buffer_tuning",
+    "category": "NETWORK/HTTP",
+    "title": "Critic Fix: tune HTTP IdleTimeout and ReadHeaderTimeout to reduce TIME_WAIT bursts",
+    "head": "208ef82",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:124:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:125:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0044_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 45,
+    "timestamp": 1793974037.8526592,
+    "time": "2026-11-06 23:07:17",
+    "diag_id": "static_feed_routes",
+    "category": "ROUTER/FAST_PATH",
+    "title": "register static routes for public and friends-of-friends feeds to bypass dynamic routing",
+    "head": "208ef82",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 239336,
+        "rps": 2267.5,
+        "p50": 3.81,
+        "p99": 72.88,
+        "fail": 0
+      },
+      {
+        "score": 247497,
+        "rps": 2362.5,
+        "p50": 4.96,
+        "p99": 61.83,
+        "fail": 0
+      },
+      {
+        "score": 243843,
+        "rps": 2342.1,
+        "p50": 4.95,
+        "p99": 67.21,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 227750,
+        "rps": 2194.2,
+        "p50": 4.37,
+        "p99": 64.8,
+        "fail": 0
+      },
+      {
+        "score": 237690,
+        "rps": 2269.1,
+        "p50": 4.72,
+        "p99": 68.1,
+        "fail": 0
+      },
+      {
+        "score": 239783,
+        "rps": 2289.4,
+        "p50": 2.87,
+        "p99": 77.08,
+        "fail": 0
+      }
+    ],
+    "base_median": 243843,
+    "cand_median": 237690,
+    "gain_pct": -2.52,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 3.35,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2269.1,
+    "p50": 4.72,
+    "p99": 68.1,
+    "commit": ""
+  },
+  {
+    "id": 46,
+    "timestamp": 1793974057.3366172,
+    "time": "2026-11-06 23:07:37",
+    "diag_id": "critic_connection_buffer_tuning",
+    "category": "CRITIC/NETWORK",
+    "title": "Critic Fix: tune HTTP listener read/write buffer and keep-alive to absorb connection bursts",
+    "head": "208ef82",
+    "min_gain_pct": 2.0,
+    "status": "BUILD_FAIL",
+    "error": "Node Server Build Failed:\n# command-line-arguments\n..\\arena\\node_server.go:124:4: e.Server undefined (type *echo.Echo has no field or method Server)\n..\\arena\\node_server.go:125:4: e.Server undefined (type *echo.Echo has no field or method Server)\n\n",
+    "patch_file": "harness/patches/0046_critic_connection_buffer_tuning.diff"
+  },
+  {
+    "id": 47,
+    "timestamp": 1793974192.8056617,
+    "time": "2026-11-06 23:09:52",
+    "diag_id": "fast_image_path_slice",
+    "category": "CPU/MEMORY",
+    "title": "direct URL path slicing for imageId to eliminate Echo Param map allocations",
+    "head": "208ef82",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 235673,
+        "rps": 2268.5,
+        "p50": 4.16,
+        "p99": 66.18,
+        "fail": 0
+      },
+      {
+        "score": 240915,
+        "rps": 2270.3,
+        "p50": 3.12,
+        "p99": 88.72,
+        "fail": 0
+      },
+      {
+        "score": 246212,
+        "rps": 2355.0,
+        "p50": 5.01,
+        "p99": 63.38,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 227866,
+        "rps": 2183.8,
+        "p50": 4.77,
+        "p99": 71.49,
+        "fail": 0
+      },
+      {
+        "score": 247286,
+        "rps": 2350.4,
+        "p50": 4.5,
+        "p99": 70.24,
+        "fail": 0
+      },
+      {
+        "score": 237525,
+        "rps": 2272.8,
+        "p50": 5.63,
+        "p99": 62.95,
+        "fail": 0
+      }
+    ],
+    "base_median": 240915,
+    "cand_median": 237525,
+    "gain_pct": -1.41,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 4.37,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2272.8,
+    "p50": 5.63,
+    "p99": 62.95,
+    "commit": "",
+    "patch_file": "harness/patches/0047_fast_image_path_slice.diff"
   }
 ]
