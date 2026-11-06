@@ -2974,5 +2974,75 @@
     "p99": 18.1,
     "commit": "",
     "patch_file": "harness/patches/0053_manual.diff"
+  },
+  {
+    "id": 54,
+    "timestamp": 1793977301.4817083,
+    "time": "2026-11-07 00:01:41",
+    "diag_id": "manual",
+    "category": "",
+    "title": "explicit Content-Length: 0 and Connection: keep-alive in image endpoint",
+    "head": "228b506",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 229378,
+        "rps": 2206.4,
+        "p50": 4.9,
+        "p99": 69.47,
+        "fail": 0
+      },
+      {
+        "score": 314781,
+        "rps": 3019.2,
+        "p50": 4.84,
+        "p99": 54.95,
+        "fail": 0
+      },
+      {
+        "score": 420493,
+        "rps": 4054.7,
+        "p50": 5.12,
+        "p99": 18.43,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 222953,
+        "rps": 2140.7,
+        "p50": 4.99,
+        "p99": 70.76,
+        "fail": 0
+      },
+      {
+        "score": 236246,
+        "rps": 2257.4,
+        "p50": 3.25,
+        "p99": 77.93,
+        "fail": 0
+      },
+      {
+        "score": 410567,
+        "rps": 3942.8,
+        "p50": 5.29,
+        "p99": 18.41,
+        "fail": 0
+      }
+    ],
+    "base_median": 314781,
+    "cand_median": 236246,
+    "gain_pct": -24.95,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 60.71,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2257.4,
+    "p50": 3.25,
+    "p99": 77.93,
+    "commit": "",
+    "patch_file": "harness/patches/0054_manual.diff"
   }
 ]
