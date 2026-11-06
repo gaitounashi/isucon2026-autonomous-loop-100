@@ -3044,5 +3044,75 @@
     "p99": 77.93,
     "commit": "",
     "patch_file": "harness/patches/0054_manual.diff"
+  },
+  {
+    "id": 55,
+    "timestamp": 1793979169.610769,
+    "time": "2026-11-07 00:32:49",
+    "diag_id": "manual",
+    "category": "",
+    "title": "fast reject oversized upload via Content-Length and LimitReader",
+    "head": "a48b548",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 196760,
+        "rps": 1837.5,
+        "p50": 9.54,
+        "p99": 53.66,
+        "fail": 0
+      },
+      {
+        "score": 203086,
+        "rps": 1899.3,
+        "p50": 9.3,
+        "p99": 50.13,
+        "fail": 0
+      },
+      {
+        "score": 193212,
+        "rps": 1805.8,
+        "p50": 9.76,
+        "p99": 58.87,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 216876,
+        "rps": 2036.8,
+        "p50": 8.02,
+        "p99": 56.2,
+        "fail": 0
+      },
+      {
+        "score": 218280,
+        "rps": 2026.4,
+        "p50": 7.83,
+        "p99": 57.46,
+        "fail": 0
+      },
+      {
+        "score": 234947,
+        "rps": 2202.6,
+        "p50": 6.86,
+        "p99": 55.16,
+        "fail": 0
+      }
+    ],
+    "base_median": 196760,
+    "cand_median": 218280,
+    "gain_pct": 10.94,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 5.02,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2026.4,
+    "p50": 7.83,
+    "p99": 57.46,
+    "commit": "5f2bbd7",
+    "patch_file": "harness/patches/0055_manual.diff"
   }
 ]
