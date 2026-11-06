@@ -24,7 +24,7 @@ NODE_SERVER_GO = ARENA_DIR / "node_server.go"
 
 sys.path.insert(0, str(HARNESS_DIR))
 import experiment as ex
-from autonomous_autopilot import check_build_and_tests, cooldown_and_drain, run_cmd
+from autonomous_autopilot import check_build_and_tests, apply_cooldown, run_cmd
 
 
 # ==============================================================================
@@ -298,7 +298,7 @@ def evaluate_patch(name: str, patch_fn) -> bool:
     ex.refresh_dashboard()
 
     # クールダウン & ソケットドレイン
-    cooldown_and_drain(min_seconds=3.0, max_wait_sec=8.0, target_timewait=80)
+    apply_cooldown(min_seconds=3.0, max_wait_sec=8.0, target_timewait=80)
 
     return accepted
 
