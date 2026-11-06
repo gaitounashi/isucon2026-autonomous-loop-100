@@ -823,5 +823,74 @@
     "p99": 19.89,
     "commit": "4c03f2f",
     "patch_file": "harness/patches/0012_gc_percent_300.diff"
+  },
+  {
+    "id": 13,
+    "timestamp": 1793966180.8413084,
+    "time": "2026-11-06 20:56:20",
+    "diag_id": "fast_reject_invalid_sig",
+    "category": "SECURITY/FAST_DROP",
+    "title": "Critic Fix: early 403 rejection on invalid image signatures (bypass 1000 HMAC loops for bad requests)",
+    "head": "bbe15a9",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 256220,
+        "rps": 2416.0,
+        "p50": 6.34,
+        "p99": 55.17,
+        "fail": 0
+      },
+      {
+        "score": 246962,
+        "rps": 2322.5,
+        "p50": 4.78,
+        "p99": 67.03,
+        "fail": 0
+      },
+      {
+        "score": 247597,
+        "rps": 2321.5,
+        "p50": 4.05,
+        "p99": 69.49,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 257917,
+        "rps": 2414.1,
+        "p50": 3.56,
+        "p99": 61.87,
+        "fail": 0
+      },
+      {
+        "score": 254467,
+        "rps": 2376.1,
+        "p50": 1.74,
+        "p99": 66.83,
+        "fail": 0
+      },
+      {
+        "score": 240618,
+        "rps": 2259.3,
+        "p50": 3.46,
+        "p99": 74.67,
+        "fail": 0
+      }
+    ],
+    "base_median": 247597,
+    "cand_median": 254467,
+    "gain_pct": 2.77,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 3.74,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "rps": 2376.1,
+    "p50": 1.74,
+    "p99": 66.83,
+    "commit": "3512070",
+    "patch_file": "harness/patches/0013_fast_reject_invalid_sig.diff"
   }
 ]
