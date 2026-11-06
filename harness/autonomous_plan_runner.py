@@ -204,13 +204,141 @@ def patch_static_feed_response_buffer() -> tuple[bool, str]:
     return True, "optimized static feed response writer marker"
 
 
+
+def patch_lockfree_sync_map_sig_cache() -> tuple[bool, str]:
+    """パッチ 6: 完全ロックフリー sync.Map による動的署名キャッシュ (実験61のRWMutex競合を解消)"""
+    content = NODE_SERVER_GO.read_text(encoding="utf-8")
+    if "verifiedSyncMap" in content:
+        return False, "already applied"
+
+    import_target = 'import (\n\t"io"'
+    import_repl = 'import (\n\t"sync"\n\t"io"'
+    if import_target in content:
+        content = content.replace(import_target, import_repl, 1)
+
+    var_target = "var (\n\tsigningKey"
+    var_repl = """var (
+\tverifiedSyncMap sync.Map // ロックフリー署名検証キャッシュ
+\tsigningKey"""
+    if var_target in content:
+        content = content.replace(var_target, var_repl, 1)
+
+    # referenceImageSignature の前に完全ロックフリー Load
+    check_repl = """cacheKey := imageID + ":" + expStr + ":" + sigStr
+\t\tif val, ok := verifiedSyncMap.Load(cacheKey); ok {
+\t\t\tif !val.(bool) {
+\t\t\t\treturn c.String(http.StatusForbidden, "image_forbidden")
+\t\t\t}
+\t\t} else {
+\t\t\texpected := referenceImageSignature(signingKey, imageID, exp)
+\t\t\tisValid := hmac.Equal(sig, expected)
+\t\t\tverifiedSyncMap.Store(cacheKey, isValid)
+\t\t\tif !isValid {
+\t\t\t\treturn c.String(http.StatusForbidden, "image_forbidden")
+\t\t\t}
+\t\t}"""
+
+    full_old = """\t\texpected := referenceImageSignature(signingKey, imageID, exp)
+\t\tif !hmac.Equal(sig, expected) {
+\t\t\treturn c.String(http.StatusForbidden, "image_forbidden")
+\t\t}"""
+
+    if full_old in content:
+        content = content.replace(full_old, check_repl, 1)
+        NODE_SERVER_GO.write_text(content, encoding="utf-8")
+        return True, "lock-free sync.Map cache for dynamic signature verification"
+
+    return False, "referenceImageSignature call site not found"
+
+
+def patch_sync_pool_post_reader() -> tuple[bool, str]:
+    """パッチ 7: sync.Pool バッファ再利用による POST /api/posts ゼロアロケーション受信"""
+    content = NODE_SERVER_GO.read_text(encoding="utf-8")
+    if "postBufPool" in content:
+        return False, "already applied"
+
+    import_target = 'import (\n\t"io"'
+    import_repl = 'import (\n\t"sync"\n\t"io"'
+    if import_target in content and '"sync"' not in content:
+        content = content.replace(import_target, import_repl, 1)
+
+    var_target = "var (\n\tsigningKey"
+    var_repl = """var (
+\tpostBufPool = sync.Pool{
+\t\tNew: func() any {
+\t\t\tb := make([]byte, 4096)
+\t\t\treturn &b
+\t\t},
+\t}
+\tsigningKey"""
+    if var_target in content:
+        content = content.replace(var_target, var_repl, 1)
+
+    old_post = """\t// 投稿作成エンドポイント (Write系 負荷)
+\te.POST("/api/posts", func(c *echo.Context) error {
+\t\tbody, _ := io.ReadAll(c.Request().Body)
+\t\t_ = body
+\t\tw := c.Response()
+\t\tw.Header().Set("Content-Type", "application/json")
+\t\tw.WriteHeader(http.StatusCreated)
+\t\tw.Write([]byte(`{"status":"created"}`))
+\t\treturn nil
+\t})"""
+
+    new_post = """\t// 投稿作成エンドポイント (sync.Pool バッファ再利用 & 直書き)
+\tstaticCreatedJSON := []byte(`{"status":"created"}`)
+\te.POST("/api/posts", func(c *echo.Context) error {
+\t\tbufPtr := postBufPool.Get().(*[]byte)
+\t\t_, _ = io.CopyBuffer(io.Discard, c.Request().Body, *bufPtr)
+\t\tpostBufPool.Put(bufPtr)
+\t\tw := c.Response()
+\t\th := w.Header()
+\t\th.Set("Content-Type", "application/json")
+\t\th.Set("Content-Length", "20")
+\t\tw.WriteHeader(http.StatusCreated)
+\t\t_, err := w.Write(staticCreatedJSON)
+\t\treturn err
+\t})"""
+
+    if old_post in content:
+        content = content.replace(old_post, new_post, 1)
+        NODE_SERVER_GO.write_text(content, encoding="utf-8")
+        return True, "zero-alloc POST reader using sync.Pool 4KB buffer and direct writer"
+
+    return False, "old_post handler not matched"
+
+
+def patch_inline_precomputed_redirect_slice() -> tuple[bool, str]:
+    """パッチ 8: 画像リダイレクトヘッダの完全スライス参照化 (マップフォールバック完全消滅)"""
+    content = NODE_SERVER_GO.read_text(encoding="utf-8")
+    if "inlineRedirSlice" in content:
+        return False, "already applied"
+
+    old_redir = """\t\tredir, ok := precomputedRedirects[imageID]
+\t\t\tif !ok {
+\t\t\t\tredir = "/_imgcache/" + imageID + ".jpg"
+\t\t\t}
+\t\t\tc.Response().Header().Set("X-Accel-Redirect", redir)"""
+
+    new_redir = """\t\t// inlineRedirSlice: O(1) slice lookup
+\t\tif idx := imageIndex(imageID); idx >= 0 {
+\t\t\tc.Response().Header().Set("X-Accel-Redirect", precomputedRedirArr[idx])
+\t\t} else {
+\t\t\tc.Response().Header().Set("X-Accel-Redirect", "/_imgcache/" + imageID + ".jpg")
+\t\t}"""
+
+    if old_redir in content:
+        content = content.replace(old_redir, new_redir, 1)
+        NODE_SERVER_GO.write_text(content, encoding="utf-8")
+        return True, "O(1) precomputedRedirArr slice index in fallback path without map hashing"
+
+    return False, "old_redir not found"
+
 # パッチキュー
 PLAN_PATCHES = [
-    ("fast_post_handler", patch_fast_post_handler),
-    ("exp_minute_rounding_cache", patch_exp_minute_rounding_cache),
-    ("region_weight_throttle_v2", patch_region_weight_throttle_v2),
-    ("gc_percent_400_and_memlimit", patch_gc_percent_400_and_memlimit),
-    ("in_memory_sig_lru_cache", patch_in_memory_sig_lru_cache),
+    ("lockfree_sync_map_sig_cache", patch_lockfree_sync_map_sig_cache),
+    ("sync_pool_post_reader", patch_sync_pool_post_reader),
+    ("inline_precomputed_redirect_slice", patch_inline_precomputed_redirect_slice),
 ]
 
 
