@@ -24,6 +24,11 @@ NODES = [
     {"name": "america1", "port": 8003, "multiplier": 1.5}
 ]
 
+# 本番シナリオ対応用ダミーペイロード (事前アロケーションで GIL 競合ゼロ化)
+DUMMY_OVERSIZED_PAYLOAD = b"\xff\xd8\xff\xe0" + b"\x00" * (11 * 1024 * 1024)  # 11MB 不正巨大画像
+POST_PAYLOAD = b'{"content":"ISUCON2026 test post message"}'
+
+
 def fetch_urls(base_url: str, retries: int = 15) -> list[str]:
     for _ in range(retries):
         try:
@@ -65,31 +70,50 @@ def run_topology_bench(duration_sec: int = 10, workers_per_node: int = 8) -> dic
         local_score = 0
         http_pool = urllib3.PoolManager(maxsize=10, timeout=2.0, retries=False)
 
-        # 事前ビルドリクエストパターン (70% 画像, 30% フィード: Python GIL ロック競合ゼロ化)
+        # 事前ビルドリクエストパターン (本番 ISUReal 準拠 v2: 60% 正常画像, 20% フィード, 10% 不正アップロード, 5% 改ざん署名, 5% 投稿)
         prebuilt_requests = []
         for i in range(100):
-            if (i % 10) < 7:
+            if i < 60:
+                # 正常画像 GET (60%)
                 img_path = urls[i % len(urls)]
-                score_pts = 1.5 if mult > 1.0 else 1.0
-                prebuilt_requests.append((f"{base_url}{img_path}", score_pts))
+                pts = 1.5 if mult > 1.0 else 1.0
+                prebuilt_requests.append(("GET", f"{base_url}{img_path}", {}, None, 200, pts))
+            elif i < 80:
+                # フィード GET (20%)
+                pts = 3.0 if mult > 1.0 else 2.0
+                prebuilt_requests.append(("GET", f"{base_url}/api/feed/friends-of-friends", {}, None, 200, pts))
+            elif i < 90:
+                # 巨大不正画像アップロード POST (10%) - 上位陣の 10〜32MB 即切断ターゲット
+                pts = 2.0 * (1.5 if mult > 1.0 else 1.0)
+                headers = {"Content-Type": "image/jpeg"}
+                prebuilt_requests.append(("POST", f"{base_url}/api/images/upload", headers, DUMMY_OVERSIZED_PAYLOAD, 413, pts))
+            elif i < 95:
+                # 改ざん署名・攻撃画像 GET (5%) - HMAC 1000回ループ回避 / 即403ターゲット
+                pts = 1.0 * (1.5 if mult > 1.0 else 1.0)
+                prebuilt_requests.append(("GET", f"{base_url}/api/images/image-0001?exp=9999999999&sig=tampered_attack_sig", {}, None, 403, pts))
             else:
-                score_pts = 3.0 if mult > 1.0 else 2.0
-                prebuilt_requests.append((f"{base_url}/api/feed/friends-of-friends", score_pts))
+                # 投稿作成 POST (5%) - Write系 負荷
+                pts = 3.0 if mult > 1.0 else 2.0
+                headers = {"Content-Type": "application/json"}
+                prebuilt_requests.append(("POST", f"{base_url}/api/posts", headers, POST_PAYLOAD, 201, pts))
 
         num_prebuilt = len(prebuilt_requests)
         req_idx = 0
 
         while time.perf_counter() < end_time:
-            target_url, score_pts = prebuilt_requests[req_idx % num_prebuilt]
+            method, target_url, headers, body, expected_status, score_pts = prebuilt_requests[req_idx % num_prebuilt]
             req_idx += 1
             req_start = time.perf_counter()
 
             try:
-                resp = http_pool.request("GET", target_url)
+                if method == "GET":
+                    resp = http_pool.request("GET", target_url, headers=headers)
+                else:
+                    resp = http_pool.request("POST", target_url, headers=headers, body=body)
                 _ = resp.data
                 elapsed = time.perf_counter() - req_start
                 local_latencies.append(elapsed)
-                if resp.status == 200:
+                if resp.status == expected_status:
                     local_success += 1
                     local_score += score_pts
                 else:
