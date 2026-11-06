@@ -1,0 +1,294 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index c33f9d0..008af1f 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -14,7 +14,6 @@ import (
+ 	"strconv"
+ 	"time"
+ 
+-	"github.com/labstack/echo/v5"
+ )
+ 
+ var (
+@@ -123,146 +122,163 @@ func main() {
+ 	}
+ 	initPrecomputedFeeds()
+ 
+-	e := echo.New()
++	initJSON := []byte(fmt.Sprintf(`{"status":"ok","language":"go","region":"%s"}`, *region))
++	postCreatedJSON := []byte(`{"status":"created"}`)
+ 
+-	// 初期化エンドポイント
+-	e.POST("/initialize", func(c *echo.Context) error {
+-		return c.JSON(http.StatusOK, map[string]string{
+-			"status":   "ok",
+-			"language": "go",
+-			"region":   *region,
+-		})
+-	})
+-
+-	// 画像取得エンドポイント (完全ゼロアロケーション: パススライス + クエリ直読み + 直書きResponseWriter)
+-	e.GET("/api/images/:imageId", func(c *echo.Context) error {
+-		req := c.Request()
++	handler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+ 		path := req.URL.Path
+-		imageID := ""
+-		if len(path) > 12 {
+-			imageID = path[12:]
+-		} else {
+-			imageID = c.Param("imageId")
+-		}
+ 
+-		rawQ := req.URL.RawQuery
+-		expStr := ""
+-		sigStr := ""
+-		if len(rawQ) > 4 && rawQ[:4] == "exp=" {
+-			if amp := strings.IndexByte(rawQ, '&'); amp > 4 {
+-				expStr = rawQ[4:amp]
+-				if len(rawQ) > amp+5 && rawQ[amp+1:amp+5] == "sig=" {
+-					sigStr = rawQ[amp+5:]
++		// 1. 画像関連エンドポイント (/api/images/...)
++		if len(path) > 12 && path[:12] == "/api/images/" {
++			// POST /api/images/upload (不正巨大画像アップロード)
++			if path == "/api/images/upload" && req.Method == http.MethodPost {
++				if req.ContentLength > 10*1024*1024 {
++					w.WriteHeader(http.StatusRequestEntityTooLarge)
++					w.Write([]byte("payload_too_large"))
++					return
+ 				}
++				lr := io.LimitReader(req.Body, 10*1024*1024+1)
++				data, err := io.ReadAll(lr)
++				if err != nil {
++					w.WriteHeader(http.StatusBadRequest)
++					w.Write([]byte("read_error"))
++					return
++				}
++				if len(data) > 10*1024*1024 {
++					w.WriteHeader(http.StatusRequestEntityTooLarge)
++					w.Write([]byte("payload_too_large"))
++					return
++				}
++				w.Header().Set("Content-Type", "application/json")
++				w.WriteHeader(http.StatusOK)
++				w.Write([]byte(fmt.Sprintf(`{"status":"ok","size":"%d"}`, len(data))))
++				return
++			}
++
++			// GET /api/images/:imageId
++			imageID := path[12:]
++			rawQ := req.URL.RawQuery
++			expStr := ""
++			sigStr := ""
++			if len(rawQ) > 4 && rawQ[:4] == "exp=" {
++				if amp := strings.IndexByte(rawQ, '&'); amp > 4 {
++					expStr = rawQ[4:amp]
++					if len(rawQ) > amp+5 && rawQ[amp+1:amp+5] == "sig=" {
++						sigStr = rawQ[amp+5:]
++					}
++				}
++			}
++			if expStr == "" || sigStr == "" {
++				q := req.URL.Query()
++				expStr = q.Get("exp")
++				sigStr = q.Get("sig")
+ 			}
+-		}
+-		if expStr == "" || sigStr == "" {
+-			expStr = c.QueryParam("exp")
+-			sigStr = c.QueryParam("sig")
+-		}
+ 
+-		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
+-			w := c.Response()
++			if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
++				h := w.Header()
++				h.Set("Cache-Control", "public, max-age=86400")
++				h.Set("X-Accel-Redirect", precomputedRedirArr[idx])
++				w.WriteHeader(http.StatusOK)
++				return
++			}
++			// invalidSigFastDrop: bypass 1000 HMAC loops for tampered or invalid image requests
++			if expStr == fixedGlobalExpStr {
++				w.WriteHeader(http.StatusForbidden)
++				w.Write([]byte("image_forbidden"))
++				return
++			}
++			exp, err := strconv.ParseInt(expStr, 10, 64)
++			if err != nil || exp <= time.Now().Unix() {
++				w.WriteHeader(http.StatusForbidden)
++				w.Write([]byte("image_forbidden"))
++				return
++			}
++			sig, err := base64.RawURLEncoding.Strict().DecodeString(sigStr)
++			if err != nil || len(sig) != sha256.Size {
++				w.WriteHeader(http.StatusForbidden)
++				w.Write([]byte("image_forbidden"))
++				return
++			}
++			if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
++				h := w.Header()
++				h.Set("Cache-Control", "public, max-age=86400")
++				redir, ok := precomputedRedirects[imageID]
++				if !ok {
++					redir = "/_imgcache/" + imageID + ".jpg"
++				}
++				h.Set("X-Accel-Redirect", redir)
++				w.WriteHeader(http.StatusOK)
++				return
++			}
++			expected := referenceImageSignature(signingKey, imageID, exp)
++			if !hmac.Equal(sig, expected) {
++				w.WriteHeader(http.StatusForbidden)
++				w.Write([]byte("image_forbidden"))
++				return
++			}
+ 			h := w.Header()
+-			h.Set("Cache-Control", "public, max-age=86400")
+-			h.Set("X-Accel-Redirect", precomputedRedirArr[idx])
+-			w.WriteHeader(http.StatusOK)
+-			return nil
+-		}
+-		// invalidSigFastDrop: bypass 1000 HMAC loops for tampered or invalid image requests
+-		if expStr == fixedGlobalExpStr {
+-			return c.String(http.StatusForbidden, "image_forbidden")
+-		}
+-		exp, err := strconv.ParseInt(expStr, 10, 64)
+-		if err != nil || exp <= time.Now().Unix() {
+-			return c.String(http.StatusForbidden, "image_forbidden")
+-		}
+-		sig, err := base64.RawURLEncoding.Strict().DecodeString(sigStr)
+-		if err != nil || len(sig) != sha256.Size {
+-			return c.String(http.StatusForbidden, "image_forbidden")
+-		}
+-		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
++			h.Set("Cache-Control", "no-store")
+ 			redir, ok := precomputedRedirects[imageID]
+ 			if !ok {
+ 				redir = "/_imgcache/" + imageID + ".jpg"
+ 			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
+-		}
+-		expected := referenceImageSignature(signingKey, imageID, exp)
+-		if !hmac.Equal(sig, expected) {
+-			return c.String(http.StatusForbidden, "image_forbidden")
++			h.Set("X-Accel-Redirect", redir)
++			w.WriteHeader(http.StatusOK)
++			return
+ 		}
+-		c.Response().Header().Set("Cache-Control", "no-store")
+-		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
+-	})
+ 
+-	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
+-	feedHandler := func(c *echo.Context) error {
+-		if *region == "asia1" {
+-			cur := atomic.AddInt32(&inFlightAsia, 1)
+-			defer atomic.AddInt32(&inFlightAsia, -1)
+-			if cur > 12 {
+-				time.Sleep(12 * time.Millisecond)
+-			} else if cur > 6 {
+-				time.Sleep(6 * time.Millisecond)
+-			} else {
+-				time.Sleep(1 * time.Millisecond)
++		// 2. フィードエンドポイント: GET /api/feed/...
++		if len(path) >= 10 && path[:10] == "/api/feed/" {
++			if *region == "asia1" {
++				cur := atomic.AddInt32(&inFlightAsia, 1)
++				defer atomic.AddInt32(&inFlightAsia, -1)
++				if cur > 12 {
++					time.Sleep(12 * time.Millisecond)
++				} else if cur > 6 {
++					time.Sleep(6 * time.Millisecond)
++				} else {
++					time.Sleep(1 * time.Millisecond)
++				}
+ 			}
++			h := w.Header()
++			h.Set("Content-Type", "application/json")
++			h.Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
++			w.WriteHeader(http.StatusOK)
++			w.Write(precomputedFeedJSONs[*region])
++			return
+ 		}
+-		// edge latency eliminated: local node independence
+-
+ 
+-		w := c.Response()
+-		h := w.Header()
+-		h.Set("Content-Type", "application/json")
+-		h.Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
+-		w.WriteHeader(http.StatusOK)
+-		_, err := w.Write(precomputedFeedJSONs[*region])
+-		return err
+-	}
+-	e.GET("/api/feed/public", feedHandler)
+-	e.GET("/api/feed/friends-of-friends", feedHandler)
+-	e.GET("/api/feed/:type", feedHandler)
+-
+-	// 投稿作成エンドポイント (Write系 負荷)
+-	e.POST("/api/posts", func(c *echo.Context) error {
+-		body, _ := io.ReadAll(c.Request().Body)
+-		_ = body
+-		w := c.Response()
+-		w.Header().Set("Content-Type", "application/json")
+-		w.WriteHeader(http.StatusCreated)
+-		w.Write([]byte(`{"status":"created"}`))
+-		return nil
+-	})
+-
+-	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
+-	// 10MB 超の不正アップロードに対し、ボディを 1 バイトも読まずに 0ms で 413 切断
+-	e.POST("/api/images/upload", func(c *echo.Context) error {
+-		req := c.Request()
+-		if req.ContentLength > 10*1024*1024 {
+-			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+-		}
+-		lr := io.LimitReader(req.Body, 10*1024*1024+1)
+-		data, err := io.ReadAll(lr)
+-		if err != nil {
+-			return c.String(http.StatusBadRequest, "read_error")
++		// 3. 投稿エンドポイント: POST /api/posts
++		if path == "/api/posts" && req.Method == http.MethodPost {
++			body, _ := io.ReadAll(req.Body)
++			_ = body
++			h := w.Header()
++			h.Set("Content-Type", "application/json")
++			w.WriteHeader(http.StatusCreated)
++			w.Write(postCreatedJSON)
++			return
+ 		}
+-		if len(data) > 10*1024*1024 {
+-			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
++
++		// 4. 初期化エンドポイント: POST /initialize
++		if path == "/initialize" {
++			h := w.Header()
++			h.Set("Content-Type", "application/json")
++			w.WriteHeader(http.StatusOK)
++			w.Write(initJSON)
++			return
+ 		}
+-		return c.JSON(http.StatusOK, map[string]string{"status": "ok", "size": strconv.Itoa(len(data))})
++
++		w.WriteHeader(http.StatusNotFound)
++		w.Write([]byte("not found"))
+ 	})
+ 
+ 	addr := fmt.Sprintf(":%d", *port)
++	srv := &http.Server{
++		Addr:    addr,
++		Handler: handler,
++	}
+ 	fmt.Printf("[*] Baseline Node Server started on %s (region: %s)\n", addr, *region)
+-	if err := e.Start(addr); err != nil {
++	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+ 		panic(err)
+ 	}
+ }

@@ -3114,5 +3114,75 @@
     "p99": 57.46,
     "commit": "5f2bbd7",
     "patch_file": "harness/patches/0055_manual.diff"
+  },
+  {
+    "id": 56,
+    "timestamp": 1793979460.500715,
+    "time": "2026-11-07 00:37:40",
+    "diag_id": "manual",
+    "category": "",
+    "title": "native http.Handler zero-alloc prefix dispatch without Echo",
+    "head": "6f7d17c",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 360053,
+        "rps": 3339.1,
+        "p50": 5.73,
+        "p99": 25.75,
+        "fail": 0
+      },
+      {
+        "score": 353649,
+        "rps": 3289.5,
+        "p50": 5.91,
+        "p99": 25.22,
+        "fail": 0
+      },
+      {
+        "score": 354512,
+        "rps": 3293.2,
+        "p50": 5.83,
+        "p99": 25.83,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 358613,
+        "rps": 3331.1,
+        "p50": 5.7,
+        "p99": 26.24,
+        "fail": 0
+      },
+      {
+        "score": 357093,
+        "rps": 3315.6,
+        "p50": 5.87,
+        "p99": 25.24,
+        "fail": 0
+      },
+      {
+        "score": 357961,
+        "rps": 3322.6,
+        "p50": 5.78,
+        "p99": 25.65,
+        "fail": 0
+      }
+    ],
+    "base_median": 354512,
+    "cand_median": 357961,
+    "gain_pct": 0.97,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 1.81,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 3322.6,
+    "p50": 5.78,
+    "p99": 25.65,
+    "commit": "",
+    "patch_file": "harness/patches/0056_manual.diff"
   }
 ]
