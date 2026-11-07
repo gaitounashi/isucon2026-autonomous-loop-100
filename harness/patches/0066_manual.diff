@@ -1,0 +1,27 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..445b3a8 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -253,11 +253,12 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		return nil
+ 	})
+ 
+-	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
+-	// 10MB 超の不正アップロードに対し、ボディを 1 バイトも読まずに 0ms で 413 切断
++	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & Connection: close 強制切断)
++	// 10MB 超の不正アップロードに対し、ボディを 1 バイトも読まずに Connection: close で 0ms 即時ソケット切断
+ 	e.POST("/api/images/upload", func(c *echo.Context) error {
+ 		req := c.Request()
+ 		if req.ContentLength > 10*1024*1024 {
++			c.Response().Header().Set("Connection", "close")
+ 			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+ 		}
+ 		lr := io.LimitReader(req.Body, 10*1024*1024+1)
+@@ -266,6 +267,7 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 			return c.String(http.StatusBadRequest, "read_error")
+ 		}
+ 		if len(data) > 10*1024*1024 {
++			c.Response().Header().Set("Connection", "close")
+ 			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+ 		}
+ 		return c.JSON(http.StatusOK, map[string]string{"status": "ok", "size": strconv.Itoa(len(data))})

@@ -3774,5 +3774,75 @@
     "p99": 56.08,
     "commit": "",
     "patch_file": "harness/patches/0065_manual.diff"
+  },
+  {
+    "id": 66,
+    "timestamp": 1794061805.3798742,
+    "time": "2026-11-07 23:30:05",
+    "diag_id": "manual",
+    "category": "",
+    "title": "fast abort oversized upload with Connection: close header",
+    "head": "3536631",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 346464,
+        "rps": 3222.3,
+        "p50": 5.99,
+        "p99": 26.39,
+        "fail": 0
+      },
+      {
+        "score": 297230,
+        "rps": 2756.5,
+        "p50": 6.84,
+        "p99": 31.71,
+        "fail": 0
+      },
+      {
+        "score": 317364,
+        "rps": 2963.2,
+        "p50": 6.38,
+        "p99": 30.06,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 346276,
+        "rps": 3208.2,
+        "p50": 5.99,
+        "p99": 26.75,
+        "fail": 0
+      },
+      {
+        "score": 294685,
+        "rps": 2743.7,
+        "p50": 6.85,
+        "p99": 31.98,
+        "fail": 0
+      },
+      {
+        "score": 295056,
+        "rps": 2747.1,
+        "p50": 6.99,
+        "p99": 31.51,
+        "fail": 0
+      }
+    ],
+    "base_median": 317364,
+    "cand_median": 295056,
+    "gain_pct": -7.03,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 15.51,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2747.1,
+    "p50": 6.99,
+    "p99": 31.51,
+    "commit": "",
+    "patch_file": "harness/patches/0066_manual.diff"
   }
 ]
