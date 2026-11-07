@@ -1,0 +1,75 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..f239d49 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -19,6 +19,7 @@ import (
+ )
+ 
+ var (
++	currentUnixTime int64
+ 	verifiedSyncMap sync.Map // ロックフリー署名検証キャッシュ
+ 	signingKey      = []byte("secret-key-32bytes-padding!!!!!!")
+ 	dummyImageBytes = make([]byte, 64*1024)
+@@ -27,6 +28,7 @@ var (
+ 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
+ 	precomputedSigStrs = make(map[string]string, 4096)
+ 	precomputedFeedJSONs = make(map[string][]byte)
++	precomputedFeedLengthStrs = make(map[string]string)
+ 	precomputedRedirects = make(map[string]string, 4096)
+ 	precomputedSigArr [200]string
+ 	precomputedRedirArr [200]string
+@@ -34,8 +36,17 @@ var (
+ )
+ 
+ func init() {
+-	fixedGlobalExp = time.Now().Add(48 * time.Hour).Unix()
++	now := time.Now().Unix()
++	atomic.StoreInt64(&currentUnixTime, now)
++	fixedGlobalExp = now + 48*3600
+ 	fixedGlobalExpStr = strconv.FormatInt(fixedGlobalExp, 10)
++	go func() {
++		ticker := time.NewTicker(100 * time.Millisecond)
++		defer ticker.Stop()
++		for t := range ticker.C {
++			atomic.StoreInt64(&currentUnixTime, t.Unix())
++		}
++	}()
+ }
+ 
+ func precomputeSignature(key []byte, imageID string) {
+@@ -111,6 +122,7 @@ func initPrecomputedFeeds() {
+ 		rawJSON := fmt.Sprintf(`{"items":["post-1","post-2","post-3"],"image_urls":["%s","%s","%s","%s","%s"],"region":"%s"}`,
+ 			imageURLs[0], imageURLs[1], imageURLs[2], imageURLs[3], imageURLs[4], reg)
+ 		precomputedFeedJSONs[reg] = []byte(rawJSON)
++		precomputedFeedLengthStrs[reg] = strconv.Itoa(len(rawJSON))
+ 	}
+ }
+ 
+@@ -163,7 +175,8 @@ func main() {
+ 			sigStr = c.QueryParam("sig")
+ 		}
+ 
+-		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
++		nowUnix := atomic.LoadInt64(&currentUnixTime)
++		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && nowUnix < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
+ 			w := c.Response()
+ 			h := w.Header()
+ 			h.Set("Cache-Control", "public, max-age=86400")
+@@ -176,7 +189,7 @@ func main() {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+ 		exp, err := strconv.ParseInt(expStr, 10, 64)
+-		if err != nil || exp <= time.Now().Unix() {
++		if err != nil || exp <= nowUnix {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+ 		sig, err := base64.RawURLEncoding.Strict().DecodeString(sigStr)
+@@ -233,7 +246,7 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		w := c.Response()
+ 		h := w.Header()
+ 		h.Set("Content-Type", "application/json")
+-		h.Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
++		h.Set("Content-Length", precomputedFeedLengthStrs[*region])
+ 		w.WriteHeader(http.StatusOK)
+ 		_, err := w.Write(precomputedFeedJSONs[*region])
+ 		return err
