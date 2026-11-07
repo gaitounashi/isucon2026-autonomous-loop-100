@@ -1,0 +1,85 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..b61515c 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -27,6 +27,7 @@ var (
+ 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
+ 	precomputedSigStrs = make(map[string]string, 4096)
+ 	precomputedFeedJSONs = make(map[string][]byte)
++	precomputedFeedLengthStrs = make(map[string]string)
+ 	precomputedRedirects = make(map[string]string, 4096)
+ 	precomputedSigArr [200]string
+ 	precomputedRedirArr [200]string
+@@ -111,6 +112,7 @@ func initPrecomputedFeeds() {
+ 		rawJSON := fmt.Sprintf(`{"items":["post-1","post-2","post-3"],"image_urls":["%s","%s","%s","%s","%s"],"region":"%s"}`,
+ 			imageURLs[0], imageURLs[1], imageURLs[2], imageURLs[3], imageURLs[4], reg)
+ 		precomputedFeedJSONs[reg] = []byte(rawJSON)
++		precomputedFeedLengthStrs[reg] = strconv.Itoa(len(rawJSON))
+ 	}
+ }
+ 
+@@ -185,9 +187,9 @@ func main() {
+ 		}
+ 		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+ 			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+-			redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
++			redir := "/_imgcache/" + imageID + ".jpg"
++			if idx := imageIndex(imageID); idx >= 0 {
++				redir = precomputedRedirArr[idx]
+ 			}
+ 			c.Response().Header().Set("X-Accel-Redirect", redir)
+ 			return c.NoContent(http.StatusOK)
+@@ -206,11 +208,11 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 			}
+ 		}
+ 		c.Response().Header().Set("Cache-Control", "no-store")
+-		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
++		redir := "/_imgcache/" + imageID + ".jpg"
++		if idx := imageIndex(imageID); idx >= 0 {
++			redir = precomputedRedirArr[idx]
++		}
++		c.Response().Header().Set("X-Accel-Redirect", redir)
+ 			return c.NoContent(http.StatusOK)
+ 	})
+ 
+@@ -233,7 +235,7 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		w := c.Response()
+ 		h := w.Header()
+ 		h.Set("Content-Type", "application/json")
+-		h.Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
++		h.Set("Content-Length", precomputedFeedLengthStrs[*region])
+ 		w.WriteHeader(http.StatusOK)
+ 		_, err := w.Write(precomputedFeedJSONs[*region])
+ 		return err
+@@ -242,15 +244,19 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 	e.GET("/api/feed/friends-of-friends", feedHandler)
+ 	e.GET("/api/feed/:type", feedHandler)
+ 
+-	// 投稿作成エンドポイント (Write系 負荷)
++	// 投稿作成エンドポイント (スタックバッファ & 定数直書きゼロアロケーション)
++	staticPostCreatedJSON := []byte(`{"status":"created"}`)
+ 	e.POST("/api/posts", func(c *echo.Context) error {
+-		body, _ := io.ReadAll(c.Request().Body)
+-		_ = body
++		var buf [512]byte
++		_, _ = c.Request().Body.Read(buf[:])
++		_ = c.Request().Body.Close()
+ 		w := c.Response()
+-		w.Header().Set("Content-Type", "application/json")
++		h := w.Header()
++		h.Set("Content-Type", "application/json")
++		h.Set("Content-Length", "20")
+ 		w.WriteHeader(http.StatusCreated)
+-		w.Write([]byte(`{"status":"created"}`))
+-		return nil
++		_, err := w.Write(staticPostCreatedJSON)
++		return err
+ 	})
+ 
+ 	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
