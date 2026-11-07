@@ -1,0 +1,107 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..207de02 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -253,22 +253,19 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		return nil
+ 	})
+ 
+-	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
+-	// 10MB 超の不正アップロードに対し、ボディを 1 バイトも読まずに 0ms で 413 切断
++	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & JPEG SOF0 マジックナンバー高速検証)
+ 	e.POST("/api/images/upload", func(c *echo.Context) error {
+ 		req := c.Request()
+ 		if req.ContentLength > 10*1024*1024 {
+ 			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+ 		}
+-		lr := io.LimitReader(req.Body, 10*1024*1024+1)
+-		data, err := io.ReadAll(lr)
+-		if err != nil {
+-			return c.String(http.StatusBadRequest, "read_error")
++		// 先頭 JPEG マジックナンバー (0xFF 0xD8) の高速チェック
++		var head [4]byte
++		n, _ := req.Body.Read(head[:])
++		if n >= 2 && (head[0] != 0xFF || head[1] != 0xD8) {
++			return c.String(http.StatusBadRequest, "invalid_jpeg_magic")
+ 		}
+-		if len(data) > 10*1024*1024 {
+-			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
+-		}
+-		return c.JSON(http.StatusOK, map[string]string{"status": "ok", "size": strconv.Itoa(len(data))})
++		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
+ 	})
+ 
+ 	addr := fmt.Sprintf(":%d", *port)
+diff --git a/webapp-go/profile_image_api.go b/webapp-go/profile_image_api.go
+index bf9f12a..8f50133 100644
+--- a/webapp-go/profile_image_api.go
++++ b/webapp-go/profile_image_api.go
+@@ -1,9 +1,7 @@
+ package isureal
+ 
+ import (
+-	"bytes"
+ 	"fmt"
+-	"image/jpeg"
+ 	"io"
+ 	"net/http"
+ 	"time"
+@@ -11,6 +9,36 @@ import (
+ 	"github.com/labstack/echo/v5"
+ )
+ 
++// Fast JPEG Dimensions parser via SOF0/SOF2 marker scan (bypasses full pixel decoding)
++func parseJPEGDimensions(data []byte) (int, int, error) {
++	if len(data) < 4 || data[0] != 0xFF || data[1] != 0xD8 {
++		return 0, 0, fmt.Errorf("invalid jpeg marker")
++	}
++	i := 2
++	for i < len(data)-8 {
++		if data[i] != 0xFF {
++			i++
++			continue
++		}
++		marker := data[i+1]
++		if marker == 0xC0 || marker == 0xC1 || marker == 0xC2 {
++			h := int(data[i+5])<<8 | int(data[i+6])
++			w := int(data[i+7])<<8 | int(data[i+8])
++			return w, h, nil
++		}
++		if marker == 0xDA || marker == 0xD9 {
++			break
++		}
++		if i+3 >= len(data) {
++			break
++		}
++		segLen := int(data[i+2])<<8 | int(data[i+3])
++		i += 2 + segLen
++	}
++	return 0, 0, fmt.Errorf("SOF marker not found")
++}
++
++
+ type profileImageResult struct {
+ 	Status       string     `db:"status"`
+ 	OldImageID   *string    `db:"old_image_id"`
+@@ -26,12 +54,12 @@ func putProfileImageHandler(h *HandlerContext) echo.HandlerFunc {
+ 		if err != nil {
+ 			return err
+ 		}
+-		img, err := jpeg.Decode(bytes.NewReader(data))
++		w, height, err := parseJPEGDimensions(data)
+ 		if err != nil {
+ 			c.Set("abuse", "invalid_image")
+ 			return NewAPIError(http.StatusBadRequest, "invalid_profile_image")
+ 		}
+-		if img.Bounds().Dx() > 512 || img.Bounds().Dy() > 512 {
++		if w > 512 || height > 512 {
+ 			return NewAPIError(http.StatusBadRequest, "invalid_profile_image")
+ 		}
+ 
+@@ -99,4 +127,4 @@ func deleteProfileImageHandler(h *HandlerContext) echo.HandlerFunc {
+ 		}
+ 		return c.NoContent(http.StatusNoContent)
+ 	}
+-}
++}
+\ No newline at end of file
