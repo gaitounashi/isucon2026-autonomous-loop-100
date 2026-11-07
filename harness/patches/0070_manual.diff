@@ -1,0 +1,67 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..2e2fcd4 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -163,7 +163,8 @@ func main() {
+ 			sigStr = c.QueryParam("sig")
+ 		}
+ 
+-		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
++		idx := imageIndex(imageID)
++		if idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
+ 			w := c.Response()
+ 			h := w.Header()
+ 			h.Set("Cache-Control", "public, max-age=86400")
+@@ -184,15 +185,20 @@ func main() {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+ 		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+-			redir, ok := precomputedRedirects[imageID]
+-			if !ok {
++			redir := ""
++			if idx >= 0 {
++				redir = precomputedRedirArr[idx]
++			} else {
+ 				redir = "/_imgcache/" + imageID + ".jpg"
+ 			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++			w := c.Response()
++			h := w.Header()
++			h.Set("Cache-Control", "public, max-age=86400")
++			h.Set("X-Accel-Redirect", redir)
++			w.WriteHeader(http.StatusOK)
++			return nil
+ 		}
+-cacheKey := imageID + ":" + expStr + ":" + sigStr
++		cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		if val, ok := verifiedSyncMap.Load(cacheKey); ok {
+ 			if !val.(bool) {
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+@@ -205,13 +211,18 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+ 			}
+ 		}
+-		c.Response().Header().Set("Cache-Control", "no-store")
+-		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++		redir := ""
++		if idx >= 0 {
++			redir = precomputedRedirArr[idx]
++		} else {
++			redir = "/_imgcache/" + imageID + ".jpg"
++		}
++		w := c.Response()
++		h := w.Header()
++		h.Set("Cache-Control", "no-store")
++		h.Set("X-Accel-Redirect", redir)
++		w.WriteHeader(http.StatusOK)
++		return nil
+ 	})
+ 
+ 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)

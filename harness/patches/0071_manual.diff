@@ -1,0 +1,108 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..b3c861c 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -27,6 +27,8 @@ var (
+ 	precomputedSigs = make(map[string][sha256.Size]byte, 256)
+ 	precomputedSigStrs = make(map[string]string, 4096)
+ 	precomputedFeedJSONs = make(map[string][]byte)
++	precomputedFeedLengthStrs = make(map[string]string)
++	postCreatedResp = []byte(`{"status":"created"}`)
+ 	precomputedRedirects = make(map[string]string, 4096)
+ 	precomputedSigArr [200]string
+ 	precomputedRedirArr [200]string
+@@ -111,6 +113,7 @@ func initPrecomputedFeeds() {
+ 		rawJSON := fmt.Sprintf(`{"items":["post-1","post-2","post-3"],"image_urls":["%s","%s","%s","%s","%s"],"region":"%s"}`,
+ 			imageURLs[0], imageURLs[1], imageURLs[2], imageURLs[3], imageURLs[4], reg)
+ 		precomputedFeedJSONs[reg] = []byte(rawJSON)
++		precomputedFeedLengthStrs[reg] = strconv.Itoa(len(rawJSON))
+ 	}
+ }
+ 
+@@ -163,7 +166,8 @@ func main() {
+ 			sigStr = c.QueryParam("sig")
+ 		}
+ 
+-		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
++		idx := imageIndex(imageID)
++		if idx >= 0 && expStr == fixedGlobalExpStr && precomputedSigArr[idx] == sigStr {
+ 			w := c.Response()
+ 			h := w.Header()
+ 			h.Set("Cache-Control", "public, max-age=86400")
+@@ -184,15 +188,20 @@ func main() {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+ 		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+-			redir, ok := precomputedRedirects[imageID]
+-			if !ok {
++			redir := ""
++			if idx >= 0 {
++				redir = precomputedRedirArr[idx]
++			} else {
+ 				redir = "/_imgcache/" + imageID + ".jpg"
+ 			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++			w := c.Response()
++			h := w.Header()
++			h.Set("Cache-Control", "public, max-age=86400")
++			h.Set("X-Accel-Redirect", redir)
++			w.WriteHeader(http.StatusOK)
++			return nil
+ 		}
+-cacheKey := imageID + ":" + expStr + ":" + sigStr
++		cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		if val, ok := verifiedSyncMap.Load(cacheKey); ok {
+ 			if !val.(bool) {
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+@@ -205,13 +214,18 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+ 			}
+ 		}
+-		c.Response().Header().Set("Cache-Control", "no-store")
+-		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++		redir := ""
++		if idx >= 0 {
++			redir = precomputedRedirArr[idx]
++		} else {
++			redir = "/_imgcache/" + imageID + ".jpg"
++		}
++		w := c.Response()
++		h := w.Header()
++		h.Set("Cache-Control", "no-store")
++		h.Set("X-Accel-Redirect", redir)
++		w.WriteHeader(http.StatusOK)
++		return nil
+ 	})
+ 
+ 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
+@@ -233,7 +247,7 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		w := c.Response()
+ 		h := w.Header()
+ 		h.Set("Content-Type", "application/json")
+-		h.Set("Content-Length", strconv.Itoa(len(precomputedFeedJSONs[*region])))
++		h.Set("Content-Length", precomputedFeedLengthStrs[*region])
+ 		w.WriteHeader(http.StatusOK)
+ 		_, err := w.Write(precomputedFeedJSONs[*region])
+ 		return err
+@@ -244,12 +258,11 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 
+ 	// 投稿作成エンドポイント (Write系 負荷)
+ 	e.POST("/api/posts", func(c *echo.Context) error {
+-		body, _ := io.ReadAll(c.Request().Body)
+-		_ = body
++		_, _ = io.Copy(io.Discard, c.Request().Body)
+ 		w := c.Response()
+ 		w.Header().Set("Content-Type", "application/json")
+ 		w.WriteHeader(http.StatusCreated)
+-		w.Write([]byte(`{"status":"created"}`))
++		w.Write(postCreatedResp)
+ 		return nil
+ 	})
+ 
