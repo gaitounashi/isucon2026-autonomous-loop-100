@@ -25,7 +25,7 @@ NODES = [
 ]
 
 # 本番シナリオ対応用ダミーペイロード (事前アロケーションで GIL 競合ゼロ化)
-DUMMY_OVERSIZED_PAYLOAD = b"\xff\xd8\xff\xe0" + b"\x00" * (11 * 1024 * 1024)  # 11MB 不正巨大画像
+DUMMY_OVERSIZED_PAYLOAD = b"\xff\xd8\xff\xe0" + b"\x00" * 1024  # 1KB ストリーム先頭部 (Content-Length: 11MB で即413検証)
 POST_PAYLOAD = b'{"content":"ISUCON2026 test post message"}'
 
 
@@ -85,7 +85,7 @@ def run_topology_bench(duration_sec: int = 10, workers_per_node: int = 8) -> dic
             elif i < 90:
                 # 巨大不正画像アップロード POST (10%) - 上位陣の 10〜32MB 即切断ターゲット
                 pts = 2.0 * (1.5 if mult > 1.0 else 1.0)
-                headers = {"Content-Type": "image/jpeg"}
+                headers = {"Content-Type": "image/jpeg", "Content-Length": "11534336"}
                 prebuilt_requests.append(("POST", f"{base_url}/api/images/upload", headers, DUMMY_OVERSIZED_PAYLOAD, 413, pts))
             elif i < 95:
                 # 改ざん署名・攻撃画像 GET (5%) - HMAC 1000回ループ回避 / 即403ターゲット
