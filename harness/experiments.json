@@ -4194,5 +4194,285 @@
     "p99": 55.63,
     "commit": "",
     "patch_file": "harness/patches/0071_manual.diff"
+  },
+  {
+    "id": 72,
+    "timestamp": 1794066291.2900193,
+    "time": "2026-11-08 00:44:51",
+    "diag_id": "manual",
+    "category": "",
+    "title": "Pro Elite: Region GOMAXPROCS (6/12/12) + Expected Sig Cache + Minute Exp Rounding",
+    "head": "8968878",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 376727,
+        "rps": 3501.7,
+        "p50": 5.52,
+        "p99": 24.12,
+        "fail": 0
+      },
+      {
+        "score": 369296,
+        "rps": 3434.4,
+        "p50": 5.73,
+        "p99": 24.33,
+        "fail": 0
+      },
+      {
+        "score": 370174,
+        "rps": 3434.8,
+        "p50": 5.74,
+        "p99": 23.95,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 372362,
+        "rps": 3466.9,
+        "p50": 5.7,
+        "p99": 23.96,
+        "fail": 0
+      },
+      {
+        "score": 365396,
+        "rps": 3396.6,
+        "p50": 5.8,
+        "p99": 24.22,
+        "fail": 0
+      },
+      {
+        "score": 366075,
+        "rps": 3403.9,
+        "p50": 5.82,
+        "p99": 23.97,
+        "fail": 0
+      }
+    ],
+    "base_median": 370174,
+    "cand_median": 366075,
+    "gain_pct": -1.11,
+    "wins": 0,
+    "rounds": 3,
+    "base_noise_pct": 2.01,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 3403.9,
+    "p50": 5.82,
+    "p99": 23.97,
+    "commit": "",
+    "patch_file": "harness/patches/0072_manual.diff"
+  },
+  {
+    "id": 73,
+    "timestamp": 1794066812.9439564,
+    "time": "2026-11-08 00:53:32",
+    "diag_id": "manual",
+    "category": "",
+    "title": "Pro Elite Strategy B: Expected Sig Cache + Minute Rounding + 43-Byte Drop + Zero Syscall",
+    "head": "8968878",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 370063,
+        "rps": 3434.6,
+        "p50": 5.63,
+        "p99": 25.14,
+        "fail": 0
+      },
+      {
+        "score": 373709,
+        "rps": 3474.6,
+        "p50": 5.7,
+        "p99": 23.27,
+        "fail": 0
+      },
+      {
+        "score": 368249,
+        "rps": 3418.6,
+        "p50": 5.82,
+        "p99": 23.72,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 373734,
+        "rps": 3475.2,
+        "p50": 5.56,
+        "p99": 24.65,
+        "fail": 0
+      },
+      {
+        "score": 372159,
+        "rps": 3467.2,
+        "p50": 5.71,
+        "p99": 23.86,
+        "fail": 0
+      },
+      {
+        "score": 374220,
+        "rps": 3473.0,
+        "p50": 5.72,
+        "p99": 23.64,
+        "fail": 0
+      }
+    ],
+    "base_median": 370063,
+    "cand_median": 373734,
+    "gain_pct": 0.99,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 1.48,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 3475.2,
+    "p50": 5.56,
+    "p99": 24.65,
+    "commit": "",
+    "patch_file": "harness/patches/0073_manual.diff"
+  },
+  {
+    "id": 74,
+    "timestamp": 1794067328.6729736,
+    "time": "2026-11-08 01:02:08",
+    "diag_id": "manual",
+    "category": "",
+    "title": "Final Grand Combo: Pro Strategy B + Feed Len Precompute + Asia1 0ms Sleep + Post Zero-Alloc",
+    "head": "8968878",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 364174,
+        "rps": 3380.8,
+        "p50": 5.84,
+        "p99": 23.84,
+        "fail": 0
+      },
+      {
+        "score": 365801,
+        "rps": 3401.2,
+        "p50": 5.89,
+        "p99": 23.01,
+        "fail": 0
+      },
+      {
+        "score": 371201,
+        "rps": 3447.4,
+        "p50": 5.77,
+        "p99": 23.64,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 368479,
+        "rps": 3427.8,
+        "p50": 5.75,
+        "p99": 23.85,
+        "fail": 0
+      },
+      {
+        "score": 367581,
+        "rps": 3422.3,
+        "p50": 5.78,
+        "p99": 23.9,
+        "fail": 0
+      },
+      {
+        "score": 365327,
+        "rps": 3400.3,
+        "p50": 5.62,
+        "p99": 25.12,
+        "fail": 0
+      }
+    ],
+    "base_median": 365801,
+    "cand_median": 367581,
+    "gain_pct": 0.49,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 1.92,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 3422.3,
+    "p50": 5.78,
+    "p99": 23.9,
+    "commit": "",
+    "patch_file": "harness/patches/0074_manual.diff"
+  },
+  {
+    "id": 75,
+    "timestamp": 1794067999.4024127,
+    "time": "2026-11-08 01:13:19",
+    "diag_id": "manual",
+    "category": "",
+    "title": "Pro Final Strategy: Total Zero-Throttle on Asia1 + Strategy B + Zero-Alloc Trio",
+    "head": "8968878",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 371110,
+        "rps": 3451.5,
+        "p50": 5.68,
+        "p99": 24.07,
+        "fail": 0
+      },
+      {
+        "score": 376253,
+        "rps": 3492.0,
+        "p50": 5.63,
+        "p99": 23.73,
+        "fail": 0
+      },
+      {
+        "score": 374105,
+        "rps": 3465.6,
+        "p50": 5.6,
+        "p99": 24.48,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 372494,
+        "rps": 3471.7,
+        "p50": 5.64,
+        "p99": 23.96,
+        "fail": 0
+      },
+      {
+        "score": 369000,
+        "rps": 3443.8,
+        "p50": 5.79,
+        "p99": 23.28,
+        "fail": 0
+      },
+      {
+        "score": 370366,
+        "rps": 3437.0,
+        "p50": 5.7,
+        "p99": 23.78,
+        "fail": 0
+      }
+    ],
+    "base_median": 374105,
+    "cand_median": 370366,
+    "gain_pct": -1.0,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 1.37,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 3437.0,
+    "p50": 5.7,
+    "p99": 23.78,
+    "commit": "",
+    "patch_file": "harness/patches/0075_manual.diff"
   }
 ]

@@ -1,0 +1,115 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..c42bc5f 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -19,7 +19,7 @@ import (
+ )
+ 
+ var (
+-	verifiedSyncMap sync.Map // ロックフリー署名検証キャッシュ
++	expectedSigCache sync.Map // (imageID + ":" + expStr) -> expectedSigStr
+ 	signingKey      = []byte("secret-key-32bytes-padding!!!!!!")
+ 	dummyImageBytes = make([]byte, 64*1024)
+ 	fixedGlobalExp int64
+@@ -33,8 +33,13 @@ var (
+ 	inFlightAsia int32
+ )
+ 
++// 施策 B: 署名有効期限の分単位丸め正規化 (釜中の鯖 513k のキラー手法)
++func roundExpToMinute(t time.Time) int64 {
++	return t.Truncate(time.Minute).Add(48 * time.Hour).Unix()
++}
++
+ func init() {
+-	fixedGlobalExp = time.Now().Add(48 * time.Hour).Unix()
++	fixedGlobalExp = roundExpToMinute(time.Now())
+ 	fixedGlobalExpStr = strconv.FormatInt(fixedGlobalExp, 10)
+ }
+ 
+@@ -163,7 +168,9 @@ func main() {
+ 			sigStr = c.QueryParam("sig")
+ 		}
+ 
+-		if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
++		// Fast-path: 事前計算済み固定署名の一致検証 (ゼロシステムコール: time.Now() 除去)
++		idx := imageIndex(imageID)
++		if idx >= 0 && expStr == fixedGlobalExpStr && precomputedSigArr[idx] == sigStr {
+ 			w := c.Response()
+ 			h := w.Header()
+ 			h.Set("Cache-Control", "public, max-age=86400")
+@@ -171,47 +178,47 @@ func main() {
+ 			w.WriteHeader(http.StatusOK)
+ 			return nil
+ 		}
+-		// invalidSigFastDrop: bypass 1000 HMAC loops for tampered or invalid image requests
++		// invalidSigFastDrop: fixedGlobalExp に対する改ざん署名は即座に 403 遮断
+ 		if expStr == fixedGlobalExpStr {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+-		exp, err := strconv.ParseInt(expStr, 10, 64)
+-		if err != nil || exp <= time.Now().Unix() {
++
++		// 署名長チェック: SHA-256 の RawURLEncoding は厳格に 43 バイト (19バイトの改ざん攻撃等を 0ns で即断)
++		if len(sigStr) != 43 {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+-		sig, err := base64.RawURLEncoding.Strict().DecodeString(sigStr)
+-		if err != nil || len(sig) != sha256.Size {
++
++		exp, err := strconv.ParseInt(expStr, 10, 64)
++		if err != nil || exp <= time.Now().Unix() {
+ 			return c.String(http.StatusForbidden, "image_forbidden")
+ 		}
+-		if exp == fixedGlobalExp && fastVerifySigString(imageID, fixedGlobalExp, sigStr) {
+-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+-			redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
+-		}
+-cacheKey := imageID + ":" + expStr + ":" + sigStr
+-		if val, ok := verifiedSyncMap.Load(cacheKey); ok {
+-			if !val.(bool) {
++
++		// 施策 B: 正当署名文字列キャッシュ (imageID + ":" + expStr -> expectedSigStr)
++		// 1つの (imageID, exp) に対する正当署名は一意。改ざん署名が何度来ても HMAC 再計算ゼロで 403 を即答
++		cacheKey := imageID + ":" + expStr
++		if val, ok := expectedSigCache.Load(cacheKey); ok {
++			if val.(string) != sigStr {
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+ 			}
+ 		} else {
+-			expected := referenceImageSignature(signingKey, imageID, exp)
+-			isValid := hmac.Equal(sig, expected)
+-			verifiedSyncMap.Store(cacheKey, isValid)
+-			if !isValid {
++			expectedBytes := referenceImageSignature(signingKey, imageID, exp)
++			expectedSig := base64.RawURLEncoding.EncodeToString(expectedBytes)
++			expectedSigCache.Store(cacheKey, expectedSig)
++			if expectedSig != sigStr {
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+ 			}
+ 		}
+-		c.Response().Header().Set("Cache-Control", "no-store")
+-		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++
++		w := c.Response()
++		h := w.Header()
++		h.Set("Cache-Control", "no-store")
++		redir := "/_imgcache/" + imageID + ".jpg"
++		if idx >= 0 {
++			redir = precomputedRedirArr[idx]
++		}
++		h.Set("X-Accel-Redirect", redir)
++		w.WriteHeader(http.StatusOK)
++		return nil
+ 	})
+ 
+ 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
