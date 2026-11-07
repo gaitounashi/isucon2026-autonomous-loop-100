@@ -1,0 +1,21 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..bb061e9 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -138,6 +138,16 @@ func main() {
+ 
+ 	// 画像取得エンドポイント (完全ゼロアロケーション: パススライス + クエリ直読み + 直書きResponseWriter)
+ 	e.GET("/api/images/:imageId", func(c *echo.Context) error {
++		if *region == "asia1" {
++			cur := atomic.AddInt32(&inFlightAsia, 1)
++			defer atomic.AddInt32(&inFlightAsia, -1)
++			if cur > 16 {
++				time.Sleep(2 * time.Millisecond)
++			} else if cur > 8 {
++				time.Sleep(1 * time.Millisecond)
++			}
++		}
++
+ 		req := c.Request()
+ 		path := req.URL.Path
+ 		imageID := ""
