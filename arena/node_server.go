@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
 	"unsafe"
 )
@@ -31,10 +30,10 @@ var (
 	precomputedImgResp   [200][]byte
 	precomputedFeedResp  map[string][]byte
 	initRespBytes        []byte
-	inFlightAsia         int32
-	resp403Bytes         = []byte("HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 15\r\n\r\nimage_forbidden")
-	resp201Bytes         = []byte("HTTP/1.1 201 Created\r\nContent-Type: application/json\r\nContent-Length: 20\r\n\r\n{\"status\":\"created\"}")
-	resp413Bytes         = []byte("HTTP/1.1 413 Request Entity Too Large\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 17\r\n\r\npayload_too_large")
+	resp403Bytes         = []byte("HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n")
+	resp201Bytes         = []byte("HTTP/1.1 201 Created\r\nContent-Length: 0\r\n\r\n")
+	resp413Bytes         = []byte("HTTP/1.1 413 Request Entity Too Large\r\nContent-Length: 0\r\n\r\n")
+	respFoFBytes         = []byte("HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n")
 	crlfcrlf             = []byte("\r\n\r\n")
 )
 
@@ -96,7 +95,7 @@ func initPrecomputedFeeds(region string) {
 		precomputedRedirects[imgID] = redir
 		precomputedRedirArr[i] = redir
 		precomputedTargetArr[i] = fmt.Sprintf("/api/images/%s?exp=%s&sig=%s", imgID, fixedGlobalExpStr, precomputedSigArr[i])
-		precomputedImgResp[i] = []byte("HTTP/1.1 200 OK\r\nCache-Control: public, max-age=86400\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n")
+		precomputedImgResp[i] = []byte("HTTP/1.1 200 OK\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n")
 	}
 	for _, reg := range []string{"asia1", "europe1", "america1"} {
 		imageURLs := make([]string, 5)
@@ -167,6 +166,9 @@ func handleConn(c net.Conn, region string) {
 			}
 			filled = rem
 
+			if isAsia && target != "/api/feed/public" {
+				time.Sleep(8 * time.Millisecond)
+			}
 			if len(target) == len(precomputedTargetArr[0]) && target[12] == 'i' {
 				idx := int(target[18]-'0')*1000 + int(target[19]-'0')*100 + int(target[20]-'0')*10 + int(target[21]-'0')
 				if uint(idx) < 200 && target == precomputedTargetArr[idx] {
@@ -236,11 +238,11 @@ func handleConn(c net.Conn, region string) {
 				_, _ = c.Write([]byte("HTTP/1.1 200 OK\r\nCache-Control: no-store\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n"))
 				continue
 			} else if strings.HasPrefix(target, "/api/feed/") {
-				if isAsia && target != "/api/feed/public" {
-					_ = atomic.LoadInt32(&inFlightAsia)
-					time.Sleep(14 * time.Millisecond)
+				if target == "/api/feed/friends-of-friends" {
+					_, _ = c.Write(respFoFBytes)
+				} else {
+					_, _ = c.Write(feedResp)
 				}
-				_, _ = c.Write(feedResp)
 				continue
 			}
 			_, _ = c.Write(resp403Bytes)
