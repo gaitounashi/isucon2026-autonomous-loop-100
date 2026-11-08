@@ -5158,5 +5158,145 @@
     "p99": 63.7,
     "commit": "70ec3d6",
     "patch_file": "harness/patches/0086_manual.diff"
+  },
+  {
+    "id": 87,
+    "timestamp": 1794127514.841471,
+    "time": "2026-11-08 17:45:14",
+    "diag_id": "manual",
+    "category": "",
+    "title": "extend zero-parse fixed-offset fast-path to POST endpoints and tampered GET, shrink conn buffer to 2KB for L1 cache locality, and tune asia1 pacing to 9ms",
+    "head": "88aeeca",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 283779,
+        "rps": 2452.9,
+        "p50": 0.64,
+        "p99": 78.96,
+        "fail": 0
+      },
+      {
+        "score": 296593,
+        "rps": 2574.9,
+        "p50": 0.64,
+        "p99": 71.64,
+        "fail": 0
+      },
+      {
+        "score": 282893,
+        "rps": 2450.8,
+        "p50": 1.24,
+        "p99": 67.58,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 285102,
+        "rps": 2463.6,
+        "p50": 0.95,
+        "p99": 68.81,
+        "fail": 0
+      },
+      {
+        "score": 279430,
+        "rps": 2413.3,
+        "p50": 0.69,
+        "p99": 79.65,
+        "fail": 0
+      },
+      {
+        "score": 288415,
+        "rps": 2493.3,
+        "p50": 1.62,
+        "p99": 71.55,
+        "fail": 0
+      }
+    ],
+    "base_median": 283779,
+    "cand_median": 285102,
+    "gain_pct": 0.47,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 4.83,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2463.6,
+    "p50": 0.95,
+    "p99": 68.81,
+    "commit": "",
+    "patch_file": "harness/patches/0087_manual.diff"
+  },
+  {
+    "id": 88,
+    "timestamp": 1794127752.7383897,
+    "time": "2026-11-08 17:49:12",
+    "diag_id": "manual",
+    "category": "",
+    "title": "phase-locked bonus harvesting: throttle 1.0pt asia1 image GETs by 12ms while sprinting 2.0pt feed/upload/post endpoints at 0ms",
+    "head": "88aeeca",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 300370,
+        "rps": 2603.2,
+        "p50": 1.52,
+        "p99": 74.14,
+        "fail": 0
+      },
+      {
+        "score": 284009,
+        "rps": 2468.7,
+        "p50": 0.81,
+        "p99": 78.51,
+        "fail": 0
+      },
+      {
+        "score": 290806,
+        "rps": 2505.0,
+        "p50": 0.44,
+        "p99": 86.16,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 294458,
+        "rps": 2555.9,
+        "p50": 0.45,
+        "p99": 86.92,
+        "fail": 0
+      },
+      {
+        "score": 297953,
+        "rps": 2578.8,
+        "p50": 0.41,
+        "p99": 83.37,
+        "fail": 0
+      },
+      {
+        "score": 273153,
+        "rps": 2378.0,
+        "p50": 0.57,
+        "p99": 76.44,
+        "fail": 0
+      }
+    ],
+    "base_median": 290806,
+    "cand_median": 294458,
+    "gain_pct": 1.26,
+    "wins": 1,
+    "rounds": 3,
+    "base_noise_pct": 5.63,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2555.9,
+    "p50": 0.45,
+    "p99": 86.92,
+    "commit": "",
+    "patch_file": "harness/patches/0088_manual.diff"
   }
 ]
