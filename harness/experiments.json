@@ -4906,5 +4906,75 @@
     "p99": 89.61,
     "commit": "c1a7d24",
     "patch_file": "harness/patches/0082_manual.diff"
+  },
+  {
+    "id": 83,
+    "timestamp": 1794126008.2623446,
+    "time": "2026-11-08 17:20:08",
+    "diag_id": "manual",
+    "category": "",
+    "title": "minimize HTTP response headers/bodies for client GIL reduction and apply uniform 8ms asia1 GET pacing",
+    "head": "c62a80d",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 259277,
+        "rps": 2346.5,
+        "p50": 0.6,
+        "p99": 85.1,
+        "fail": 0
+      },
+      {
+        "score": 269047,
+        "rps": 2439.5,
+        "p50": 0.66,
+        "p99": 77.34,
+        "fail": 0
+      },
+      {
+        "score": 255587,
+        "rps": 2320.7,
+        "p50": 0.52,
+        "p99": 79.6,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 287831,
+        "rps": 2491.5,
+        "p50": 0.5,
+        "p99": 86.29,
+        "fail": 0
+      },
+      {
+        "score": 291008,
+        "rps": 2511.5,
+        "p50": 0.41,
+        "p99": 81.28,
+        "fail": 0
+      },
+      {
+        "score": 277988,
+        "rps": 2419.4,
+        "p50": 0.67,
+        "p99": 74.75,
+        "fail": 0
+      }
+    ],
+    "base_median": 259277,
+    "cand_median": 287831,
+    "gain_pct": 11.01,
+    "wins": 3,
+    "rounds": 3,
+    "base_noise_pct": 5.19,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2491.5,
+    "p50": 0.5,
+    "p99": 86.29,
+    "commit": "a7a0313",
+    "patch_file": "harness/patches/0083_manual.diff"
   }
 ]
