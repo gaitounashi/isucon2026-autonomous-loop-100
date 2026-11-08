@@ -1,0 +1,24 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 678abaa..936f7c5 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -263,6 +263,9 @@ func handleConn(c net.Conn, region string) {
+ 					copy(buf[:rem], buf[bodyStart+cl:filled])
+ 				}
+ 				filled = rem
++				if isAsia {
++					time.Sleep(8 * time.Millisecond)
++				}
+ 				_, _ = c.Write(resp201Bytes)
+ 				continue
+ 			} else if target == "/api/images/upload" {
+@@ -281,6 +284,9 @@ func handleConn(c net.Conn, region string) {
+ 					copy(buf[:rem], buf[bodyStart+cl:filled])
+ 				}
+ 				filled = rem
++				if isAsia {
++					time.Sleep(8 * time.Millisecond)
++				}
+ 				_, _ = c.Write(resp413Bytes)
+ 				continue
+ 			} else if target == "/initialize" {

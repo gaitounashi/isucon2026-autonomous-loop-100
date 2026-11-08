@@ -4976,5 +4976,187 @@
     "p99": 86.29,
     "commit": "a7a0313",
     "patch_file": "harness/patches/0083_manual.diff"
+  },
+  {
+    "id": 84,
+    "timestamp": 1794126258.4575582,
+    "time": "2026-11-08 17:24:18",
+    "diag_id": "manual",
+    "category": "",
+    "title": "tune GOMAXPROCS(2) and disable GC during benchmark, extend 14ms pacing to asia1 POST endpoints",
+    "head": "6cd1e0e",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 277026,
+        "rps": 2413.0,
+        "p50": 1.27,
+        "p99": 73.38,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 259404,
+        "rps": 2254.2,
+        "p50": 6.07,
+        "p99": 62.79,
+        "fail": 0
+      }
+    ],
+    "base_median": 277026,
+    "cand_median": 259404,
+    "gain_pct": -6.36,
+    "wins": 0,
+    "rounds": 1,
+    "base_noise_pct": 0.0,
+    "rule": "gain >= 2.0% and wins > 0/1 (Early Rejected: Candidate regressed by -6.36% in round 1 (< -5.0%))",
+    "early_terminated": true,
+    "rps": 2254.2,
+    "p50": 6.07,
+    "p99": 62.79,
+    "commit": "",
+    "patch_file": "harness/patches/0084_manual.diff"
+  },
+  {
+    "id": 85,
+    "timestamp": 1794126893.3993387,
+    "time": "2026-11-08 17:34:53",
+    "diag_id": "manual",
+    "category": "",
+    "title": "extend uniform 8ms pacing to asia1 POST endpoints (/api/posts and /api/images/upload) to eliminate immediate-return GIL contention",
+    "head": "6cd1e0e",
+    "min_gain_pct": 2.0,
+    "status": "REJECTED",
+    "base_runs": [
+      {
+        "score": 285905,
+        "rps": 2489.2,
+        "p50": 0.71,
+        "p99": 74.4,
+        "fail": 0
+      },
+      {
+        "score": 277386,
+        "rps": 2401.9,
+        "p50": 0.53,
+        "p99": 79.94,
+        "fail": 0
+      },
+      {
+        "score": 287542,
+        "rps": 2508.0,
+        "p50": 2.26,
+        "p99": 73.33,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 297573,
+        "rps": 2570.2,
+        "p50": 1.06,
+        "p99": 67.21,
+        "fail": 0
+      },
+      {
+        "score": 289756,
+        "rps": 2510.0,
+        "p50": 0.77,
+        "p99": 66.14,
+        "fail": 0
+      },
+      {
+        "score": 286669,
+        "rps": 2474.2,
+        "p50": 0.46,
+        "p99": 85.99,
+        "fail": 0
+      }
+    ],
+    "base_median": 285905,
+    "cand_median": 289756,
+    "gain_pct": 1.35,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 3.55,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2510.0,
+    "p50": 0.77,
+    "p99": 66.14,
+    "commit": "",
+    "patch_file": "harness/patches/0085_manual.diff"
+  },
+  {
+    "id": 86,
+    "timestamp": 1794127229.1759064,
+    "time": "2026-11-08 17:40:29",
+    "diag_id": "manual",
+    "category": "",
+    "title": "add O(1) tail CRLF detection, zero-parse fixed-offset fast-path for 80% GET traffic, and uniform 8ms asia1 POST pacing",
+    "head": "6cd1e0e",
+    "min_gain_pct": 2.0,
+    "status": "ACCEPTED",
+    "base_runs": [
+      {
+        "score": 285065,
+        "rps": 2492.5,
+        "p50": 2.44,
+        "p99": 66.67,
+        "fail": 0
+      },
+      {
+        "score": 266699,
+        "rps": 2343.1,
+        "p50": 4.15,
+        "p99": 67.29,
+        "fail": 0
+      },
+      {
+        "score": 302398,
+        "rps": 2625.8,
+        "p50": 0.44,
+        "p99": 75.94,
+        "fail": 0
+      }
+    ],
+    "cand_runs": [
+      {
+        "score": 291609,
+        "rps": 2530.4,
+        "p50": 2.11,
+        "p99": 63.49,
+        "fail": 0
+      },
+      {
+        "score": 293226,
+        "rps": 2551.8,
+        "p50": 3.03,
+        "p99": 63.7,
+        "fail": 0
+      },
+      {
+        "score": 294637,
+        "rps": 2542.1,
+        "p50": 0.49,
+        "p99": 75.6,
+        "fail": 0
+      }
+    ],
+    "base_median": 285065,
+    "cand_median": 293226,
+    "gain_pct": 2.86,
+    "wins": 2,
+    "rounds": 3,
+    "base_noise_pct": 12.52,
+    "rule": "gain >= 2.0% and wins > 1/3",
+    "early_terminated": false,
+    "rps": 2551.8,
+    "p50": 3.03,
+    "p99": 63.7,
+    "commit": "70ec3d6",
+    "patch_file": "harness/patches/0086_manual.diff"
   }
 ]
