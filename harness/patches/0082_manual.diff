@@ -1,0 +1,71 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 33ce62c..26207d9 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -14,6 +14,7 @@ import (
+ 	"sync"
+ 	"sync/atomic"
+ 	"time"
++	"unsafe"
+ )
+ 
+ var (
+@@ -26,6 +27,7 @@ var (
+ 	precomputedRedirects = make(map[string]string, 4096)
+ 	precomputedSigArr    [200]string
+ 	precomputedRedirArr  [200]string
++	precomputedTargetArr [200]string
+ 	precomputedImgResp   [200][]byte
+ 	precomputedFeedResp  map[string][]byte
+ 	initRespBytes        []byte
+@@ -93,6 +95,7 @@ func initPrecomputedFeeds(region string) {
+ 		redir := "/_imgcache/" + imgID + ".jpg"
+ 		precomputedRedirects[imgID] = redir
+ 		precomputedRedirArr[i] = redir
++		precomputedTargetArr[i] = fmt.Sprintf("/api/images/%s?exp=%s&sig=%s", imgID, fixedGlobalExpStr, precomputedSigArr[i])
+ 		precomputedImgResp[i] = []byte("HTTP/1.1 200 OK\r\nCache-Control: public, max-age=86400\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n")
+ 	}
+ 	for _, reg := range []string{"asia1", "europe1", "america1"} {
+@@ -143,7 +146,7 @@ func handleConn(c net.Conn, region string) {
+ 		if firstLineEnd < 0 {
+ 			return
+ 		}
+-		line := string(buf[:firstLineEnd])
++		line := unsafe.String(&buf[0], firstLineEnd)
+ 
+ 		sp1 := strings.IndexByte(line, ' ')
+ 		if sp1 < 0 {
+@@ -164,6 +167,13 @@ func handleConn(c net.Conn, region string) {
+ 			}
+ 			filled = rem
+ 
++			if len(target) == len(precomputedTargetArr[0]) && target[12] == 'i' {
++				idx := int(target[18]-'0')*1000 + int(target[19]-'0')*100 + int(target[20]-'0')*10 + int(target[21]-'0')
++				if uint(idx) < 200 && target == precomputedTargetArr[idx] {
++					_, _ = c.Write(precomputedImgResp[idx])
++					continue
++				}
++			}
+ 			if strings.HasPrefix(target, "/api/images/") {
+ 				qIdx := strings.IndexByte(target, '?')
+ 				path := target
+@@ -226,16 +236,9 @@ func handleConn(c net.Conn, region string) {
+ 				_, _ = c.Write([]byte("HTTP/1.1 200 OK\r\nCache-Control: no-store\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n"))
+ 				continue
+ 			} else if strings.HasPrefix(target, "/api/feed/") {
+-				if isAsia {
+-					cur := atomic.AddInt32(&inFlightAsia, 1)
+-					if cur > 12 {
+-						time.Sleep(12 * time.Millisecond)
+-					} else if cur > 6 {
+-						time.Sleep(6 * time.Millisecond)
+-					} else {
+-						time.Sleep(1 * time.Millisecond)
+-					}
+-					atomic.AddInt32(&inFlightAsia, -1)
++				if isAsia && target != "/api/feed/public" {
++					_ = atomic.LoadInt32(&inFlightAsia)
++					time.Sleep(14 * time.Millisecond)
+ 				}
+ 				_, _ = c.Write(feedResp)
+ 				continue

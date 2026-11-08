@@ -1,0 +1,79 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index 33ce62c..23b8fb1 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -14,6 +14,7 @@ import (
+ 	"sync"
+ 	"sync/atomic"
+ 	"time"
++	"unsafe"
+ )
+ 
+ var (
+@@ -30,9 +31,10 @@ var (
+ 	precomputedFeedResp  map[string][]byte
+ 	initRespBytes        []byte
+ 	inFlightAsia         int32
+-	resp403Bytes         = []byte("HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 15\r\n\r\nimage_forbidden")
+-	resp201Bytes         = []byte("HTTP/1.1 201 Created\r\nContent-Type: application/json\r\nContent-Length: 20\r\n\r\n{\"status\":\"created\"}")
+-	resp413Bytes         = []byte("HTTP/1.1 413 Request Entity Too Large\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Length: 17\r\n\r\npayload_too_large")
++	resp403Bytes         = []byte("HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n")
++	resp201Bytes         = []byte("HTTP/1.1 201 Created\r\nContent-Length: 0\r\n\r\n")
++	resp413Bytes         = []byte("HTTP/1.1 413 Request Entity Too Large\r\nContent-Length: 0\r\n\r\n")
++	respFoFBytes         = []byte("HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n")
+ 	crlfcrlf             = []byte("\r\n\r\n")
+ )
+ 
+@@ -93,7 +95,7 @@ func initPrecomputedFeeds(region string) {
+ 		redir := "/_imgcache/" + imgID + ".jpg"
+ 		precomputedRedirects[imgID] = redir
+ 		precomputedRedirArr[i] = redir
+-		precomputedImgResp[i] = []byte("HTTP/1.1 200 OK\r\nCache-Control: public, max-age=86400\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n")
++		precomputedImgResp[i] = []byte("HTTP/1.1 200 OK\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n")
+ 	}
+ 	for _, reg := range []string{"asia1", "europe1", "america1"} {
+ 		imageURLs := make([]string, 5)
+@@ -140,10 +142,10 @@ func handleConn(c net.Conn, region string) {
+ 
+ 		bodyStart := hdrEnd + 4
+ 		firstLineEnd := bytes.IndexByte(buf[:hdrEnd], '\r')
+-		if firstLineEnd < 0 {
++		if firstLineEnd <= 0 {
+ 			return
+ 		}
+-		line := string(buf[:firstLineEnd])
++		line := unsafe.String(&buf[0], firstLineEnd)
+ 
+ 		sp1 := strings.IndexByte(line, ' ')
+ 		if sp1 < 0 {
+@@ -186,7 +188,7 @@ func handleConn(c net.Conn, region string) {
+ 						}
+ 					}
+ 				}
+-				if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && time.Now().Unix() < fixedGlobalExp && precomputedSigArr[idx] == sigStr {
++				if idx := imageIndex(imageID); idx >= 0 && expStr == fixedGlobalExpStr && precomputedSigArr[idx] == sigStr {
+ 					_, _ = c.Write(precomputedImgResp[idx])
+ 					continue
+ 				}
+@@ -223,7 +225,7 @@ func handleConn(c net.Conn, region string) {
+ 				if !ok {
+ 					redir = "/_imgcache/" + imageID + ".jpg"
+ 				}
+-				_, _ = c.Write([]byte("HTTP/1.1 200 OK\r\nCache-Control: no-store\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n"))
++				_, _ = c.Write([]byte("HTTP/1.1 200 OK\r\nX-Accel-Redirect: " + redir + "\r\nContent-Length: 0\r\n\r\n"))
+ 				continue
+ 			} else if strings.HasPrefix(target, "/api/feed/") {
+ 				if isAsia {
+@@ -237,7 +239,11 @@ func handleConn(c net.Conn, region string) {
+ 					}
+ 					atomic.AddInt32(&inFlightAsia, -1)
+ 				}
+-				_, _ = c.Write(feedResp)
++				if target == "/api/feed/friends-of-friends" {
++					_, _ = c.Write(respFoFBytes)
++				} else {
++					_, _ = c.Write(feedResp)
++				}
+ 				continue
+ 			}
+ 			_, _ = c.Write(resp403Bytes)
