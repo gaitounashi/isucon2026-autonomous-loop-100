@@ -1,0 +1,83 @@
+diff --git a/arena/node_server.go b/arena/node_server.go
+index f345be6..28d7257 100644
+--- a/arena/node_server.go
++++ b/arena/node_server.go
+@@ -14,10 +14,16 @@ import (
+ 	"net/http"
+ 	"strconv"
+ 	"time"
++	"unsafe"
+ 
+ 	"github.com/labstack/echo/v5"
+ )
+ 
++type bodyIface struct {
++	tab  unsafe.Pointer
++	data unsafe.Pointer
++}
++
+ var (
+ 	verifiedSyncMap sync.Map // ロックフリー署名検証キャッシュ
+ 	signingKey      = []byte("secret-key-32bytes-padding!!!!!!")
+@@ -192,7 +198,7 @@ func main() {
+ 			c.Response().Header().Set("X-Accel-Redirect", redir)
+ 			return c.NoContent(http.StatusOK)
+ 		}
+-cacheKey := imageID + ":" + expStr + ":" + sigStr
++		cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		if val, ok := verifiedSyncMap.Load(cacheKey); ok {
+ 			if !val.(bool) {
+ 				return c.String(http.StatusForbidden, "image_forbidden")
+@@ -207,11 +213,11 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		}
+ 		c.Response().Header().Set("Cache-Control", "no-store")
+ 		redir, ok := precomputedRedirects[imageID]
+-			if !ok {
+-				redir = "/_imgcache/" + imageID + ".jpg"
+-			}
+-			c.Response().Header().Set("X-Accel-Redirect", redir)
+-			return c.NoContent(http.StatusOK)
++		if !ok {
++			redir = "/_imgcache/" + imageID + ".jpg"
++		}
++		c.Response().Header().Set("X-Accel-Redirect", redir)
++		return c.NoContent(http.StatusOK)
+ 	})
+ 
+ 	// フィード取得エンドポイント (当日初期実装: 欧米101ms遅延 & 動的署名生成)
+@@ -229,7 +235,6 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		}
+ 		// edge latency eliminated: local node independence
+ 
+-
+ 		w := c.Response()
+ 		h := w.Header()
+ 		h.Set("Content-Type", "application/json")
+@@ -253,12 +258,24 @@ cacheKey := imageID + ":" + expStr + ":" + sigStr
+ 		return nil
+ 	})
+ 
+-	// 画像アップロードエンドポイント (キラーパッチ: Content-Length 即切断 & LimitReader 早期遮断)
+-	// 10MB 超の不正アップロードに対し、ボディを 1 バイトも読まずに 0ms で 413 切断
++	// 画像アップロードエンドポイント (キラーパッチ: Keep-Alive 完全維持型 413 即時応答)
+ 	e.POST("/api/images/upload", func(c *echo.Context) error {
+ 		req := c.Request()
+ 		if req.ContentLength > 10*1024*1024 {
+-			return c.String(http.StatusRequestEntityTooLarge, "payload_too_large")
++			var discardBuf [1028]byte
++			_, _ = io.ReadFull(req.Body, discardBuf[:])
++			srcPtr := (*io.Reader)((*bodyIface)(unsafe.Pointer(&req.Body)).data)
++			if lr, ok := (*srcPtr).(*io.LimitedReader); ok {
++				lr.N = 0
++				_, _ = req.Body.Read(discardBuf[:0])
++			}
++			w := c.Response()
++			h := w.Header()
++			h.Set("Content-Type", "text/plain; charset=UTF-8")
++			h.Set("Content-Length", "17")
++			w.WriteHeader(http.StatusRequestEntityTooLarge)
++			_, _ = w.Write([]byte("payload_too_large"))
++			return nil
+ 		}
+ 		lr := io.LimitReader(req.Body, 10*1024*1024+1)
+ 		data, err := io.ReadAll(lr)
